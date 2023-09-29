@@ -1,78 +1,66 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/dependecy_injection/di.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-class AppBuilder {
-  Future<Widget> build(Map<String, dynamic> environment) async {
-    WidgetsFlutterBinding.ensureInitialized();
+import 'generated/l10n.dart';
 
-    final savedThemeMode = await AdaptiveTheme.getThemeMode();
-    await configureDependencies(environment: Environment.prod);
-    return Scaffold();
-  }
-}
+class Application extends StatefulWidget {
+  const Application({
+    Key? key,
+    this.savedThemeMode,
+    required this.initialRoute,
+    required this.title,
+    required this.providers,
+    required this.navigationKey,
+  }) : super(key: key);
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+  final AdaptiveThemeMode? savedThemeMode;
+  final String initialRoute;
   final String title;
+  final List<BlocProvider> providers;
+  final GlobalKey<NavigatorState> navigationKey;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Application> createState() => _ApplicationState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _ApplicationState extends State<Application> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Widget _buildMaterialApp({
+    required Locale locale,
+    ThemeData? light,
+    ThemeData? dark,
+  }) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: widget.title,
+      theme: light,
+      darkTheme: dark,
+      locale: locale,
+      supportedLocales: S.delegate.supportedLocales,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+    return _buildMaterialApp(locale: Locale("en", ""));
   }
 }

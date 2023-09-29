@@ -1,4 +1,4 @@
-import 'app.dart';
+import 'app_init.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
