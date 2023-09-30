@@ -2,6 +2,8 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:lettutor/core/dependecy_injection/di.dart';
+import 'package:lettutor/core/navigation/routes_service.dart';
 
 import 'generated/l10n.dart';
 
@@ -43,12 +45,17 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     ThemeData? light,
     ThemeData? dark,
   }) {
+    final routeService = injector.get<RouteService>().getRouter();
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: widget.title,
       theme: light,
       darkTheme: dark,
       locale: locale,
+      routerDelegate: routeService.routerDelegate,
+      routeInformationParser: routeService.routeInformationParser,
+      routeInformationProvider: routeService.routeInformationProvider,
       supportedLocales: S.delegate.supportedLocales,
       localizationsDelegates: const [
         S.delegate,
@@ -61,6 +68,11 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return _buildMaterialApp(locale: Locale("en", ""));
+    return AdaptiveTheme(
+      initial: AdaptiveThemeMode.light,
+      light: ThemeData.light(),
+      dark: ThemeData.dark(),
+      builder: (light, dark) => _buildMaterialApp(locale: Locale("en", "")),
+    );
   }
 }

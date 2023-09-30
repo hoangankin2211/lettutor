@@ -1,6 +1,4 @@
+import 'package:lettutor/core/configuration/environment.dart';
 import 'app_init.dart';
-import 'package:flutter/widgets.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => AppBuilder.run(environmentProd);

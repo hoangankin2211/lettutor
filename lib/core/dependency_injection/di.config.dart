@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
 import '../../ui/shared/app_setting/bloc/app_settings_bloc.dart' as _i3;
+import '../navigation/routes_service.dart' as _i4;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i1.GetIt init(
@@ -26,5 +27,6 @@ _i1.GetIt init(
     environmentFilter,
   );
   gh.singleton<_i3.AppSettingsBloc>(_i3.AppSettingsBloc());
+  gh.factory<_i4.RouteService>(() => _i4.RouteService());
   return getIt;
 }
