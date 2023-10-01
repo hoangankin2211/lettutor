@@ -4,8 +4,10 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/app.dart';
+import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
@@ -39,7 +41,10 @@ class AppBuilder {
     return Application(
       initialRoute: RouteLocation.splash,
       title: "Lettutor",
-      providers: const [],
+      providers: [
+        BlocProvider<ApplicationBloc>(
+            create: (context) => injector.get<ApplicationBloc>()),
+      ],
       navigationKey: appNavigationKey,
       savedThemeMode: savedThemeMode,
       router: routeService,

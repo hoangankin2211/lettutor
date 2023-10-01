@@ -8,12 +8,12 @@ class ApplicationDataState {
   final String initialRoute;
   final bool isAlreadyShowIntro;
 
-  const ApplicationDataState({
-    required this.themeMode,
-    required this.locale,
-    required this.initialRoute,
-    required this.isAlreadyShowIntro,
-  });
+  const ApplicationDataState(
+      {required this.themeMode,
+      required this.locale,
+      required this.initialRoute,
+      required this.isAlreadyShowIntro,
+      w});
 
   ApplicationDataState copyWith({
     AdaptiveThemeMode? themeMode,

@@ -1,6 +1,9 @@
+import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/configuration/configuration.dart';
+import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
+import 'package:lettutor/core/dependency_injection/di.dart';
 
 @injectable
 class NetworkService {
@@ -20,9 +23,9 @@ class NetworkService {
         ? BaseOptions(baseUrl: baseUrl)
         : BaseOptions();
 
-    final dio = Dio(baseOptions);
-    // ..interceptors.add(ApiTokenInterceptor(appStorage))
-    // ..interceptors.add(LoggerInterceptor());
+    final dio = Dio(baseOptions)
+      ..interceptors.add(ApiTokenInterceptor(injector.get()))
+      ..interceptors.add(AwesomeDioInterceptor());
 
     return dio;
   }
