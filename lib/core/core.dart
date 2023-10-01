@@ -1,5 +1,5 @@
 //extension
-export 'extensions/extensions.dart';
+export 'components/extensions/extensions.dart';
 
 //route
-export 'navigation/routes_location.dart';
+export 'components/navigation/routes_location.dart';
