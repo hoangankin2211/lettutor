@@ -74,7 +74,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
         light: ThemeData.light(),
         dark: ThemeData.dark(),
         builder: (light, dark) => _buildMaterialApp(
-          locale: Locale("en", ""),
+          locale: const Locale("en", ""),
         ),
       ),
     );

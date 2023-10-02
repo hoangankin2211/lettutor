@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +32,7 @@ class AppBuilder {
     final myBlocObserver = AppBlocObserver();
     Bloc.observer = myBlocObserver;
 
+    //Get routeService
     final routeService = injector.get<RouteService>().getRouter();
 
     //Turn off default status bar for application
@@ -43,7 +43,8 @@ class AppBuilder {
       title: "Lettutor",
       providers: [
         BlocProvider<ApplicationBloc>(
-            create: (context) => injector.get<ApplicationBloc>()),
+          create: (context) => injector.get<ApplicationBloc>(),
+        ),
       ],
       navigationKey: appNavigationKey,
       savedThemeMode: savedThemeMode,
