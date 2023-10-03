@@ -5,15 +5,8 @@ import 'package:lettutor/core/components/configuration/configuration.dart';
 import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 
-@injectable
 class NetworkService {
-  late final Dio dio;
-
-  NetworkService() {
-    dio = initializeDio(baseUrl: Configurations.baseUrl);
-  }
-
-  Dio initializeDio({
+  static Dio initializeDio({
     required String baseUrl,
   }) {
     var uri = Uri.tryParse(baseUrl);

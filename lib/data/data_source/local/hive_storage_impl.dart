@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/data/local/app_local_storage.dart';
+import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 
 @Singleton(as: AppLocalStorage)
 class HiveStorageImpl implements AppLocalStorage {

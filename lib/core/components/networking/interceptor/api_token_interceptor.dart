@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:lettutor/data/local/app_local_storage.dart';
+import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 
 const keyAuthentication = 'Authorization';
 const keyApiKey = 'XApiKey';

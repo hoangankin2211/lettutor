@@ -9,16 +9,24 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i11;
 import 'package:get_it/get_it.dart' as _i1;
-import 'package:hive/hive.dart' as _i4;
+import 'package:hive/hive.dart' as _i7;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../../data/local/app_local_storage.dart' as _i7;
-import '../../data/local/hive_storage_impl.dart' as _i8;
+import '../../data/data_source/local/app_local_storage.dart' as _i9;
+import '../../data/data_source/local/hive_storage_impl.dart' as _i10;
+import '../../data/data_source/remote/authentication/authentication.dart'
+    as _i4;
+import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
+    as _i12;
+import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
+    as _i5;
+import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
+    as _i6;
 import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
-import '../components/navigation/routes_service.dart' as _i6;
-import '../components/networking/network.dart' as _i5;
-import 'module.dart' as _i9;
+import '../components/navigation/routes_service.dart' as _i8;
+import 'module.dart' as _i13;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> init(
@@ -32,18 +40,33 @@ Future<_i1.GetIt> init(
     environmentFilter,
   );
   final hiveModule = _$HiveModule();
+  final dioModule = _$DioModule();
   gh.factory<_i3.ApplicationBloc>(
       () => _i3.ApplicationBloc(gh<_i3.ApplicationState>()));
-  await gh.singletonAsync<_i4.HiveInterface>(
+  gh.factory<_i4.AuthenticationApi>(
+    () => _i5.FacebookAuthImpl(),
+    instanceName: 'FacebookAuthImpl',
+  );
+  gh.factory<_i4.AuthenticationApi>(
+    () => _i6.GoogleAuthImpl(),
+    instanceName: 'GoogleAuthImpl',
+  );
+  await gh.singletonAsync<_i7.HiveInterface>(
     () => hiveModule.initHive(),
     preResolve: true,
   );
-  gh.factory<_i5.NetworkService>(() => _i5.NetworkService());
-  gh.factory<_i6.RouteService>(() => _i6.RouteService());
-  gh.singleton<_i4.Box<dynamic>>(hiveModule.prefs(gh<_i4.HiveInterface>()));
-  gh.singleton<_i7.AppLocalStorage>(
-      _i8.HiveStorageImpl(gh<_i4.Box<dynamic>>()));
+  gh.factory<_i8.RouteService>(() => _i8.RouteService());
+  gh.singleton<_i7.Box<dynamic>>(hiveModule.create(gh<_i7.HiveInterface>()));
+  gh.singleton<_i9.AppLocalStorage>(
+      _i10.HiveStorageImpl(gh<_i7.Box<dynamic>>()));
+  gh.singleton<_i11.Dio>(dioModule.create(gh<_i9.AppLocalStorage>()));
+  gh.factory<_i4.AuthenticationApi>(
+    () => _i12.EmailAuthApi(gh<_i11.Dio>()),
+    instanceName: 'EmailAuthApi',
+  );
   return getIt;
 }
 
-class _$HiveModule extends _i9.HiveModule {}
+class _$HiveModule extends _i13.HiveModule {}
+
+class _$DioModule extends _i13.DioModule {}
