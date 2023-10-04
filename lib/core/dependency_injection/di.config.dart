@@ -19,14 +19,18 @@ import '../../data/data_source/local/hive_storage_impl.dart' as _i10;
 import '../../data/data_source/remote/authentication/authentication.dart'
     as _i4;
 import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
-    as _i12;
+    as _i15;
 import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
     as _i5;
 import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
     as _i6;
+import '../../data/data_source/remote/course/course_service.dart' as _i16;
+import '../../data/data_source/remote/ebook/ebook_service.dart' as _i12;
+import '../../data/data_source/remote/schedule/schedule_service.dart' as _i13;
+import '../../data/data_source/remote/tutorial/tutorial_service.dart' as _i14;
 import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
 import '../components/navigation/routes_service.dart' as _i8;
-import 'module.dart' as _i13;
+import 'module.dart' as _i17;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> init(
@@ -60,13 +64,17 @@ Future<_i1.GetIt> init(
   gh.singleton<_i9.AppLocalStorage>(
       _i10.HiveStorageImpl(gh<_i7.Box<dynamic>>()));
   gh.singleton<_i11.Dio>(dioModule.create(gh<_i9.AppLocalStorage>()));
+  gh.factory<_i12.EbookService>(() => _i12.EbookService(gh<_i11.Dio>()));
+  gh.factory<_i13.ScheduleService>(() => _i13.ScheduleService(gh<_i11.Dio>()));
+  gh.factory<_i14.TutorialService>(() => _i14.TutorialService(gh<_i11.Dio>()));
   gh.factory<_i4.AuthenticationApi>(
-    () => _i12.EmailAuthApi(gh<_i11.Dio>()),
+    () => _i15.EmailAuthApi(gh<_i11.Dio>()),
     instanceName: 'EmailAuthApi',
   );
+  gh.factory<_i16.CourseService>(() => _i16.CourseService(gh<_i11.Dio>()));
   return getIt;
 }
 
-class _$HiveModule extends _i13.HiveModule {}
+class _$HiveModule extends _i17.HiveModule {}
 
-class _$DioModule extends _i13.DioModule {}
+class _$DioModule extends _i17.DioModule {}

@@ -6,20 +6,20 @@ import 'package:retrofit/dio.dart';
 @Injectable(as: AuthenticationApi)
 class GoogleAuthImpl implements AuthenticationApi {
   @override
-  Future<HttpResponse> login({required Map<String, dynamic> body}) {
-    // TODO: implement login
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpResponse> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
-  }
-
-  @override
   Future<HttpResponse> refreshToken({required Map<String, dynamic> body}) {
     // TODO: implement refreshToken
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<HttpResponse> signIn({required Map<String, dynamic> body}) {
+    // TODO: implement signIn
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<HttpResponse> signOut() {
+    // TODO: implement signOut
     throw UnimplementedError();
   }
 }

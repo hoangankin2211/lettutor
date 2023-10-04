@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'email_auth_api.dart';
+part of 'schedule_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'email_auth_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _EmailAuthApi implements EmailAuthApi {
-  _EmailAuthApi(
+class _ScheduleService implements ScheduleService {
+  _ScheduleService(
     this._dio, {
     this.baseUrl,
   });
@@ -19,50 +19,22 @@ class _EmailAuthApi implements EmailAuthApi {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<AuthResponse>> signIn(
-      {required Map<String, dynamic> body}) async {
+  Future<HttpResponse<dynamic>> getScheduleList(
+      {required Map<String, dynamic> queries}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<AuthResponse>>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/auth/login',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value = AuthResponse.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<dynamic>> signOut() async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(queries);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
-      method: 'POST',
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/auth/logout',
+              '/booking/list/student',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -77,22 +49,20 @@ class _EmailAuthApi implements EmailAuthApi {
   }
 
   @override
-  Future<HttpResponse<dynamic>> refreshToken(
-      {required Map<String, dynamic> body}) async {
+  Future<HttpResponse<dynamic>> getNextAppointment({required int time}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
+    final Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
-      method: 'POST',
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/auth/refresh-token',
+              '/booking/next?dateTime=${time}',
               queryParameters: queryParameters,
               data: _data,
             )

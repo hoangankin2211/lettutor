@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../authentication.dart';
@@ -21,12 +22,12 @@ abstract class EmailAuthApi implements AuthenticationApi {
 
   @override
   @POST(loginApi)
-  Future<HttpResponse<dynamic>> login(
+  Future<HttpResponse<AuthResponse>> signIn(
       {@Body() required Map<String, dynamic> body});
 
   @override
   @POST(logoutApi)
-  Future<HttpResponse<dynamic>> logout();
+  Future<HttpResponse<dynamic>> signOut();
 
   @override
   @POST(refreshTokenApi)
