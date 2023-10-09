@@ -31,6 +31,6 @@ abstract class EmailAuthApi implements AuthenticationApi {
 
   @override
   @POST(refreshTokenApi)
-  Future<HttpResponse<dynamic>> refreshToken(
+  Future<HttpResponse<AuthResponse>> refreshToken(
       {@Body() required Map<String, dynamic> body});
 }

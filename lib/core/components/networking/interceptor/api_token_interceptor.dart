@@ -14,7 +14,6 @@ class ApiTokenInterceptor extends Interceptor {
   final AppLocalStorage _appLocalStorage;
 
   ApiTokenInterceptor(this._appLocalStorage);
-
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final accessToken = _appLocalStorage.getString(accessTokenKey);

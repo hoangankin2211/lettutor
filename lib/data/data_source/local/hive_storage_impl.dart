@@ -14,31 +14,6 @@ class HiveStorageImpl implements AppLocalStorage {
   }
 
   @override
-  Future<bool?> getBool(String key) {
-    return _box.get(key);
-  }
-
-  @override
-  Future<double?> getDouble(String key) {
-    return _box.get(key);
-  }
-
-  @override
-  int? getInt(String key) {
-    return _box.get(key);
-  }
-
-  @override
-  Future<List<String>> getListString(String key) {
-    return _box.get(key);
-  }
-
-  @override
-  String? getString(String key) {
-    return _box.get(key);
-  }
-
-  @override
   Future<void> remove(String key) async {
     await _box.delete(key);
   }
@@ -66,5 +41,30 @@ class HiveStorageImpl implements AppLocalStorage {
   @override
   Future<void> saveStringList(String key, List<String> value) async {
     await _box.put(key, value);
+  }
+
+  @override
+  bool? getBool(String key) {
+    return _box.get(key);
+  }
+
+  @override
+  double? getDouble(String key) {
+    return _box.get(key);
+  }
+
+  @override
+  int? getInt(String key) {
+    return _box.get(key);
+  }
+
+  @override
+  List<String>? getListString(String key) {
+    return _box.get(key);
+  }
+
+  @override
+  String? getString(String key) {
+    return _box.get(key);
   }
 }

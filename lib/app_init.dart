@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/core/components/navigation/routes_service.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 import 'core/components/blocs/app_bloc_observer.dart';
 import 'core/components/configuration/configuration.dart';
@@ -33,7 +35,7 @@ class AppBuilder {
     Bloc.observer = myBlocObserver;
 
     //Get routeService
-    final routeService = injector.get<RouteService>().getRouter();
+    final routeService = injector.get<RouteService>();
 
     //Turn off default status bar for application
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
@@ -45,10 +47,13 @@ class AppBuilder {
         BlocProvider<ApplicationBloc>(
           create: (context) => injector.get<ApplicationBloc>(),
         ),
+        BlocProvider<AuthBloc>(
+          create: (context) => injector.get<AuthBloc>(),
+        ),
       ],
       navigationKey: appNavigationKey,
       savedThemeMode: savedThemeMode,
-      router: routeService,
+      routeService: routeService,
     );
   }
 

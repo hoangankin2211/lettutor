@@ -6,9 +6,9 @@ abstract class AppLocalStorage {
   Future<void> saveStringList(String key, List<String> value);
   String? getString(String key);
   int? getInt(String key);
-  Future<double?> getDouble(String key);
-  Future<bool?> getBool(String key);
-  Future<List<String>> getListString(String key);
+  double? getDouble(String key);
+  bool? getBool(String key);
+  List<String>? getListString(String key);
   Future<void> remove(String key);
   Future<void> clear();
 }

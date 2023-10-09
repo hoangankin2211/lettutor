@@ -1,11 +1,13 @@
 import 'package:retrofit/retrofit.dart';
 
+import '../../../entities/response/auth_response.dart';
+
 abstract class AuthenticationApi {
-  Future<HttpResponse<dynamic>> signIn(
+  Future<HttpResponse<AuthResponse>> signIn(
       {@Body() required Map<String, dynamic> body});
 
   Future<HttpResponse<dynamic>> signOut();
 
-  Future<HttpResponse<dynamic>> refreshToken(
+  Future<HttpResponse<AuthResponse>> refreshToken(
       {@Body() required Map<String, dynamic> body});
 }

@@ -14,6 +14,10 @@ extension BuildContextExt on BuildContext {
     return Theme.of(this);
   }
 
+  ColorScheme get colorScheme {
+    return Theme.of(this).colorScheme;
+  }
+
   TextTheme get textTheme => theme.textTheme;
 
   NavigatorState get navigator {

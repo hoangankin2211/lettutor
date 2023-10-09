@@ -2,9 +2,12 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/core/components/navigation/routes_service.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 import 'generated/l10n.dart';
+import 'ui/auth/blocs/auth_status.dart';
 
 class Application extends StatefulWidget {
   const Application({
@@ -14,14 +17,14 @@ class Application extends StatefulWidget {
     required this.title,
     required this.providers,
     required this.navigationKey,
-    required this.router,
+    required this.routeService,
   }) : super(key: key);
 
   final AdaptiveThemeMode? savedThemeMode;
   final String initialRoute;
   final String title;
   final List<BlocProvider> providers;
-  final GoRouter router;
+  final RouteService routeService;
   final GlobalKey<NavigatorState> navigationKey;
 
   @override
@@ -32,6 +35,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -46,6 +50,8 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     ThemeData? light,
     ThemeData? dark,
   }) {
+    final appRouter = widget.routeService.getRouter();
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: widget.title,
@@ -59,9 +65,21 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      routerDelegate: widget.router.routerDelegate,
-      routeInformationParser: widget.router.routeInformationParser,
-      routeInformationProvider: widget.router.routeInformationProvider,
+      builder: (context, child) {
+        return BlocListener<AuthBloc, AuthState>(
+          listener: (context, authState) {
+            if (authState.authStatus == AuthStatus.authenticated) {
+              appRouter.go(RouteLocation.home);
+            } else if (authState.authStatus == AuthStatus.unauthenticated) {
+              appRouter.go(RouteLocation.auth);
+            }
+          },
+          child: child!,
+        );
+      },
+      routerDelegate: appRouter.routerDelegate,
+      routeInformationParser: appRouter.routeInformationParser,
+      routeInformationProvider: appRouter.routeInformationProvider,
     );
   }
 
