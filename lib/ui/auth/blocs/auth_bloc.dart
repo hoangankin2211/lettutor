@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/domain/usecase/auth_usecase.dart';
+import 'package:lettutor/domain/usecases/auth_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 
 import '../../../domain/models/user.dart';

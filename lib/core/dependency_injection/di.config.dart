@@ -31,7 +31,7 @@ import '../../data/data_source/remote/tutorial/tutorial_service.dart' as _i14;
 import '../../data/repositories/authentication_repos_impl.dart' as _i17;
 import '../../domain/repositories/authentication_repo.dart' as _i20;
 import '../../domain/repositories/repositories.dart' as _i16;
-import '../../domain/usecase/auth_usecase.dart' as _i19;
+import '../../domain/usecases/auth_usecase.dart' as _i19;
 import '../../ui/auth/blocs/auth_bloc.dart' as _i21;
 import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
 import '../components/navigation/routes_service.dart' as _i8;
@@ -50,8 +50,7 @@ Future<_i1.GetIt> init(
   );
   final hiveModule = _$HiveModule();
   final dioModule = _$DioModule();
-  gh.factory<_i3.ApplicationBloc>(
-      () => _i3.ApplicationBloc(gh<_i3.ApplicationState>()));
+  gh.factory<_i3.ApplicationBloc>(() => _i3.ApplicationBloc());
   gh.factory<_i4.AuthenticationApi>(
     () => _i5.FacebookAuthImpl(),
     instanceName: 'FacebookAuthImpl',

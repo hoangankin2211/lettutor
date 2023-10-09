@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart' show immutable;
 class RouteLocation {
   const RouteLocation._();
   //routeLocation
-  static String get home => '/';
-  static String get splash => '/splash';
-  static String get detailScreen => '/quoteDetails';
-  static String get settings => '/settings';
-  static String get search => '/search';
-  static String get auth => '/auth';
-  static String get profile => '/profile';
+  static const String home = '/';
+  static const String splash = '/splash';
+  static const String detailScreen = '/quoteDetails';
+  static const String settings = '/settings';
+  static const String search = '/search';
+  static const String auth = '/auth';
+  static const String profile = '/profile';
 }

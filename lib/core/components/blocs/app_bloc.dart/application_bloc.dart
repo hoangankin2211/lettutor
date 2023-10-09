@@ -12,10 +12,8 @@ part 'application_event.dart';
 
 @injectable
 class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
-  ApplicationBloc(super.initialState) {
-    // on<ApplicationInitialEvent>((event, emit) => null);
-    // on<ChangeThemeModeEvent>((event, emit) => null);
-    // on<LanguageChangedEvent>((event, emit) => null);
+  ApplicationBloc()
+      : super(ApplicationInitialState(data: const ApplicationDataState())) {
     on<ApplicationInitialEvent>(onApplicationInitialEvent);
     on<ChangeThemeModeEvent>(onChangeThemeModeEvent);
     on<LanguageChangedEvent>(onChangeLanguageEvent);
@@ -29,9 +27,7 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
       ApplicationInitialState(
         data: const ApplicationDataState(
           themeMode: AdaptiveThemeMode.light,
-          locale: Locale('en'),
           initialRoute: '/',
-          isAlreadyShowIntro: false,
         ),
       ),
     );
@@ -56,9 +52,7 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
   ) async {
     emit(
       ApplicationInitialState(
-        data: state.data.copyWith(
-          locale: event.locale,
-        ),
+        data: state.data.copyWith(),
       ),
     );
   }
