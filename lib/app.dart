@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/core/components/navigation/routes_service.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
+import 'core/components/blocs/app_bloc.dart/application_bloc.dart';
 import 'generated/l10n.dart';
 import 'ui/auth/blocs/auth_status.dart';
 
@@ -15,7 +19,6 @@ class Application extends StatefulWidget {
     this.savedThemeMode,
     required this.initialRoute,
     required this.title,
-    required this.providers,
     required this.navigationKey,
     required this.routeService,
   }) : super(key: key);
@@ -23,8 +26,7 @@ class Application extends StatefulWidget {
   final AdaptiveThemeMode? savedThemeMode;
   final String initialRoute;
   final String title;
-  final List<BlocProvider> providers;
-  final RouteService routeService;
+  final GoRouter routeService;
   final GlobalKey<NavigatorState> navigationKey;
 
   @override
@@ -32,11 +34,13 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> with WidgetsBindingObserver {
+  late final authBloc = BlocProvider.of<AuthBloc>(context);
+
   @override
   void initState() {
-    super.initState();
-
+    authBloc.add(InitAuthenticationStatus());
     WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
   @override
@@ -50,8 +54,6 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     ThemeData? light,
     ThemeData? dark,
   }) {
-    final appRouter = widget.routeService.getRouter();
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: widget.title,
@@ -65,36 +67,46 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      builder: (context, child) {
-        return BlocListener<AuthBloc, AuthState>(
-          listener: (context, authState) {
-            if (authState.authStatus == AuthStatus.authenticated) {
-              appRouter.go(RouteLocation.home);
-            } else if (authState.authStatus == AuthStatus.unauthenticated) {
-              appRouter.go(RouteLocation.auth);
-            }
-          },
-          child: child!,
-        );
-      },
-      routerDelegate: appRouter.routerDelegate,
-      routeInformationParser: appRouter.routeInformationParser,
-      routeInformationProvider: appRouter.routeInformationProvider,
+      routerDelegate: widget.routeService.routerDelegate,
+      routeInformationParser: widget.routeService.routeInformationParser,
+      routeInformationProvider: widget.routeService.routeInformationProvider,
     );
+  }
+
+  void _applicationStateListener(BuildContext context, ApplicationState state) {
+    switch (state) {
+      default:
+    }
+  }
+
+  void _authStateListener(BuildContext context, AuthState state) {
+    switch (state.authStatus) {
+      case AuthStatus.authenticated:
+        widget.routeService.go(RouteLocation.home);
+        break;
+      case AuthStatus.unauthenticated:
+        widget.routeService.go(RouteLocation.auth);
+        break;
+      default:
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: widget.providers,
-      child: AdaptiveTheme(
-        initial: widget.savedThemeMode ?? AdaptiveThemeMode.light,
-        light: ThemeData.light(),
-        dark: ThemeData.dark(),
-        builder: (light, dark) => _buildMaterialApp(
-          locale: const Locale("en", ""),
-        ),
-      ),
+    return BlocConsumer<ApplicationBloc, ApplicationState>(
+      listener: _applicationStateListener,
+      builder: (context, appState) {
+        return AdaptiveTheme(
+          initial: widget.savedThemeMode ?? AdaptiveThemeMode.light,
+          light: ThemeData.light(),
+          dark: ThemeData.dark(),
+          builder: (light, dark) => BlocListener<AuthBloc, AuthState>(
+            listener: _authStateListener,
+            child: _buildMaterialApp(locale: const Locale("en", "")),
+          ),
+        );
+      },
     );
   }
 }

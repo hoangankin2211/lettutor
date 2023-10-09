@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:lettutor/data/entities/user_entity.dart';
+
 class User {
   final String id;
   final String email;
@@ -14,7 +16,7 @@ class User {
   final List<String> courses;
   final String requireNote;
   final String level;
-  final List<String> learnTopics;
+  final List<LearnTopics> learnTopics;
   final List<TestPreparation> testPreparations;
   final bool isPhoneActivated;
   final int timezone;
@@ -59,7 +61,7 @@ class User {
     List<String>? courses,
     String? requireNote,
     String? level,
-    List<String>? learnTopics,
+    List<LearnTopics>? learnTopics,
     List<TestPreparation>? testPreparations,
     bool? isPhoneActivated,
     int? timezone,
@@ -88,6 +90,11 @@ class User {
       studySchedule: studySchedule ?? this.studySchedule,
       canSendMessage: canSendMessage ?? this.canSendMessage,
     );
+  }
+
+  @override
+  String toString() {
+    return 'User(id: $id, email: $email, name: $name, avatar: $avatar, country: $country, phone: $phone, roles: $roles, language: $language, birthday: $birthday, isActivated: $isActivated, walletInfo: $walletInfo, courses: $courses, requireNote: $requireNote, level: $level, learnTopics: $learnTopics, testPreparations: $testPreparations, isPhoneActivated: $isPhoneActivated, timezone: $timezone, studySchedule: $studySchedule, canSendMessage: $canSendMessage)';
   }
 }
 

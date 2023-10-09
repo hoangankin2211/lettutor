@@ -14,14 +14,14 @@ class UserEntity {
   final String country;
   final String phone;
   final List<String> roles;
-  final String language;
+  final String? language;
   final String birthday;
   final bool isActivated;
   final WalletInfoEntity walletInfo;
   final List<String> courses;
   final String requireNote;
   final String level;
-  final List<String> learnTopics;
+  final List<LearnTopics> learnTopics;
   final List<TestPreparationEntity> testPreparations;
   final bool isPhoneActivated;
   final int timezone;
@@ -66,7 +66,7 @@ class UserEntity {
     List<String>? courses,
     String? requireNote,
     String? level,
-    List<String>? learnTopics,
+    List<LearnTopics>? learnTopics,
     List<TestPreparationEntity>? testPreparations,
     bool? isPhoneActivated,
     int? timezone,
@@ -113,7 +113,7 @@ class UserEntity {
       'courses': courses,
       'requireNote': requireNote,
       'level': level,
-      'learnTopics': learnTopics,
+      'learnTopics': learnTopics.map((e) => e.toMap()).toList(),
       'testPreparations': testPreparations.map((x) => x.toMap()).toList(),
       'isPhoneActivated': isPhoneActivated,
       'timezone': timezone,
@@ -130,18 +130,26 @@ class UserEntity {
       avatar: map['avatar'] as String,
       country: map['country'] as String,
       phone: map['phone'] as String,
-      roles: List<String>.from((map['roles'] as List<String>)),
-      language: map['language'] as String,
+      roles: List<String>.from(
+          (map['roles'] as List<dynamic>).map((e) => e as String)),
+      language: map['language'] as String?,
       birthday: map['birthday'] as String,
       isActivated: map['isActivated'] as bool,
       walletInfo:
           WalletInfoEntity.fromMap(map['walletInfo'] as Map<String, dynamic>),
-      courses: List<String>.from((map['courses'] as List<String>)),
+      courses: List<String>.from(
+          (map['courses'] as List<dynamic>).map((e) => e as String)),
       requireNote: map['requireNote'] as String,
       level: map['level'] as String,
-      learnTopics: List<String>.from((map['learnTopics'] as List<String>)),
+      learnTopics: List<LearnTopics>.from(
+        (map['learnTopics'] as List<dynamic>).map(
+          (e) => LearnTopics.fromMap(
+            e as Map<String, dynamic>,
+          ),
+        ),
+      ),
       testPreparations: List<TestPreparationEntity>.from(
-        (map['testPreparations'] as List<int>).map<TestPreparationEntity>(
+        (map['testPreparations'] as List<dynamic>).map<TestPreparationEntity>(
           (x) => TestPreparationEntity.fromMap(x as Map<String, dynamic>),
         ),
       ),
@@ -210,5 +218,32 @@ class UserEntity {
         timezone.hashCode ^
         studySchedule.hashCode ^
         canSendMessage.hashCode;
+  }
+}
+
+class LearnTopics {
+  final int id;
+  final String key;
+  final String name;
+  LearnTopics({
+    required this.id,
+    required this.key,
+    required this.name,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'key': key,
+      'name': name,
+    };
+  }
+
+  factory LearnTopics.fromMap(Map<String, dynamic> map) {
+    return LearnTopics(
+      id: map['id'] as int,
+      key: map['key'] as String,
+      name: map['name'] as String,
+    );
   }
 }

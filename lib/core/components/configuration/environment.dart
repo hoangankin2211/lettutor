@@ -1,5 +1,5 @@
 final Map<String, dynamic> environmentProd = {
-  'name': 'Just OpenAI Prod',
+  'name': 'LetTutor',
   'environment': 'dev',
-  'baseUrl': 'https://rtkrqvtslujdzjxhjocu.supabase.co',
+  'baseUrl': 'https://sandbox.api.lettutor.com',
 };

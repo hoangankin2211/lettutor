@@ -1,10 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/authentication/authentication.dart';
+import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
 
+import '../../core/components/networking/data_state.dart';
 import '../../domain/repositories/repositories.dart';
 
+@Injectable(as: AuthenticationRepository)
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final AuthenticationApi _authenticationApi;
   AuthenticationRepositoryImpl(@Named("EmailAuthApi") this._authenticationApi);
@@ -15,32 +20,22 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<User> login(String email, String password) async {
-    final authResponse = await _authenticationApi.signIn(body: {
-      'email': email,
-      'password': password,
-    });
-    // return User(
-    //   id: authResponse.data!.user.id,
-    //   email: authResponse.data!.user.email,
-    //   name: authResponse.data!.user.name,
-    //   avatar: authResponse.data!.user.avatar,
-    //   country: authResponse.data!.user.country,
-    //   phone: authResponse.data!.user.phone,
-    //   roles: authResponse.data!.user.roles,
-    //   language: authResponse.data!.user.language,
-    //   birthday: authResponse.data!.user.birthday,
-    //   isActivated: authResponse.data!.user.isActivated,
-    //   courses: authResponse.data!.user.courses,
-    //   requireNote: authResponse.data!.user.requireNote,
-    //   level: authResponse.data!.user.level,
-    //   learnTopics: authResponse.data!.user.learnTopics,
-    //   isPhoneActivated: authResponse.data!.user.isPhoneActivated,
-    //   timezone: authResponse.data!.user.timezone,
-    //   studySchedule: authResponse.data!.user.studySchedule,
-    //   canSendMessage: authResponse.data!.user.canSendMessage,
-    // );
-    throw UnimplementedError();
+  Future<Either<UserEntity, String>> login(
+      String email, String password) async {
+    final state = await getStateOf(
+      request: () async {
+        return await _authenticationApi.signIn(body: {
+          'email': email,
+          'password': password,
+        });
+      },
+    );
+
+    if (state is DataSuccess) {
+      return Left(state.data!.user);
+    }
+
+    return Right(state.dioException?.message ?? "Error while sign in");
   }
 
   @override

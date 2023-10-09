@@ -5,6 +5,8 @@ import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
 
+import '../../../ui/auth/views/signin_screen.dart';
+
 final routes = [
   // GoRoute(
   //   path: RouteLocation.auth,
@@ -23,8 +25,13 @@ final routes = [
   // ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
-    path: RouteLocation.auth,
+    path: RouteLocation.home,
     builder: (context, state) => const HomeScreen(),
+  ),
+  GoRoute(
+    parentNavigatorKey: AppBuilder.appNavigationKey,
+    path: RouteLocation.auth,
+    builder: (context, state) => const SignInScreen(),
   ),
   GoRoute(
     path: RouteLocation.splash,

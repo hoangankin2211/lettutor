@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/configuration/configuration.dart';
 import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
+import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 
 class NetworkService {
   static Dio initializeDio({
@@ -17,7 +18,7 @@ class NetworkService {
         : BaseOptions();
 
     final dio = Dio(baseOptions)
-      ..interceptors.add(ApiTokenInterceptor(injector.get()))
+      ..interceptors.add(ApiTokenInterceptor(injector.get<AppLocalStorage>()))
       ..interceptors.add(AwesomeDioInterceptor());
 
     return dio;

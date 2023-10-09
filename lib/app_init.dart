@@ -35,14 +35,12 @@ class AppBuilder {
     Bloc.observer = myBlocObserver;
 
     //Get routeService
-    final routeService = injector.get<RouteService>();
+    final routeService = injector.get<RouteService>().getRouter();
 
     //Turn off default status bar for application
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
 
-    return Application(
-      initialRoute: RouteLocation.splash,
-      title: "Lettutor",
+    return MultiBlocProvider(
       providers: [
         BlocProvider<ApplicationBloc>(
           create: (context) => injector.get<ApplicationBloc>(),
@@ -51,9 +49,21 @@ class AppBuilder {
           create: (context) => injector.get<AuthBloc>(),
         ),
       ],
-      navigationKey: appNavigationKey,
-      savedThemeMode: savedThemeMode,
-      routeService: routeService,
+      child: Application(
+        initialRoute: RouteLocation.splash,
+        title: "Lettutor",
+        // providers: [
+        //   BlocProvider<ApplicationBloc>(
+        //     create: (context) => injector.get<ApplicationBloc>(),
+        //   ),
+        //   BlocProvider<AuthBloc>(
+        //     create: (context) => injector.get<AuthBloc>(),
+        //   ),
+        // ],
+        navigationKey: appNavigationKey,
+        savedThemeMode: savedThemeMode,
+        routeService: routeService,
+      ),
     );
   }
 

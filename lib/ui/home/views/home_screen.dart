@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/core.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Image.asset(
-          "assets/images/logo.png",
+          "assets/images/splash.png",
           cacheHeight: 50,
           cacheWidth: 50,
         ),
@@ -22,9 +23,14 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          InkWell(),
+          TextButton(
+              onPressed: () {
+                context.go(RouteLocation.auth);
+              },
+              child: Text("Logout"))
         ],
       ),
+      body: Placeholder(),
     );
   }
 }

@@ -17,7 +17,7 @@ class AuthResponse {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'user': user.toMap(),
-      'token': tokens.toMap(),
+      'tokens': tokens.toMap(),
     };
   }
 
