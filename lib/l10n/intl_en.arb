@@ -61,5 +61,7 @@
     "signInGoogle": "Sign In with Google",
     "signOut": "Sign Out",
     "@END_OF_FILE": {},
-    "hello":"Heelo Hoang"
+    "hello":"Heelo Hoang",
+    "welcomeTo": "Welcome to"
+
 }

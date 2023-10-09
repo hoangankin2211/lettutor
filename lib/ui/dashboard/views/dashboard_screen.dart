@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/ui/home/views/home_screen.dart';
+
+import '../../../core/components/navigation/routes_location.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -10,33 +14,82 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final controller = CupertinoTabController(initialIndex: 0);
+  final controller = PageController(initialPage: 0, keepPage: true);
 
   final List<Map<String, dynamic>> _tabs = [
     {
-      'title': 'Favorites',
-      'icon': CupertinoIcons.star_fill,
+      'title': 'Home',
+      'icon': CupertinoIcons.house_alt_fill,
+      "widget": HomeScreen(),
     },
     {
-      'title': 'Recents',
-      'icon': CupertinoIcons.clock_solid,
+      'title': 'Teachers',
+      'icon': CupertinoIcons.person_2_fill,
+      "widget": Placeholder(),
     },
     {
-      'title': 'Contacts',
-      'icon': CupertinoIcons.person_alt_circle_fill,
+      'title': 'Schedule',
+      'icon': CupertinoIcons.calendar,
+      "widget": Placeholder(),
     },
     {
-      'title': 'Keypad',
-      'icon': CupertinoIcons.circle_grid_3x3_fill,
+      'title': 'Courses',
+      'icon': CupertinoIcons.book_fill,
+      "widget": Placeholder(),
+    },
+    {
+      'title': 'Setting',
+      'icon': CupertinoIcons.settings_solid,
+      "widget": Placeholder(),
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
+    return Scaffold(
       backgroundColor: context.colorScheme.background,
-      controller: controller,
-      tabBar: CupertinoTabBar(
+      appBar: AppBar(
+        leading: Image.asset(
+          "assets/images/splash.png",
+          cacheHeight: 50,
+          cacheWidth: 50,
+        ),
+        backgroundColor: context.theme.cardColor,
+        title: Text(
+          "LetTutor",
+          style: context.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: context.theme.primaryColor,
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                context.go(RouteLocation.auth);
+              },
+              child: const Text("Logout"))
+        ],
+      ),
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: controller,
+        children: _tabs.map((e) => e["widget"] as Widget).toList(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          controller.animateToPage(index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceInOut);
+        },
+        backgroundColor: context.colorScheme.background,
+        currentIndex: 0,
+        selectedIconTheme: IconThemeData(color: context.theme.indicatorColor),
+        unselectedIconTheme: IconThemeData(color: context.theme.disabledColor),
+        selectedLabelStyle: context.textTheme.bodyMedium,
+        unselectedLabelStyle:
+            context.textTheme.bodyMedium?.copyWith(color: Colors.black),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: _tabs
             .map(
               (tab) => BottomNavigationBarItem(
@@ -46,15 +99,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )
             .toList(),
       ),
-      tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) {
-            return Center(
-              child: Text('Content of tab $index'),
-            );
-          },
-        );
-      },
     );
   }
 }

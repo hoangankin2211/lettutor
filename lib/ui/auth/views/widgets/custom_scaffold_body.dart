@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lettutor/core/core.dart';
 
 class CustomScaffoldBody extends StatelessWidget {
   final Widget child;
@@ -10,7 +11,7 @@ class CustomScaffoldBody extends StatelessWidget {
   static Widget buildBackgroundView(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.white,
+      color: context.colorScheme.primary,
     );
   }
 
@@ -74,9 +75,9 @@ class TCRoundContainer extends StatelessWidget {
     return Container(
       width: MediaQuery.sizeOf(context).width,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.onBackground,
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10),
+          top: Radius.circular(20),
         ),
       ),
       padding: padding,

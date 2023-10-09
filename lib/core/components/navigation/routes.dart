@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app.dart';
 import 'package:lettutor/app_init.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
 
@@ -27,6 +28,11 @@ final routes = [
     parentNavigatorKey: AppBuilder.appNavigationKey,
     path: RouteLocation.home,
     builder: (context, state) => const HomeScreen(),
+  ),
+  GoRoute(
+    parentNavigatorKey: AppBuilder.appNavigationKey,
+    path: RouteLocation.dashboard,
+    builder: (context, state) => const DashboardScreen(),
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,

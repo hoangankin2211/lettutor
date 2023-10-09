@@ -270,18 +270,27 @@ class _SignInScreenState extends State<SignInScreen> {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  final appBar = const CustomScaffoldAppBar();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomScaffoldAppBar(),
+      extendBody: true,
+      backgroundColor: context.colorScheme.primary,
+      appBar: appBar,
       body: CustomScaffoldBody(
-        child: Column(
-          children: [
-            buildHeader(),
-            buildSignInForm(),
-            buildAnotherSignInOption(),
-            buildSignInButton(),
-          ],
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.9 -
+              appBar.preferredSize.height,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              buildHeader(),
+              buildSignInForm(),
+              buildAnotherSignInOption(),
+              buildSignInButton(),
+            ],
+          ),
         ),
       ),
     );

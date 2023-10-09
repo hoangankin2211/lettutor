@@ -6,6 +6,14 @@ extension BuildContextExt on BuildContext {
     return MediaQuery.of(this);
   }
 
+  double get height {
+    return MediaQuery.of(this).size.height;
+  }
+
+  double get width {
+    return MediaQuery.of(this).size.width;
+  }
+
   FocusScopeNode get focus {
     return FocusScope.of(this);
   }
@@ -31,4 +39,15 @@ extension BuildContextExt on BuildContext {
   }
 
   S get l10n => S.of(this);
+
+  TextStyle? myTitleLarge({Color? color}) => textTheme.titleLarge?.copyWith(
+        color: color ?? textTheme.titleLarge?.color,
+        fontWeight: FontWeight.bold,
+      );
+  TextStyle? get hintBoldText => textTheme.bodyLarge
+      ?.copyWith(fontWeight: FontWeight.w500, color: theme.hintColor);
+}
+
+extension CustomTextTheme on TextStyle {
+  TextStyle get boldTextTheme => copyWith(fontWeight: FontWeight.bold);
 }
