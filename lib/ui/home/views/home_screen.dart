@@ -21,9 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
       height: context.height * 0.2,
       decoration: BoxDecoration(
         color: context.theme.primaryColor,
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(300),
-        ),
+        borderRadius:
+            const BorderRadius.only(bottomRight: Radius.circular(300)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,14 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
       title: "Upcoming course",
       leading: Icon(Icons.schedule, color: context.theme.primaryColor),
       body: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 200),
+        constraints: BoxConstraints(maxHeight: context.height * 0.22),
         child: ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(
-            width: 20,
-          ),
+          separatorBuilder: (context, index) => const SizedBox(width: 20),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          itemBuilder: (context, index) => CourseWidget(
+          itemBuilder: (context, index) => const CourseWidget(
             imageUrl:
                 "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
             title: "Life in the Internet Age",
@@ -95,10 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Let's discuss how technology is changing the way we live",
             level: "Intermediate",
           ),
-          // itemBuilder: (context, index) => Container(
-          //   width: 120,
-          //   color: Colors.amber,
-          // ),
           itemCount: 5,
         ),
       ),
@@ -110,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: "Recommend Course",
       leading: Icon(Icons.schedule, color: context.theme.primaryColor),
       body: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 200),
+        constraints: BoxConstraints(maxHeight: context.height * 0.22),
         child: ListView.separated(
           separatorBuilder: (context, index) => const SizedBox(
             width: 20,
@@ -135,18 +128,19 @@ class _HomeScreenState extends State<HomeScreen> {
       title: "Recommend Tutor",
       leading: Icon(Icons.schedule, color: context.theme.primaryColor),
       body: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 290),
+        constraints: BoxConstraints(maxHeight: context.height * 0.38),
         child: ListView.separated(
           separatorBuilder: (context, index) => const SizedBox(
             width: 20,
           ),
           scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
           itemBuilder: (context, index) => TutorWidget(
             imageUrl:
                 "https://api.app.lettutor.com/avatar/83802576-70fe-4394-b27a-3d9e8b50f1b7avatar1649512219387.jpg",
             name: "name",
             country: "country",
-            specialties: ["specialties", "specialties", "specialties"],
+            specialties: List.generate(6, (index) => "sadfasd"),
             rating: 4.5,
             description:
                 "descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription",

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tutorial_service.dart';
+part of 'feedback_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'tutorial_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _TutorialService implements TutorialService {
-  _TutorialService(
+class _FeedbackService implements FeedbackService {
+  _FeedbackService(
     this._dio, {
     this.baseUrl,
   });
@@ -19,23 +19,24 @@ class _TutorialService implements TutorialService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<dynamic>> fetchTutorialPage({
-    required int page,
-    required int size,
+  Future<HttpResponse<FeedbackResponse>> getReviews(
+    String id, {
+    required Map<String, dynamic> body,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<FeedbackResponse>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/tutor/more?perPage=${size}&page=${page}',
+              '/feedback/v2/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -44,7 +45,7 @@ class _TutorialService implements TutorialService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = FeedbackResponse.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

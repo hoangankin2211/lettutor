@@ -156,8 +156,7 @@ class _TutorWidgetState extends State<TutorWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints:
-          BoxConstraints(maxWidth: context.width * 0.8, maxHeight: 180),
+      constraints: BoxConstraints(maxWidth: context.width * 0.8),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       decoration: BoxDecoration(
         color: context.theme.cardColor,

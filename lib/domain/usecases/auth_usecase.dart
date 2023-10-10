@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:lettutor/domain/mapper/user_mapper.dart';
 import 'package:lettutor/domain/models/user.dart';
 import 'package:lettutor/domain/repositories/authentication_repo.dart';

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/data/entities/response/content_category_response.dart';
+import 'package:lettutor/data/entities/response/course_detail_response.dart';
+import 'package:lettutor/data/entities/response/course_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'course_service.g.dart';
@@ -15,13 +17,13 @@ abstract class CourseService {
   factory CourseService(Dio dio) = _CourseService;
 
   @GET(course)
-  Future<HttpResponse<dynamic>> fetchCoursePage(
+  Future<HttpResponse<CourseResponse>> fetchCoursePage(
       {@Queries() required Map<String, dynamic> queries});
 
   @GET("$course/{id}")
-  Future<HttpResponse<dynamic>> getCourseDetail(
+  Future<HttpResponse<CourseDetailResponse>> getCourseDetail(
       {@Path("id") required String id});
 
   @GET(contentCategory)
-  Future<HttpResponse<dynamic>> getCategoryContent();
+  Future<HttpResponse<ContentCategoryResponse>> getCategoryContent();
 }

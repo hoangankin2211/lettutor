@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/auth/views/signup_screen.dart';
 import 'package:lettutor/ui/auth/views/widgets/custom_scaffold_body.dart';
 import 'package:lettutor/ui/auth/views/widgets/custom_textfield.dart';
@@ -15,6 +16,8 @@ import 'widgets/custom_scaffold_appbar.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
+
+  static const int pageNum = 0;
 
   @override
   State createState() {
@@ -112,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.text,
             maxLines: 1,
-            ignoreShadown: true,
+            ignoreShadow: true,
             onFieldSubmitted: (text) {},
           ),
           const SizedBox(height: 16),
@@ -135,7 +138,7 @@ class _SignInScreenState extends State<SignInScreen> {
             borderRadius: 5,
             textInputAction: TextInputAction.send,
             controller: _passwordController,
-            ignoreShadown: true,
+            ignoreShadow: true,
             onFieldSubmitted: (v) {
               _onLogin();
             },
@@ -188,7 +191,10 @@ class _SignInScreenState extends State<SignInScreen> {
             height: 16,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              BlocProvider.of<PageNotifier>(context)
+                  .nextPage(SignUpScreen.pageNum);
+            },
             child: RichText(
               text: TextSpan(
                 style: context.textTheme.bodyMedium?.copyWith(
@@ -272,27 +278,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
   final appBar = const CustomScaffoldAppBar();
 
+  final pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: context.colorScheme.primary,
-      appBar: appBar,
-      body: CustomScaffoldBody(
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.9 -
-              appBar.preferredSize.height,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              buildHeader(),
-              buildSignInForm(),
-              buildAnotherSignInOption(),
-              buildSignInButton(),
-            ],
-          ),
-        ),
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        buildHeader(),
+        buildSignInForm(),
+        buildAnotherSignInOption(),
+        buildSignInButton(),
+      ],
     );
   }
 }

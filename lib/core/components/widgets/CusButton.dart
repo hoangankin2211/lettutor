@@ -13,13 +13,13 @@ class CusButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         elevation: 0,
-        backgroundColor: context.theme.primaryColor.withOpacity(0.3),
+        backgroundColor: context.colorScheme.onPrimary,
         alignment: Alignment.center,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
           side: BorderSide(
             color: context.theme.primaryColor,
-            width: 0.2,
+            width: 1,
           ),
         ),
       ),

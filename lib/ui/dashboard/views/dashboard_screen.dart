@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/dependency_injection/di.dart';
+import 'package:lettutor/ui/course/blocs/course_bloc.dart';
+import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 
 import '../../../core/components/navigation/routes_location.dart';
@@ -35,7 +39,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     {
       'title': 'Courses',
       'icon': CupertinoIcons.book_fill,
-      "widget": Placeholder(),
+      "widget": BlocProvider(
+        create: (context) => injector.get<CourseBloc>(),
+        child: CourseScreen(),
+      ),
     },
     {
       'title': 'Setting',

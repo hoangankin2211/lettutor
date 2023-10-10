@@ -33,7 +33,7 @@ class _OTPScreenState extends State<OTPScreen> {
               fontWeight: FontWeight.normal,
             ),
             children: [
-              TextSpan(text: 'Welcome to '),
+              const TextSpan(text: 'Welcome to '),
               TextSpan(
                 text: 'TeamChannel'.toUpperCase(),
                 style: context.textTheme.titleMedium?.copyWith(

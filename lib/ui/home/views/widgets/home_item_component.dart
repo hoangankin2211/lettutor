@@ -20,8 +20,7 @@ class HomeItemComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          padding ?? const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: padding ?? const EdgeInsets.only(top: 10, bottom: 10, left: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

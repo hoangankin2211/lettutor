@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lettutor/core/core.dart';
 
 class TCInputField extends StatefulWidget {
-  final bool ignoreShadown;
+  final bool ignoreShadow;
   final bool isLoading;
   final String? hintText;
   final String? labelText;
@@ -53,7 +53,7 @@ class TCInputField extends StatefulWidget {
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.borderRadius = 15,
     this.isLoading = false,
-    this.ignoreShadown = false,
+    this.ignoreShadow = false,
     this.errorText,
   });
 
@@ -151,7 +151,7 @@ class _TCInputFieldState extends State<TCInputField> {
   InputBorder? enableBorder() {
     return OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
-        borderSide: widget.ignoreShadown
+        borderSide: widget.ignoreShadow
             ? BorderSide(
                 color: context.theme.dividerColor,
               )
@@ -229,7 +229,7 @@ class _TCInputFieldState extends State<TCInputField> {
     );
 
     return HRShadown(
-      ignoreShadown: widget.ignoreShadown,
+      ignoreShadown: widget.ignoreShadow,
       radius: widget.borderRadius,
       child: child,
     );

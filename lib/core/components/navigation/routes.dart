@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app.dart';
 import 'package:lettutor/app_init.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
@@ -37,7 +38,7 @@ final routes = [
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
     path: RouteLocation.auth,
-    builder: (context, state) => const SignInScreen(),
+    builder: (context, state) => const AuthScreen(),
   ),
   GoRoute(
     path: RouteLocation.splash,
