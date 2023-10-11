@@ -7,6 +7,8 @@ import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
 
+import '../../course/views/widgets/course_search_bar.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -170,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            CourseSearchBar(),
             _buildHeader(),
             Flexible(child: _buildUpComingCourse()),
             Flexible(child: _buildRecommendCourse()),
