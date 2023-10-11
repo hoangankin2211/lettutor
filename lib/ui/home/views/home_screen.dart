@@ -84,13 +84,23 @@ class _HomeScreenState extends State<HomeScreen> {
           separatorBuilder: (context, index) => const SizedBox(width: 20),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          itemBuilder: (context, index) => const CourseWidget(
-            imageUrl:
-                "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
-            title: "Life in the Internet Age",
-            subTitle:
-                "Let's discuss how technology is changing the way we live",
-            level: "Intermediate",
+          itemBuilder: (context, index) => Hero(
+            tag: index,
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  context.push("/${RouteLocation.courseDetail}");
+                },
+                child: const CourseWidget(
+                  imageUrl:
+                      "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
+                  title: "Life in the Internet Age",
+                  subTitle:
+                      "Let's discuss how technology is changing the way we live",
+                  level: "Intermediate",
+                ),
+              ),
+            ),
           ),
           itemCount: 5,
         ),

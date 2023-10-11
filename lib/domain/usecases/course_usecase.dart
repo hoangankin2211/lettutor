@@ -32,9 +32,16 @@ class CourseUseCase {
                   .toList(),
             ),
           );
+
   Future<Either<String, List<CourseCategory>>> getCourseCategory() =>
       courseRepository.getCourseCategory().mapRight(
             (right) =>
                 right.map(CourseMapper.courseCategoryFromEntity).toList(),
           );
+
+  Future<Either<String, CourseDetail>> getCourseDetail(String id) {
+    return courseRepository
+        .getCourseDetail(id: id)
+        .mapRight(CourseMapper.courseDetailEntityFromEntity);
+  }
 }

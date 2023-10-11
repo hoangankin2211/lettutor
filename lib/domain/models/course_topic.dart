@@ -13,6 +13,7 @@ class CourseTopic {
   final String? type;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+
   CourseTopic({
     required this.id,
     required this.courseId,

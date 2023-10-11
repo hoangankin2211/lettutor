@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:json_annotation/json_annotation.dart';
-
 import 'package:lettutor/data/entities/token_entity.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 

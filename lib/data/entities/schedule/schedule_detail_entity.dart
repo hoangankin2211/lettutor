@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:lettutor/data/data_source/remote/tutorial/tutor_service.dart';
-
 import 'schedule_info_entity.dart';
 
 class ScheduleDetailEntity {

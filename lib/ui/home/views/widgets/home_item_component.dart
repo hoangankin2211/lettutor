@@ -11,7 +11,6 @@ class HomeItemComponent extends StatelessWidget {
     this.padding,
     this.leading,
   });
-
   final String title;
   final Widget? trailing;
   final Widget? leading;
@@ -23,12 +22,15 @@ class HomeItemComponent extends StatelessWidget {
       padding: padding ?? const EdgeInsets.only(top: 10, bottom: 10, left: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              if (leading != null) leading!,
-              const SizedBox(width: 5),
+              if (leading != null) ...[
+                leading!,
+                const SizedBox(width: 5),
+              ],
               Text(
                 title,
                 style: context.textTheme.titleLarge

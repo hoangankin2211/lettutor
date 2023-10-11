@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class CourseTopicEntity {
   final String id;
   final String courseId;

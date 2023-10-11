@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/ui/course/blocs/course_bloc.dart';
+import 'package:lettutor/ui/course/views/course_detail_screen.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 
@@ -29,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     {
       'title': 'Teachers',
       'icon': CupertinoIcons.person_2_fill,
-      "widget": Placeholder(),
+      "widget": CourseDetailScreen(courseId: ""),
     },
     {
       'title': 'Schedule',
@@ -55,28 +56,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      appBar: AppBar(
-        leading: Image.asset(
-          "assets/images/splash.png",
-          cacheHeight: 50,
-          cacheWidth: 50,
-        ),
-        backgroundColor: context.theme.cardColor,
-        title: Text(
-          "LetTutor",
-          style: context.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: context.theme.primaryColor,
-          ),
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                context.go(RouteLocation.auth);
-              },
-              child: const Text("Logout"))
-        ],
-      ),
+      // appBar: AppBar(
+      //   leading: Image.asset(
+      //     "assets/images/splash.png",
+      //     cacheHeight: 50,
+      //     cacheWidth: 50,
+      //   ),
+      //   backgroundColor: context.theme.cardColor,
+      //   title: Text(
+      //     "LetTutor",
+      //     style: context.textTheme.titleLarge?.copyWith(
+      //       fontWeight: FontWeight.bold,
+      //       color: context.theme.primaryColor,
+      //     ),
+      //   ),
+      //   actions: [
+      //     TextButton(
+      //         onPressed: () {
+      //           context.go(RouteLocation.auth);
+      //         },
+      //         child: const Text("Logout"))
+      //   ],
+      // ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
