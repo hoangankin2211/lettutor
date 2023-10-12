@@ -213,9 +213,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                   decoration: BoxDecoration(
-                      color: context.colorScheme.onPrimary,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25))),
+                    color: context.colorScheme.onPrimary,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(25)),
+                  ),
                   child: Column(
                     children: [
                       _buildOverviewSection(),

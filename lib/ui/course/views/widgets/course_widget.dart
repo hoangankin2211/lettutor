@@ -10,6 +10,7 @@ class CourseWidget extends StatelessWidget {
       required this.title,
       required this.subTitle,
       required this.level});
+
   final String? imageUrl;
   final String? title;
   final String? subTitle;
@@ -45,24 +46,27 @@ class CourseWidget extends StatelessWidget {
     );
   }
 
-  _buildDegree(BuildContext context,
-      {MaterialAccentColor color = Colors.orangeAccent}) {
+  _buildDegree(
+    BuildContext context, {
+    MaterialAccentColor color = Colors.orangeAccent,
+  }) {
     return Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: List.generate(
-          5,
-          (index) => Container(
-            height: 4 + index * 4,
-            width: 4,
-            color: index < 3 ? color : color.shade100.withOpacity(0.5),
-          ),
-        )
-            .expand((element) => [
-                  element,
-                  const SizedBox(width: 2),
-                ])
-            .toList());
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: List.generate(
+        5,
+        (index) => Container(
+          height: 4 + index * 4,
+          width: 4,
+          color: index < 3 ? color : color.shade100.withOpacity(0.5),
+        ),
+      )
+          .expand((element) => [
+                element,
+                const SizedBox(width: 2),
+              ])
+          .toList(),
+    );
   }
 
   _buildDifficulty(BuildContext context,

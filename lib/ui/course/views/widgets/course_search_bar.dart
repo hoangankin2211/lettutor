@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 
 class CourseSearchBar extends StatelessWidget {
@@ -11,7 +10,7 @@ class CourseSearchBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Expanded(
+        const Expanded(
           child: TextField(
             decoration: InputDecoration(
               fillColor: Colors.green,
@@ -22,7 +21,7 @@ class CourseSearchBar extends StatelessWidget {
           style:
               IconButton.styleFrom(backgroundColor: context.theme.primaryColor),
           onPressed: () {},
-          icon: Icon(Icons.filter_list_outlined),
+          icon: const Icon(Icons.filter_list_outlined),
         ),
       ],
     );

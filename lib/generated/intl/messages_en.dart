@@ -98,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "small": MessageLookupByLibrary.simpleMessage("Small"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Oops, Something went wrong!"),
+        "welcomeTo": MessageLookupByLibrary.simpleMessage("Welcome to"),
         "wordSpacing": MessageLookupByLibrary.simpleMessage("Word spacing"),
         "writeYourQuoteHere": MessageLookupByLibrary.simpleMessage(
             "Start writing your quote here ...")
