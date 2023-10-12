@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
+import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/course/blocs/course_bloc.dart';
 import 'package:lettutor/ui/course/views/course_detail_screen.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
@@ -30,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     {
       'title': 'Teachers',
       'icon': CupertinoIcons.person_2_fill,
-      "widget": CourseDetailScreen(courseId: ""),
+      "widget": CourseDetailScreen(courseId: 0.toString()),
     },
     {
       'title': 'Schedule',
@@ -51,6 +52,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       "widget": Placeholder(),
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

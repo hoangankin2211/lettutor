@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
 
+import '../../../domain/usecases/tutor_usecase.dart';
 import '../../course/views/widgets/course_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -91,10 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
             tag: index,
             child: Material(
               child: InkWell(
-                onTap: () {
-                  context.push("/${RouteLocation.courseDetail}");
-                },
-                child: const CourseWidget(
+                onTap: () {},
+                child: CourseWidget(
+                  courseId: index.toString(),
+                  onTap: (id) {
+                    context.push("/${RouteLocation.courseDetail}",
+                        extra: <String, dynamic>{"courseId": id});
+                  },
                   imageUrl:
                       "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
                   title: "Life in the Internet Age",
@@ -123,6 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => CourseWidget(
+            courseId: index.toString(),
+            onTap: (id) {},
             imageUrl:
                 "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
             title: "Life in the Internet Age",
@@ -186,7 +193,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           TextButton(
               onPressed: () {
-                context.go(RouteLocation.auth);
+                // context.go(RouteLocation.auth);
+                injector.get<TutorUseCase>().markFavoriteTutor(
+                    id: "69d5daf8-24be-4645-a93a-5412ad94d51d");
               },
               child: const Text("Logout"))
         ],

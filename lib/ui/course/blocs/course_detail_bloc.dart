@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/domain/models/course/course.dart';
 import 'package:lettutor/domain/usecases/course_usecase.dart';
-import 'package:lettutor/ui/course/blocs/course_detail_state.dart';
+part 'course_detail_state.dart';
 
 @injectable
 class CourseDetailBloc extends Cubit<CourseDetailState> {

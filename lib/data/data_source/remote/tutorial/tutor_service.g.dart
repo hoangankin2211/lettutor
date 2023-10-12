@@ -19,7 +19,7 @@ class _TutorService implements TutorService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<TutorResponse?>> fetchTutorialPage({
+  Future<HttpResponse<TutorResponse>> fetchTutorialPage({
     required int page,
     required int size,
   }) async {
@@ -27,7 +27,7 @@ class _TutorService implements TutorService {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>?>(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<TutorResponse>>(Options(
       method: 'GET',
       headers: _headers,
@@ -44,8 +44,7 @@ class _TutorService implements TutorService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value =
-        _result.data == null ? null : TutorResponse.fromJson(_result.data!);
+    final value = TutorResponse.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -81,14 +80,14 @@ class _TutorService implements TutorService {
   }
 
   @override
-  Future<HttpResponse<SearchTutorResponse?>> searchTutor(
+  Future<HttpResponse<SearchTutorResponse>> searchTutor(
       {required Map<String, dynamic> body}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>?>(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<SearchTutorResponse>>(Options(
       method: 'POST',
       headers: _headers,
@@ -105,20 +104,18 @@ class _TutorService implements TutorService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data == null
-        ? null
-        : SearchTutorResponse.fromJson(_result.data!);
+    final value = SearchTutorResponse.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<TutorDetailEntity?>> getTutorById(String id) async {
+  Future<HttpResponse<TutorDetailEntity>> getTutorById(String id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>?>(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<TutorDetailEntity>>(Options(
       method: 'GET',
       headers: _headers,
@@ -135,41 +132,7 @@ class _TutorService implements TutorService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value =
-        _result.data == null ? null : TutorDetailEntity.fromJson(_result.data!);
-    final httpResponse = HttpResponse(value, _result);
-    return httpResponse;
-  }
-
-  @override
-  Future<HttpResponse<ScheduleResponse?>> fetchTutorSchedule(
-    String tutorId,
-    int st,
-    int et,
-  ) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>?>(
-        _setStreamType<HttpResponse<ScheduleResponse>>(Options(
-      method: 'GET',
-      headers: _headers,
-      extra: _extra,
-    )
-            .compose(
-              _dio.options,
-              '/schedule?tutorId=${tutorId}&startTimestamp=${st}&endTimestamp=${et}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final value =
-        _result.data == null ? null : ScheduleResponse.fromJson(_result.data!);
+    final value = TutorDetailEntity.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

@@ -1,4 +1,4 @@
-import 'package:lettutor/domain/models/course_detail.dart';
+part of 'course_detail_bloc.dart';
 
 abstract class CourseDetailState {
   final CourseDetail? course;

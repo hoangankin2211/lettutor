@@ -40,9 +40,8 @@ class _CourseScreenState extends State<CourseScreen> {
           } else {
             return Column(
               children: [
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
+                const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                     child: CustomNavigatorBar()),
                 Expanded(
                   child: ListView.separated(
@@ -55,6 +54,7 @@ class _CourseScreenState extends State<CourseScreen> {
                     itemBuilder: (context, index) {
                       final course = state.data.course.elementAt(index);
                       return CourseWidget(
+                        courseId: course.id,
                         imageUrl: course.imageUrl,
                         title: course.name,
                         subTitle: course.description,

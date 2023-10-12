@@ -4,17 +4,22 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 
 class CourseWidget extends StatelessWidget {
-  const CourseWidget(
-      {super.key,
-      required this.imageUrl,
-      required this.title,
-      required this.subTitle,
-      required this.level});
+  const CourseWidget({
+    super.key,
+    required this.courseId,
+    required this.imageUrl,
+    required this.title,
+    required this.subTitle,
+    required this.level,
+    this.onTap,
+  });
 
+  final String courseId;
   final String? imageUrl;
   final String? title;
   final String? subTitle;
   final String? level;
+  final void Function(String id)? onTap;
 
   Widget _buildImage(BuildContext context) {
     return imageUrl != null
@@ -94,7 +99,9 @@ class CourseWidget extends StatelessWidget {
       color: context.theme.cardColor,
       borderRadius: BorderRadius.circular(15),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          if (onTap != null) onTap!(courseId);
+        },
         child: Container(
           constraints: BoxConstraints(maxWidth: context.width * 0.85),
           decoration: BoxDecoration(

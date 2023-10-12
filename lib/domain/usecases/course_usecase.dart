@@ -1,11 +1,9 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/domain/mapper/course_mapper.dart';
-import 'package:lettutor/domain/models/course_detail.dart';
+import 'package:lettutor/domain/models/course/course.dart';
 import 'package:lettutor/domain/models/pagination.dart';
 import 'package:lettutor/domain/repositories/course_repo.dart';
-
-import '../models/course_category.dart';
 
 @injectable
 class CourseUseCase {

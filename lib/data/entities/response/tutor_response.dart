@@ -4,19 +4,26 @@ class TutorResponse {
   final int count;
   final List<TutorEntity> tutors;
   final List<String> favTutors;
-  TutorResponse(this.count, this.tutors, this.favTutors);
+  TutorResponse(
+      {required this.count, required this.tutors, required this.favTutors});
 
   factory TutorResponse.fromJson(Map<String, dynamic> data) {
     final cData = data['tutors'];
-    if (cData == null) return TutorResponse(0, List.empty(), List.empty());
+    if (cData == null) {
+      return TutorResponse(
+        count: 0,
+        tutors: List.empty(),
+        favTutors: List.empty(),
+      );
+    }
     return TutorResponse(
-      (cData['count'] as int?) ?? 0,
-      cData['rows'] != null
+      count: (cData['count'] as int?) ?? 0,
+      tutors: cData['rows'] != null
           ? ((cData['rows']) as List<dynamic>)
               .map((e) => TutorEntity.fromJson(e))
               .toList()
           : List.empty(),
-      data['favoriteTutor'] != null
+      favTutors: data['favoriteTutor'] != null
           ? (data['favoriteTutor'] as List<dynamic>)
               .map((e) => e['secondId']?.toString().trim() ?? '')
               .toList()

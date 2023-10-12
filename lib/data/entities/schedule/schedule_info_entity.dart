@@ -66,7 +66,7 @@ class ScheduleInfoEntity {
       isDeleted: map['isDeleted'] as bool,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
-      tutorInfo: TutorEntity.fromMap(map['tutorInfo'] as Map<String, dynamic>),
+      tutorInfo: TutorEntity.fromJson(map['tutorInfo'] as Map<String, dynamic>),
     );
   }
 }

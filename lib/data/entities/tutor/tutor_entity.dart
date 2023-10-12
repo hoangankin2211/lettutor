@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class TutorEntity {
   final String id;
   final String? level;
@@ -44,6 +42,8 @@ class TutorEntity {
   final bool? isNative;
   final double? price;
   final bool? isOnline;
+  final bool? isFavoriteTutor;
+
   TutorEntity({
     required this.id,
     this.level,
@@ -87,6 +87,7 @@ class TutorEntity {
     this.isNative,
     this.price,
     this.isOnline,
+    this.isFavoriteTutor,
   });
 
   Map<String, dynamic> toMap() {
@@ -136,7 +137,7 @@ class TutorEntity {
     };
   }
 
-  factory TutorEntity.fromMap(Map<String, dynamic> map) {
+  factory TutorEntity.fromJson(Map<String, dynamic> map) {
     return TutorEntity(
       id: map['id'] as String,
       level: map['level'] != null ? map['level'] as String : null,
@@ -149,9 +150,8 @@ class TutorEntity {
       country: map['country'] != null ? map['country'] as String : null,
       phone: map['phone'] != null ? map['phone'] as String : null,
       language: map['language'] != null ? map['language'] as String : null,
-      birthday: map['birthday'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['birthday'] as int)
-          : null,
+      birthday:
+          map['birthday'] != null ? DateTime.parse(map['birthday']) : null,
       requestPassword: map['requestPassword'] != null
           ? map['requestPassword'] as bool
           : null,
@@ -174,12 +174,10 @@ class TutorEntity {
       caredByStaffId: map['caredByStaffId'] != null
           ? map['caredByStaffId'] as String
           : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
-          : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
       deletedAt: map['deletedAt'] != null ? map['deletedAt'] as String : null,
       studentGroupId: map['studentGroupId'] != null
           ? map['studentGroupId'] as String
@@ -202,13 +200,11 @@ class TutorEntity {
       resume: map['resume'] != null ? map['resume'] as String : null,
       rating: map['rating'] != null ? map['rating'] as double : null,
       isNative: map['isNative'] != null ? map['isNative'] as bool : null,
-      price: map['price'] != null ? map['price'] as double : null,
+      price: map['price'] != null ? (map['price'] as int).toDouble() : null,
       isOnline: map['isOnline'] != null ? map['isOnline'] as bool : null,
+      isFavoriteTutor: map['isFavoriteTutor'] != null
+          ? map['isFavoriteTutor'] as bool
+          : false,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory TutorEntity.fromJson(String source) =>
-      TutorEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }

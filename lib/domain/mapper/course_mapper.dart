@@ -3,9 +3,7 @@ import 'dart:math';
 import 'package:lettutor/data/entities/course/course_category_entity.dart';
 import 'package:lettutor/data/entities/course/course_detail_entity.dart';
 import 'package:lettutor/data/entities/course/course_topic_entity.dart';
-import 'package:lettutor/domain/models/course_category.dart';
-import 'package:lettutor/domain/models/course_detail.dart';
-import 'package:lettutor/domain/models/course_topic.dart';
+import 'package:lettutor/domain/models/course/course.dart';
 
 import '../../data/entities/course/course_entity.dart';
 

@@ -19,14 +19,13 @@ abstract class TutorService {
   static const String fetchTutorial = "$branch/more";
   static const String searchTutorApi = "$branch/search";
   static const String getTutorByIdApi = branch;
-  static const String getTutorSchedule = "/schedule";
   static const String markFavorite = "/user/manageFavoriteTutor";
 
   @factoryMethod
   factory TutorService(Dio dio) = _TutorService;
 
   @GET('$fetchTutorial?perPage={size}&page={page}')
-  Future<HttpResponse<TutorResponse?>> fetchTutorialPage({
+  Future<HttpResponse<TutorResponse>> fetchTutorialPage({
     @Path('page') required int page,
     @Path("size") required int size,
   });
@@ -36,20 +35,11 @@ abstract class TutorService {
       {@Body() required Map<String, dynamic> body});
 
   @POST(searchTutorApi)
-  Future<HttpResponse<SearchTutorResponse?>> searchTutor(
+  Future<HttpResponse<SearchTutorResponse>> searchTutor(
       {@Body() required Map<String, dynamic> body});
 
   @GET('$getTutorByIdApi/{id}')
-  Future<HttpResponse<TutorDetailEntity?>> getTutorById(
+  Future<HttpResponse<TutorDetailEntity>> getTutorById(
     @Path('id') String id,
-  );
-
-  @GET(
-    '$getTutorSchedule?tutorId={tutorId}&startTimestamp={sT}&endTimestamp={eT}',
-  )
-  Future<HttpResponse<ScheduleResponse?>> fetchTutorSchedule(
-    @Path('tutorId') String tutorId,
-    @Path('sT') int st,
-    @Path('eT') int et,
   );
 }

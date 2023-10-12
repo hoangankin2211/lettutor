@@ -11,14 +11,22 @@ Future<DataState<T>> getStateOf<T>({
   try {
     final httpResponse = await request();
     if (httpResponse.response.statusCode == HttpStatus.ok) {
-      return DataSuccess(data: httpResponse.data);
+      return DataSuccess(
+        data: httpResponse.data,
+        statusCode: httpResponse.response.statusCode!,
+      );
     } else {
       throw DioException(
+        response: httpResponse.response,
+        message: httpResponse.response.statusMessage,
         requestOptions: httpResponse.response.requestOptions,
         error: httpResponse.response,
       );
     }
   } on DioException catch (e) {
-    return DataFailed(exception: e);
+    return DataFailed(
+      exception: e,
+      statusCode: e.response?.statusCode ?? 400,
+    );
   }
 }

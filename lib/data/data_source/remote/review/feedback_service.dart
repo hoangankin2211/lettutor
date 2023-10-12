@@ -10,11 +10,16 @@ part 'feedback_service.g.dart';
 @RestApi()
 abstract class FeedbackService {
   static const String getReviewApi = "/feedback/v2";
+  static const String addFeedbackTutor = "/user/feedbackTutor";
 
   @factoryMethod
   factory FeedbackService(Dio dio) = _FeedbackService;
 
   @GET('$getReviewApi/{id}')
   Future<HttpResponse<FeedbackResponse>> getReviews(@Path('id') String id,
+      {@Body() required Map<String, dynamic> body});
+
+  @POST(addFeedbackTutor)
+  Future<HttpResponse<dynamic>> addFeedBack(
       {@Body() required Map<String, dynamic> body});
 }
