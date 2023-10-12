@@ -155,31 +155,38 @@ class _TutorWidgetState extends State<TutorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: context.width * 0.8),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      decoration: BoxDecoration(
-        color: context.theme.cardColor,
-        border: Border.all(
-          color: context.theme.hintColor.withOpacity(0.1),
-          width: 1.5,
+    return Material(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: context.theme.cardColor,
+      borderRadius: BorderRadius.circular(15),
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          constraints: BoxConstraints(maxWidth: context.width * 0.8),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: context.theme.hintColor.withOpacity(0.1),
+              width: 1.5,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildHeader(),
+              _buildDescription(),
+              _buildActionButton(),
+            ]
+                .expand<Widget>(
+                  (element) => [
+                    element,
+                    const SizedBox(height: 10),
+                  ],
+                )
+                .toList(),
+          ),
         ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildHeader(),
-          _buildDescription(),
-          _buildActionButton(),
-        ]
-            .expand<Widget>(
-              (element) => [
-                element,
-                const SizedBox(height: 10),
-              ],
-            )
-            .toList(),
       ),
     );
   }

@@ -16,7 +16,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final AuthenticationApi _authenticationApi;
   final AppLocalStorage _appLocalStorage;
 
-  AuthenticationRepositoryImpl(
+  const AuthenticationRepositoryImpl(
     @Named("EmailAuthApi") this._authenticationApi,
     this._appLocalStorage,
   );

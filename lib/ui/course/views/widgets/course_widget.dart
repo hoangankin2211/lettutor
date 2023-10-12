@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 
 class CourseWidget extends StatelessWidget {
@@ -13,14 +15,13 @@ class CourseWidget extends StatelessWidget {
   final String? subTitle;
   final String? level;
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
     return imageUrl != null
-        ? Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imageUrl!),
-                fit: BoxFit.cover,
-              ),
+        ? ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: context.height * 0.22),
+            child: Ink.image(
+              fit: BoxFit.cover, // Fixes border issues
+              image: NetworkImage(imageUrl!),
             ),
           )
         : const Placeholder();
@@ -84,37 +85,42 @@ class CourseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints:
-          BoxConstraints(maxWidth: context.width * 0.85, minHeight: 190),
+    return Material(
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      decoration: BoxDecoration(
-        color: context.theme.cardColor,
-        border: Border.all(
-          color: context.theme.hintColor.withOpacity(0.1),
-          width: 1.5,
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(child: _buildImage()),
-          const SizedBox(width: 10),
-          Flexible(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildTitle(context),
-                _buildSubTitle(context),
-                const SizedBox(height: 20),
-                _buildDifficulty(context),
-              ],
+      color: context.theme.cardColor,
+      borderRadius: BorderRadius.circular(15),
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          constraints: BoxConstraints(maxWidth: context.width * 0.85),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: context.theme.hintColor.withOpacity(0.1),
+              width: 1.5,
             ),
           ),
-        ],
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(child: _buildImage(context)),
+              const SizedBox(width: 10),
+              Flexible(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildTitle(context),
+                    _buildSubTitle(context),
+                    const SizedBox(height: 20),
+                    _buildDifficulty(context),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

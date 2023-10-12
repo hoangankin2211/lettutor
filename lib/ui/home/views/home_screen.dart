@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: context.height * 0.22),
         child: ListView.separated(
+          padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => const SizedBox(width: 20),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
@@ -167,6 +168,29 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        leading: Image.asset(
+          "assets/images/splash.png",
+          cacheHeight: 50,
+          cacheWidth: 50,
+        ),
+        backgroundColor: context.theme.cardColor,
+        title: Text(
+          "LetTutor",
+          style: context.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: context.theme.primaryColor,
+          ),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                context.go(RouteLocation.auth);
+              },
+              child: const Text("Logout"))
+        ],
+      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
