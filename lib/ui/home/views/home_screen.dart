@@ -86,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: context.height * 0.22),
         child: ListView.separated(
+          physics: BouncingScrollPhysics(),
           padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => const SizedBox(width: 20),
           scrollDirection: Axis.horizontal,

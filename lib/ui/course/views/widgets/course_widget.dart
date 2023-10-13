@@ -23,13 +23,15 @@ class CourseWidget extends StatelessWidget {
 
   Widget _buildImage(BuildContext context) {
     return imageUrl != null
-        ? ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: context.height * 0.22),
-            child: Hero(
-              tag: courseId,
-              child: Ink.image(
-                fit: BoxFit.cover, // Fixes border issues
-                image: NetworkImage(imageUrl!),
+        ? Hero(
+            tag: courseId,
+            child: Material(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: context.height * 0.22),
+                child: Ink.image(
+                  fit: BoxFit.cover, // Fixes border issues
+                  image: NetworkImage(imageUrl!),
+                ),
               ),
             ),
           )

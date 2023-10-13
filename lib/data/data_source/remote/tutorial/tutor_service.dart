@@ -5,8 +5,6 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 import 'package:lettutor/data/entities/tutor/tutor_detail_entity.dart';
-
-import '../../../entities/response/schedule_response.dart';
 import '../../../entities/response/search_tutor_response.dart';
 import '../../../entities/response/tutor_response.dart';
 

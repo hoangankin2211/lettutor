@@ -48,8 +48,11 @@ class _CustomTemplateScreenStackScrollState
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        widget.willPopup!();
-        return true;
+        if (widget.willPopup != null) {
+          widget.willPopup!();
+          return true;
+        }
+        return false;
       },
       child: Scaffold(
         extendBody: true,

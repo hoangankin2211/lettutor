@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/domain/models/course/course.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
 import 'package:lettutor/ui/course/blocs/ebook_state.dart';
 import 'package:lettutor/ui/course/views/widgets/course_search_bar.dart';

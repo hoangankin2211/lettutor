@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/change_notifier.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/domain/models/course/course.dart';
 import 'package:lettutor/ui/course/blocs/course_detail_bloc.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../../core/components/widgets/custom_appbar.dart';
 import '../../../core/components/widgets/custom_stack_scroll.dart';
@@ -24,14 +28,22 @@ class CourseDetailScreen extends StatefulWidget {
 }
 
 class _CourseDetailScreenState extends State<CourseDetailScreen> {
-  // late final courseDetailBloc = BlocProvider.o f<CourseDetailBloc>(context);
+  late final CourseDetailBloc courseDetailBloc;
+
+  final ValueNotifier<Color?> color = ValueNotifier(null);
+
   @override
   void initState() {
-    // courseDetailBloc.fetchCourseDetailData("");
+    initBloc();
     super.initState();
   }
 
-  _buildOverviewComponent() {
+  initBloc() {
+    courseDetailBloc = injector.get<CourseDetailBloc>();
+    courseDetailBloc.fetchCourseDetailData(widget.courseId);
+  }
+
+  _buildOverviewComponent(String title, String description) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +58,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             ),
             const SizedBox(width: 5),
             Text(
-              "What will you able to do ?",
+              title,
               style: context.textTheme.titleMedium
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
@@ -54,20 +66,29 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         ),
         const SizedBox(height: 5),
         Text(
-          "asdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfasasdfasdfasdfasdfasdfas",
+          description,
           style: context.textTheme.bodyLarge,
         ),
       ],
     );
   }
 
-  _buildOverviewSection() {
+  _buildOverviewSection({
+    required String reason,
+    required String purpose,
+  }) {
+    Map<String, dynamic> data = {
+      "What take this course ?": reason,
+      "What will you able to do ?": purpose,
+    };
     return HomeItemComponent(
       title: "OverView",
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(2, (index) => _buildOverviewComponent())
+        children: data.entries
+            .map((entries) =>
+                _buildOverviewComponent(entries.key, entries.value))
             .expand<Widget>((element) => [
                   element,
                   const SizedBox(
@@ -98,7 +119,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  _buildCourseLength() {
+  _buildCourseLength(int length) {
     return HomeItemComponent(
       title: "Course Length",
       body: Row(
@@ -108,7 +129,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           Icon(CupertinoIcons.book),
           const SizedBox(width: 5),
           Text(
-            "9 Topics",
+            "$length Topics",
             style: context.textTheme.titleMedium
                 ?.copyWith(fontWeight: FontWeight.w500),
           )
@@ -117,7 +138,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  Widget _buildTopicComponent() {
+  Widget _buildTopicComponent({
+    required String unit,
+    required String description,
+  }) {
     return Material(
       borderRadius: BorderRadius.circular(10),
       color: context.theme.primaryColor.withOpacity(
@@ -127,9 +151,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
       child: ListTile(
         onTap: () {},
         titleTextStyle: context.textTheme.titleMedium?.boldTextTheme,
-        title: Text("Unit 1"),
+        title: Text("Unit $unit"),
         subtitleTextStyle: context.textTheme.titleSmall?.boldTextTheme,
-        subtitle: Text("Introduction"),
+        subtitle: Text(description),
         trailing: Text(
           "Learn Now",
           style: context.textTheme.bodyLarge
@@ -139,14 +163,20 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  _buildListTopic() {
+  _buildListTopic(List<CourseTopic> topics) {
     return HomeItemComponent(
       title: "List Topics",
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: List.generate(6, (index) => _buildTopicComponent())
+        children: List.generate(
+                topics.length,
+                (index) => _buildTopicComponent(
+                      description: topics.elementAt(index).name,
+                      unit:
+                          topics.elementAt(index).orderCourse?.toString() ?? "",
+                    ))
             .expand<Widget>((element) => [element, const SizedBox(height: 8)])
             .toList(),
       ),
@@ -155,88 +185,190 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          splashRadius: 20,
-          onPressed: () => context.pop(),
-          icon: const Icon(CupertinoIcons.back),
-        ),
-        title: Text(
-          'Life in the internet age',
-          style: context.myTitleLarge(color: context.colorScheme.onPrimary),
-        ),
-      ),
-      body: Stack(
-        children: [
-          CustomTemplateScreenStackScroll(
-            color: Colors.transparent,
-            paddingAll: const EdgeInsets.all(5),
-            afterMainScreen: Hero(
-              tag: widget.courseId,
-              child: Image.network(
-                "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
-                fit: BoxFit.cover,
-                height: (context.height * 0.45 + 5),
-              ),
+    return BlocConsumer<CourseDetailBloc, CourseDetailState>(
+        bloc: courseDetailBloc,
+        // listenWhen: (previous, current) =>
+        //     previous.runtimeType != current.runtimeType,
+        listener: (context, state) async {
+          if (state is LoadCourseDetailSuccess &&
+              state.course?.imageUrl != null &&
+              color.value == null) {
+            final ImageProvider imageProvider =
+                NetworkImage(state.course!.imageUrl!);
+
+            PaletteGenerator paletteGenerator =
+                await PaletteGenerator.fromImageProvider(imageProvider);
+
+            color.value = paletteGenerator.dominantColor?.color;
+            courseDetailBloc.rebuildBloc();
+          }
+        },
+        builder: (context, state) {
+          if (state is InitialCourseDetailPage ||
+              state is LoadingCourseDetail ||
+              color.value == null) {
+            return const AppLoadingIndicator();
+          }
+
+          return Scaffold(
+            appBar: CustomAppBar(
+              appBarBuilder: (context, color, child) {
+                return AppBar(
+                  elevation: 0,
+                  backgroundColor: color,
+                  leading: IconButton(
+                    splashRadius: 20,
+                    onPressed: () => context.pop(),
+                    icon: const Icon(CupertinoIcons.back),
+                  ),
+                  title: Text(
+                    state.course?.name ?? "",
+                    style: context.myTitleLarge(
+                        color: context.colorScheme.onPrimary),
+                  ),
+                );
+              },
+              color: color,
             ),
-            bottomSheet: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: context.width * 0.1, vertical: 10),
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+            body: Stack(
+              children: [
+                CustomTemplateScreenStackScroll(
+                  color: Colors.transparent,
+                  paddingAll: const EdgeInsets.all(5),
+                  afterMainScreen: Hero(
+                    tag: widget.courseId,
+                    child: FadeInImage.assetNetwork(
+                      image: state.course?.imageUrl ?? "",
+                      placeholder: "assets/images/placeholder.png",
+                      fit: BoxFit.cover,
+                      height: (context.height * 0.45 + 5),
+                    ),
                   ),
-                  minimumSize: Size(context.width * 0.9, 50),
-                  maximumSize: Size(context.width * 0.9, 60),
-                ),
-                onPressed: () {},
-                icon:
-                    const Icon(CupertinoIcons.arrowtriangle_right_circle_fill),
-                label: Text(
-                  "Discover",
-                  style: context.textTheme.titleLarge?.copyWith(
-                    color: context.colorScheme.onPrimary,
+                  bottomSheet: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.width * 0.1, vertical: 10),
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        minimumSize: Size(context.width * 0.9, 50),
+                        maximumSize: Size(context.width * 0.9, 60),
+                      ),
+                      onPressed: () {},
+                      icon: const Icon(
+                          CupertinoIcons.arrowtriangle_right_circle_fill),
+                      label: Text(
+                        "Discover",
+                        style: context.textTheme.titleLarge?.copyWith(
+                          color: context.colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
                   ),
+                  appBar: AppBarCustom(
+                    expandedHeight: context.height * 0.4,
+                    backgroundColor: Colors.transparent,
+                    title: const [],
+                  ),
+                  children: [
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 20),
+                        decoration: BoxDecoration(
+                          color: context.colorScheme.onPrimary,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(25)),
+                        ),
+                        child: Column(
+                          children: [
+                            _buildOverviewSection(
+                              purpose: state.course?.purpose ?? "",
+                              reason: state.course?.reason ?? "",
+                            ),
+                            _buildExperienceLevel(),
+                            _buildCourseLength(
+                                state.course?.topics?.length ?? 0),
+                            _buildListTopic(state.course?.topics ?? []),
+                            const SizedBox(height: 40),
+                          ]
+                              .expand<Widget>((element) => [
+                                    element,
+                                    const SizedBox(height: 10),
+                                  ])
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+              ],
             ),
-            appBar: AppBarCustom(
-              expandedHeight: context.height * 0.4,
-              backgroundColor: Colors.transparent,
-              title: const [],
-            ),
-            children: [
-              SliverToBoxAdapter(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.onPrimary,
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(25)),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildOverviewSection(),
-                      _buildExperienceLevel(),
-                      _buildCourseLength(),
-                      _buildListTopic(),
-                      const SizedBox(height: 40),
-                    ]
-                        .expand<Widget>((element) => [
-                              element,
-                              const SizedBox(height: 10),
-                            ])
-                        .toList(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+          );
+        });
+  }
+}
+
+class CustomAppBar extends AppBar implements ValueListenableBuilder {
+  final ValueNotifier color;
+  final Widget? appBarChild;
+  final ValueWidgetBuilder appBarBuilder;
+
+  CustomAppBar({
+    super.key,
+    this.appBarChild,
+    required this.appBarBuilder,
+    required this.color,
+  });
+
+  @override
+  ValueWidgetBuilder get builder => appBarBuilder;
+
+  @override
+  Widget? get child => appBarChild;
+
+  @override
+  ValueListenable get valueListenable => color;
+
+  @override
+  State<AppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  late Color? value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = widget.valueListenable.value;
+    widget.valueListenable.addListener(_valueChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomAppBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.valueListenable != widget.valueListenable) {
+      oldWidget.valueListenable.removeListener(_valueChanged);
+      value = widget.valueListenable.value;
+      widget.valueListenable.addListener(_valueChanged);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.valueListenable.removeListener(_valueChanged);
+    super.dispose();
+  }
+
+  void _valueChanged() {
+    setState(() {
+      value = widget.valueListenable.value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(context, value, widget.child);
   }
 }

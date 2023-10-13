@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/data_state.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/ebook/ebook_service.dart';
-import 'package:lettutor/data/entities/ebook_entity.dart';
 import 'package:lettutor/data/entities/response/ebook_response.dart';
 import 'package:lettutor/domain/mapper/course_mapper.dart';
 import 'package:lettutor/domain/models/course/course.dart';

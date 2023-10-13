@@ -1,10 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'course_detail_bloc.dart';
 
-abstract class CourseDetailState {
+class CourseDetailState {
   final CourseDetail? course;
   CourseDetailState({
     required this.course,
   });
+
+  CourseDetailState copyWith({
+    CourseDetail? course,
+  }) {
+    return CourseDetailState(
+      course: course ?? this.course,
+    );
+  }
 }
 
 class InitialCourseDetailPage extends CourseDetailState {
