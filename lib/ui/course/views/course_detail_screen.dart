@@ -173,7 +173,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             color: Colors.transparent,
             paddingAll: const EdgeInsets.all(5),
             afterMainScreen: Hero(
-              tag: int.parse(widget.courseId),
+              tag: widget.courseId,
               child: Image.network(
                 "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
                 fit: BoxFit.cover,

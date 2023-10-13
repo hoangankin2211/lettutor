@@ -25,9 +25,12 @@ class CourseWidget extends StatelessWidget {
     return imageUrl != null
         ? ConstrainedBox(
             constraints: BoxConstraints(maxHeight: context.height * 0.22),
-            child: Ink.image(
-              fit: BoxFit.cover, // Fixes border issues
-              image: NetworkImage(imageUrl!),
+            child: Hero(
+              tag: courseId,
+              child: Ink.image(
+                fit: BoxFit.cover, // Fixes border issues
+                image: NetworkImage(imageUrl!),
+              ),
             ),
           )
         : const Placeholder();

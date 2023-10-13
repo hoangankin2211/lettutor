@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/core.dart';
-import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
 
 import '../../../domain/usecases/tutor_usecase.dart';
-import '../../course/views/widgets/course_search_bar.dart';
+import '../../auth/blocs/auth_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final authBloc = BlocProvider.of<AuthBloc>(context);
+
   _buildHeader() {
     return Container(
       padding: const EdgeInsets.only(left: 25),
@@ -89,26 +90,18 @@ class _HomeScreenState extends State<HomeScreen> {
           separatorBuilder: (context, index) => const SizedBox(width: 20),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          itemBuilder: (context, index) => Hero(
-            tag: index,
-            child: Material(
-              child: InkWell(
-                onTap: () {},
-                child: CourseWidget(
-                  courseId: index.toString(),
-                  onTap: (id) {
-                    context.push("/${RouteLocation.courseDetail}",
-                        extra: <String, dynamic>{"courseId": id});
-                  },
-                  imageUrl:
-                      "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
-                  title: "Life in the Internet Age",
-                  subTitle:
-                      "Let's discuss how technology is changing the way we live",
-                  level: "Intermediate",
-                ),
-              ),
-            ),
+          itemBuilder: (context, index) => CourseWidget(
+            courseId: index.toString() + "a",
+            onTap: (id) {
+              context.push("/${RouteLocation.courseDetail}",
+                  extra: <String, dynamic>{"courseId": id});
+            },
+            imageUrl:
+                "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
+            title: "Life in the Internet Age",
+            subTitle:
+                "Let's discuss how technology is changing the way we live",
+            level: "Intermediate",
           ),
           itemCount: 5,
         ),
@@ -128,8 +121,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => CourseWidget(
-            courseId: index.toString(),
-            onTap: (id) {},
+            courseId: index.toString() + "a",
+            onTap: (id) {
+              context.pushNamed(RouteLocation.courseDetail,
+                  extra: {"courseId": id});
+            },
             imageUrl:
                 "https://camblycurriculumicons.s3.amazonaws.com/5e0e8b212ac750e7dc9886ac?h=d41d8cd98f00b204e9800998ecf8427e",
             title: "Life in the Internet Age",
@@ -193,9 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           TextButton(
               onPressed: () {
-                // context.go(RouteLocation.auth);
-                injector.get<TutorUseCase>().markFavoriteTutor(
-                    id: "69d5daf8-24be-4645-a93a-5412ad94d51d");
+                authBloc.add(LogoutAuthenticationRequest());
               },
               child: const Text("Logout"))
         ],
@@ -205,7 +199,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CourseSearchBar(),
             _buildHeader(),
             Flexible(child: _buildUpComingCourse()),
             Flexible(child: _buildRecommendCourse()),

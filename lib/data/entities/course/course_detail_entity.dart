@@ -21,6 +21,7 @@ class CourseDetailEntity {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final List<CourseTopicEntity>? topics;
+
   CourseDetailEntity({
     required this.id,
     this.name,
@@ -63,7 +64,7 @@ class CourseDetailEntity {
     };
   }
 
-  factory CourseDetailEntity.fromMap(Map<String, dynamic> map) {
+  static CourseDetailEntity fromJson(Map<String, dynamic> map) {
     return CourseDetailEntity(
       id: map['id'] as String,
       name: map['name'] != null ? map['name'] as String : null,
@@ -86,24 +87,17 @@ class CourseDetailEntity {
       visible: map['visible'] != null ? map['visible'] as bool : null,
       displayOrder:
           map['displayOrder'] != null ? map['displayOrder'] as int : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
-          : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
       topics: map['topics'] != null
           ? List<CourseTopicEntity>.from(
-              (map['topics'] as List<int>).map<CourseTopicEntity?>(
+              (map['topics'] as List<dynamic>).map<CourseTopicEntity?>(
                 (x) => CourseTopicEntity.fromJson(x as Map<String, dynamic>),
               ),
             )
           : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory CourseDetailEntity.fromJson(String source) =>
-      CourseDetailEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }

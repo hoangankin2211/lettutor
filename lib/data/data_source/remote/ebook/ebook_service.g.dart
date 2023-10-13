@@ -19,15 +19,15 @@ class _EbookService implements EbookService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<dynamic>> getEbook(
+  Future<HttpResponse<EBookResponse>> getEbook(
       {required Map<String, dynamic> queries}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(queries);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<EBookResponse>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -43,7 +43,7 @@ class _EbookService implements EbookService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = _result.data;
+    final value = EBookResponse.fromJson(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

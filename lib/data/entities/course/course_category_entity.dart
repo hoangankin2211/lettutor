@@ -37,12 +37,10 @@ class CourseCategoryEntity {
       key: map['key'] != null ? map['key'] as String : null,
       displayOrder:
           map['displayOrder'] != null ? map['displayOrder'] as int : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
-          : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
     );
   }
 }

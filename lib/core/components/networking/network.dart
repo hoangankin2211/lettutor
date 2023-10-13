@@ -18,7 +18,6 @@ class NetworkService {
             'Accept': 'application/json, text/plain, */*',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'en-US,en;q=0.9',
-            'Content-Length': '119',
             'Content-Type': 'application/json',
             'Origin': 'https://sandbox.app.lettutor.com',
             'Referer': 'https://sandbox.app.lettutor.com/',

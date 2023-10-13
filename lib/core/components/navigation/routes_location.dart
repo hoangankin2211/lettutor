@@ -7,7 +7,7 @@ class RouteLocation {
   static const String home = '/home';
   static const String dashboard = '/';
   static const String splash = '/splash';
-  static const String courseDetail = 'courseDetail';
+  static const String courseDetail = '/courseDetail';
   static const String settings = '/settings';
   static const String search = '/search';
   static const String auth = '/auth';

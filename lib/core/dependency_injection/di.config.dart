@@ -21,9 +21,9 @@ import '../../data/data_source/remote/authentication/authentication.dart'
 import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
     as _i17;
 import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
-    as _i5;
-import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
     as _i6;
+import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
+    as _i5;
 import '../../data/data_source/remote/course/course_service.dart' as _i20;
 import '../../data/data_source/remote/ebook/ebook_service.dart' as _i12;
 import '../../data/data_source/remote/review/feedback_service.dart' as _i13;
@@ -40,12 +40,13 @@ import '../../domain/repositories/tutor_repo.dart' as _i21;
 import '../../domain/usecases/auth_usecase.dart' as _i24;
 import '../../domain/usecases/course_usecase.dart' as _i28;
 import '../../domain/usecases/tutor_usecase.dart' as _i23;
-import '../../ui/auth/blocs/auth_bloc.dart' as _i29;
-import '../../ui/course/blocs/course_bloc.dart' as _i30;
-import '../../ui/course/blocs/course_detail_bloc.dart' as _i31;
+import '../../ui/auth/blocs/auth_bloc.dart' as _i30;
+import '../../ui/course/blocs/course_bloc.dart' as _i31;
+import '../../ui/course/blocs/course_detail_bloc.dart' as _i32;
+import '../../ui/course/blocs/ebook_bloc.dart' as _i29;
 import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
 import '../components/navigation/routes_service.dart' as _i8;
-import 'module.dart' as _i32;
+import 'module.dart' as _i33;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> init(
@@ -62,12 +63,12 @@ Future<_i1.GetIt> init(
   final dioModule = _$DioModule();
   gh.factory<_i3.ApplicationBloc>(() => _i3.ApplicationBloc());
   gh.factory<_i4.AuthenticationApi>(
-    () => _i5.FacebookAuthImpl(),
-    instanceName: 'FacebookAuthImpl',
+    () => _i5.GoogleAuthImpl(),
+    instanceName: 'GoogleAuthImpl',
   );
   gh.factory<_i4.AuthenticationApi>(
-    () => _i6.GoogleAuthImpl(),
-    instanceName: 'GoogleAuthImpl',
+    () => _i6.FacebookAuthImpl(),
+    instanceName: 'FacebookAuthImpl',
   );
   await gh.singletonAsync<_i7.HiveInterface>(
     () => hiveModule.initHive(),
@@ -101,15 +102,18 @@ Future<_i1.GetIt> init(
       () => _i24.AuthUseCase(gh<_i25.AuthenticationRepository>()));
   gh.factory<_i26.CourseRepository>(
       () => _i27.CourseRepositoryImpl(courseService: gh<_i20.CourseService>()));
-  gh.factory<_i28.CourseUseCase>(
-      () => _i28.CourseUseCase(gh<_i26.CourseRepository>()));
-  gh.factory<_i29.AuthBloc>(() => _i29.AuthBloc(gh<_i24.AuthUseCase>()));
-  gh.factory<_i30.CourseBloc>(() => _i30.CourseBloc(gh<_i28.CourseUseCase>()));
-  gh.factory<_i31.CourseDetailBloc>(
-      () => _i31.CourseDetailBloc(gh<_i28.CourseUseCase>()));
+  gh.factory<_i28.CourseUseCase>(() => _i28.CourseUseCase(
+        gh<_i26.CourseRepository>(),
+        gh<_i12.EbookService>(),
+      ));
+  gh.factory<_i29.EBookBloc>(() => _i29.EBookBloc(gh<_i28.CourseUseCase>()));
+  gh.factory<_i30.AuthBloc>(() => _i30.AuthBloc(gh<_i24.AuthUseCase>()));
+  gh.factory<_i31.CourseBloc>(() => _i31.CourseBloc(gh<_i28.CourseUseCase>()));
+  gh.factory<_i32.CourseDetailBloc>(
+      () => _i32.CourseDetailBloc(gh<_i28.CourseUseCase>()));
   return getIt;
 }
 
-class _$HiveModule extends _i32.HiveModule {}
+class _$HiveModule extends _i33.HiveModule {}
 
-class _$DioModule extends _i32.DioModule {}
+class _$DioModule extends _i33.DioModule {}

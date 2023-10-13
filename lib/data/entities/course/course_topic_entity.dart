@@ -46,7 +46,7 @@ class CourseTopicEntity {
     };
   }
 
-  factory CourseTopicEntity.fromJson(Map<String, dynamic> map) {
+  static CourseTopicEntity fromJson(Map<String, dynamic> map) {
     return CourseTopicEntity(
       id: map['id'] as String,
       courseId: map['courseId'] as String,
@@ -66,12 +66,10 @@ class CourseTopicEntity {
           map['description'] != null ? map['description'] as String : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       type: map['type'] != null ? map['type'] as String : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
-          : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
     );
   }
 }

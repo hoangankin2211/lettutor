@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
-import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/course/blocs/course_bloc.dart';
+import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
 import 'package:lettutor/ui/course/views/course_detail_screen.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
-
-import '../../../core/components/navigation/routes_location.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -41,8 +38,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     {
       'title': 'Courses',
       'icon': CupertinoIcons.book_fill,
-      "widget": BlocProvider(
-        create: (context) => injector.get<CourseBloc>(),
+      "widget": MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => injector.get<CourseBloc>(),
+          ),
+          BlocProvider(
+            create: (context) => injector.get<EBookBloc>(),
+          ),
+        ],
         child: CourseScreen(),
       ),
     },
