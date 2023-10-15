@@ -5,6 +5,7 @@ class RouteLocation {
   const RouteLocation._();
   //routeLocation
   static const String home = '/home';
+  static const String topicDetail = 'topicDetail';
   static const String dashboard = '/';
   static const String splash = '/splash';
   static const String courseDetail = '/courseDetail';

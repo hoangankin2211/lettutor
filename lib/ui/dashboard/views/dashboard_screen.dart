@@ -16,8 +16,14 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  final controller = PageController(initialPage: 0, keepPage: true);
+class _DashboardScreenState extends State<DashboardScreen>
+    with WidgetsBindingObserver {
+  late final controller = PageController(
+    initialPage: currentIndex.value,
+    keepPage: true,
+  );
+
+  final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
 
   final List<Map<String, dynamic>> _tabs = [
     {
@@ -57,65 +63,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
     },
   ];
 
-  @override
-  void initState() {
-    super.initState();
+  void _onTap(int index) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      currentIndex.value = index;
+    });
+    controller.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      // appBar: AppBar(
-      //   leading: Image.asset(
-      //     "assets/images/splash.png",
-      //     cacheHeight: 50,
-      //     cacheWidth: 50,
-      //   ),
-      //   backgroundColor: context.theme.cardColor,
-      //   title: Text(
-      //     "LetTutor",
-      //     style: context.textTheme.titleLarge?.copyWith(
-      //       fontWeight: FontWeight.bold,
-      //       color: context.theme.primaryColor,
-      //     ),
-      //   ),
-      //   actions: [
-      //     TextButton(
-      //         onPressed: () {
-      //           context.go(RouteLocation.auth);
-      //         },
-      //         child: const Text("Logout"))
-      //   ],
-      // ),
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: _tabs.map((e) => e["widget"] as Widget).toList(),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          controller.animateToPage(index,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.bounceInOut);
-        },
-        backgroundColor: context.colorScheme.background,
-        currentIndex: 0,
-        selectedIconTheme: IconThemeData(color: context.theme.indicatorColor),
-        unselectedIconTheme: IconThemeData(color: context.theme.disabledColor),
-        selectedLabelStyle: context.textTheme.bodyMedium,
-        unselectedLabelStyle:
-            context.textTheme.bodyMedium?.copyWith(color: Colors.black),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: _tabs
-            .map(
-              (tab) => BottomNavigationBarItem(
-                icon: Icon(tab['icon']),
-                label: tab['title'],
-              ),
-            )
-            .toList(),
+      bottomNavigationBar: ValueListenableBuilder<int>(
+        valueListenable: currentIndex,
+        builder: (context, value, _) => BottomNavigationBar(
+          onTap: _onTap,
+          backgroundColor: context.colorScheme.background,
+          currentIndex: value,
+          selectedIconTheme: IconThemeData(color: context.theme.indicatorColor),
+          unselectedIconTheme:
+              IconThemeData(color: context.theme.disabledColor),
+          selectedLabelStyle: context.textTheme.bodyMedium,
+          unselectedLabelStyle:
+              context.textTheme.bodyMedium?.copyWith(color: Colors.black),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: _tabs
+              .map(
+                (tab) => BottomNavigationBarItem(
+                  icon: Icon(tab['icon']),
+                  label: tab['title'],
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }

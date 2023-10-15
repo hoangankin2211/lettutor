@@ -13,7 +13,6 @@ import 'package:palette_generator/palette_generator.dart';
 
 import '../../../core/components/widgets/custom_appbar.dart';
 import '../../../core/components/widgets/custom_stack_scroll.dart';
-import 'widgets/course_widget.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   const CourseDetailScreen({
@@ -126,7 +125,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Icon(CupertinoIcons.book),
+          const Icon(CupertinoIcons.book),
           const SizedBox(width: 5),
           Text(
             "$length Topics",
@@ -139,17 +138,20 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   }
 
   Widget _buildTopicComponent({
+    required String? pdfUrl,
     required String unit,
     required String description,
   }) {
     return Material(
       borderRadius: BorderRadius.circular(10),
-      color: context.theme.primaryColor.withOpacity(
-        0.12,
-      ),
+      color: context.theme.primaryColor.withOpacity(0.12),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          context.push(
+              "${RouteLocation.courseDetail}/${RouteLocation.topicDetail}",
+              extra: {"pdfUrl": pdfUrl});
+        },
         titleTextStyle: context.textTheme.titleMedium?.boldTextTheme,
         title: Text("Unit $unit"),
         subtitleTextStyle: context.textTheme.titleSmall?.boldTextTheme,
@@ -173,6 +175,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         children: List.generate(
                 topics.length,
                 (index) => _buildTopicComponent(
+                      pdfUrl: topics.elementAt(index).nameFile,
                       description: topics.elementAt(index).name,
                       unit:
                           topics.elementAt(index).orderCourse?.toString() ?? "",

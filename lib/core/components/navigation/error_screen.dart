@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/core.dart';
 
 class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({super.key});
+  const ErrorScreen({super.key, this.text});
+
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class ErrorScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          l10n.somethingWentWrong,
+          text ?? l10n.somethingWentWrong,
           style: textTheme.headlineMedium,
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/core.dart';
 
+import '../../../../core/components/widgets/app_loading_indicator.dart';
+
 class TCInputField extends StatefulWidget {
   final bool ignoreShadow;
   final bool isLoading;
@@ -107,10 +109,10 @@ class _TCInputFieldState extends State<TCInputField> {
       );
     }
 
-    var childs = widget.isLoading ? [CircularProgressIndicator()] : <Widget>[];
+    var child = widget.isLoading ? [const AppLoadingIndicator()] : <Widget>[];
 
     if (showClearText) {
-      childs.add(
+      child.add(
         IconButton(
           splashRadius: 24,
           icon: widget.clearTextIcon ?? Container(),
@@ -127,13 +129,13 @@ class _TCInputFieldState extends State<TCInputField> {
         ),
       );
     }
-    if (childs.length == 1) {
-      return childs.first;
+    if (child.length == 1) {
+      return child.first;
     }
-    if (childs.isNotEmpty) {
+    if (child.isNotEmpty) {
       return Row(
         mainAxisSize: MainAxisSize.min,
-        children: childs,
+        children: child,
       );
     }
 
