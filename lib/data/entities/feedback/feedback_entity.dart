@@ -31,30 +31,23 @@ class FeedbackEntity {
       'rating': rating,
       'createdAt': createdAt?.millisecondsSinceEpoch,
       'updatedAt': updatedAt?.millisecondsSinceEpoch,
-      'feedBackUserModelEntity': feedBackUserModelEntity?.toMap(),
+      'firstInfo': feedBackUserModelEntity?.toMap(),
     };
   }
 
-  factory FeedbackEntity.fromMap(Map<String, dynamic> map) {
+  factory FeedbackEntity.fromJson(Map<String, dynamic> map) {
     return FeedbackEntity(
       id: map['id'] != null ? map['id'] as String : null,
       content: map['content'] != null ? map['content'] as String : null,
-      rating: map['rating'] != null ? map['rating'] as double : null,
-      createdAt: map['createdAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int)
-          : null,
-      updatedAt: map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int)
-          : null,
-      feedBackUserModelEntity: map['feedBackUserModelEntity'] != null
+      rating: map['rating'] != null ? (map['rating'] as int).toDouble() : null,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
+      feedBackUserModelEntity: map['firstInfo'] != null
           ? FeedBackUserModelEntity.fromMap(
-              map['feedBackUserModelEntity'] as Map<String, dynamic>)
+              map['firstInfo'] as Map<String, dynamic>)
           : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory FeedbackEntity.fromJson(String source) =>
-      FeedbackEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }

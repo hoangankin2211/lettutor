@@ -5,9 +5,11 @@ import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/ui/course/blocs/course_bloc.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
-import 'package:lettutor/ui/course/views/course_detail_screen.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
+import 'package:lettutor/ui/tutor/views/tutor_screen.dart';
+
+import '../../tutor/blocs/tutor_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -34,7 +36,10 @@ class _DashboardScreenState extends State<DashboardScreen>
     {
       'title': 'Teachers',
       'icon': CupertinoIcons.person_2_fill,
-      "widget": CourseDetailScreen(courseId: 0.toString()),
+      "widget": BlocProvider(
+        create: (context) => injector.get<TutorBloc>(),
+        child: const TutorScreen(),
+      ),
     },
     {
       'title': 'Schedule',

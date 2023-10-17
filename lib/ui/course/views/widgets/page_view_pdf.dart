@@ -11,8 +11,9 @@ import 'package:path_provider/path_provider.dart';
 
 class PdfViewerPage extends StatefulWidget {
   final String pdfUrl;
+  final Color? appBarColor;
 
-  const PdfViewerPage({super.key, required this.pdfUrl});
+  const PdfViewerPage({super.key, required this.pdfUrl, this.appBarColor});
   @override
   // ignore: library_private_types_in_public_api
   _PdfViewerPageState createState() => _PdfViewerPageState();
@@ -44,7 +45,6 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
   @override
   void initState() {
     loadNetwork();
-
     super.initState();
   }
 
@@ -57,6 +57,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
           onPressed: () => context.pop(),
           icon: const Icon(CupertinoIcons.back),
         ),
+        backgroundColor: widget.appBarColor,
         title: Text(
           "PDF Viewer",
           style: context.textTheme.titleMedium?.copyWith(

@@ -37,7 +37,5 @@ abstract class TutorService {
       {@Body() required Map<String, dynamic> body});
 
   @GET('$getTutorByIdApi/{id}')
-  Future<HttpResponse<TutorDetailEntity>> getTutorById(
-    @Path('id') String id,
-  );
+  Future<HttpResponse<TutorDetailEntity>> getTutorById(@Path('id') String id);
 }

@@ -1,5 +1,7 @@
 import 'package:either_dart/either.dart';
+import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
+import 'package:lettutor/data/entities/response/feedback_response.dart';
 import 'package:lettutor/data/entities/response/search_tutor_response.dart';
 import 'package:lettutor/data/entities/response/tutor_response.dart';
 import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
@@ -18,4 +20,6 @@ abstract class TutorRepository {
     required DateTime startTime,
     required DateTime endTime,
   });
+  Future<Either<String, FeedbackResponse>> getTutorFeedbackById(
+      {required String id, int perPage = 10, int page = 1});
 }

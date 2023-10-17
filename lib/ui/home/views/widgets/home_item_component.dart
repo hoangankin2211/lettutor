@@ -7,19 +7,25 @@ class HomeItemComponent extends StatelessWidget {
     super.key,
     required this.title,
     this.trailing,
+    this.verticalBodyGap = 15,
     required this.body,
     this.padding,
     this.leading,
+    this.isPadding = true,
   });
   final String title;
   final Widget? trailing;
   final Widget? leading;
   final Widget body;
+  final bool isPadding;
+  final double verticalBodyGap;
   final EdgeInsets? padding;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+      padding: isPadding
+          ? (padding ?? const EdgeInsets.only(top: 10, bottom: 10, left: 10))
+          : EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +46,7 @@ class HomeItemComponent extends StatelessWidget {
               if (trailing != null) trailing!,
             ],
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: verticalBodyGap),
           body,
         ],
       ),

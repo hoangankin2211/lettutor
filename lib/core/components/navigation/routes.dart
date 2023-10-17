@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app_init.dart';
 import 'package:lettutor/core/components/navigation/error_screen.dart';
@@ -9,6 +8,7 @@ import 'package:lettutor/ui/course/views/widgets/page_view_pdf.dart';
 import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
+import 'package:lettutor/ui/tutor/views/tutor_detail_screen.dart';
 
 final routes = [
   GoRoute(
@@ -18,12 +18,25 @@ final routes = [
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
+    path: RouteLocation.tutorDetail,
+    builder: (context, state) {
+      final Map<String, dynamic>? extra = state.extra as Map<String, dynamic>?;
+      if (extra != null) {
+        final String? tutorId = extra["tutorId"];
+        if (tutorId != null) {
+          return TutorDetailScreen(tutorId: tutorId);
+        }
+      }
+      return const ErrorScreen(text: "Can not open this tutor profile detail");
+    },
+  ),
+  GoRoute(
+    parentNavigatorKey: AppBuilder.appNavigationKey,
     path: RouteLocation.courseDetail,
     routes: [
       GoRoute(
         path: RouteLocation.topicDetail,
         builder: (context, state) {
-          print("RouteLocation.topicDetail");
           final Map<String, dynamic>? extra =
               state.extra as Map<String, dynamic>?;
           if (extra != null) {

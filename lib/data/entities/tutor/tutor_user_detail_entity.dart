@@ -62,7 +62,7 @@ class TutorUserDetailEntity {
       zaloUserId:
           map['zaloUserId'] != null ? map['zaloUserId'] as String : null,
       courses: List<CoursePreviewEntity>.from(
-        (map['courses'] as List<int>).map<CoursePreviewEntity>(
+        (map['courses'] as List<dynamic>).map<CoursePreviewEntity>(
           (x) => CoursePreviewEntity.fromJson(x as Map<String, dynamic>),
         ),
       ),

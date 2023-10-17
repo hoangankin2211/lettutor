@@ -22,12 +22,8 @@ class CourseScreen extends StatefulWidget {
 class _CourseScreenState extends State<CourseScreen>
     with AutomaticKeepAliveClientMixin {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

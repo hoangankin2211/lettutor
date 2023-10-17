@@ -56,7 +56,7 @@ class TutorDetailEntity {
       'isNative': isNative,
       'isFavorite': isFavorite,
       'youtubeVideoId': youtubeVideoId,
-      'user': user?.toMap(),
+      'User': user?.toMap(),
     };
   }
 
@@ -85,8 +85,8 @@ class TutorDetailEntity {
       youtubeVideoId: map['youtubeVideoId'] != null
           ? map['youtubeVideoId'] as String
           : null,
-      user: map['user'] != null
-          ? TutorUserDetailEntity.fromJson(map['user'] as Map<String, dynamic>)
+      user: map['User'] != null
+          ? TutorUserDetailEntity.fromJson(map['User'] as Map<String, dynamic>)
           : null,
     );
   }

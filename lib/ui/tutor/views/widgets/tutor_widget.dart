@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/widgets/CusButton.dart';
 
+import 'specialties_component.dart';
+
 class TutorWidget extends StatefulWidget {
   const TutorWidget({
     super.key,
@@ -13,6 +15,7 @@ class TutorWidget extends StatefulWidget {
     required this.rating,
     required this.description,
     required this.price,
+    this.onTap,
   });
   final String imageUrl;
   final String name;
@@ -21,12 +24,15 @@ class TutorWidget extends StatefulWidget {
   final double rating;
   final String description;
   final double price;
+  final void Function()? onTap;
 
   @override
   State<TutorWidget> createState() => _TutorWidgetState();
 }
 
 class _TutorWidgetState extends State<TutorWidget> {
+  late String url = widget.imageUrl;
+
   _buildSpecialties() {
     return Wrap(
       alignment: WrapAlignment.start,
@@ -40,20 +46,7 @@ class _TutorWidgetState extends State<TutorWidget> {
   }
 
   Widget _buildSpecialtiesComponent(String specialty) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-      decoration: BoxDecoration(
-        color: context.theme.primaryColor.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Text(
-        specialty,
-        style: context.textTheme.bodyLarge?.copyWith(
-          color: context.theme.primaryColor,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
+    return SpecialtiesComponent(specialty: specialty);
   }
 
   _buildHeader() {
@@ -63,15 +56,29 @@ class _TutorWidgetState extends State<TutorWidget> {
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Container(
-            width: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(widget.imageUrl),
-              ),
-            ),
-          ),
+          leading: CircleAvatar(
+              radius: 30,
+              foregroundImage: NetworkImage(url),
+              onForegroundImageError: (exception, stackTrace) {
+                setState(() {
+                  url = "";
+                });
+              },
+              backgroundColor: Colors.blue.shade600,
+              child: widget.imageUrl.isEmpty
+                  ? Text(
+                      widget.name
+                          .splitMapJoin(
+                            RegExp(r'\b\w'),
+                            onMatch: (p0) => p0.group(0)!,
+                            onNonMatch: (p0) => "",
+                          )
+                          .toUpperCase(),
+                      style: context.textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ))
+                  : null),
           title: Text(
             widget.name,
             style: context.myTitleLarge(),
@@ -88,27 +95,41 @@ class _TutorWidgetState extends State<TutorWidget> {
               ),
             ],
           ),
-          trailing: SizedBox(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (widget.rating != 0)
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.star, color: Colors.orangeAccent),
                     const SizedBox(width: 5),
                     Text(
-                      widget.rating.toString(),
+                      widget.rating.toStringAsFixed(1),
                       style: context.textTheme.bodyLarge?.boldTextTheme,
                     )
                   ],
+                )
+              else
+                Text(
+                  "No review yet",
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: context.theme.disabledColor,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
-                Icon(
+              IconButton(
+                constraints: const BoxConstraints(),
+                splashRadius: 8,
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                icon: Icon(
                   CupertinoIcons.heart,
                   color: context.theme.hintColor,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         _buildSpecialties(),
@@ -120,6 +141,8 @@ class _TutorWidgetState extends State<TutorWidget> {
     return Text(
       widget.description,
       style: context.hintBoldText,
+      maxLines: 4,
+      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -160,7 +183,7 @@ class _TutorWidgetState extends State<TutorWidget> {
       color: context.theme.cardColor,
       borderRadius: BorderRadius.circular(15),
       child: InkWell(
-        onTap: () {},
+        onTap: widget.onTap,
         child: Container(
           constraints: BoxConstraints(maxWidth: context.width * 0.8),
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

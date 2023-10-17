@@ -20,7 +20,7 @@ class TutorDetail {
   final String? youtubeVideoId;
   final TutorUserDetail? user;
 
-  TutorDetail({
+  const TutorDetail({
     this.video,
     this.bio,
     this.education,

@@ -1,10 +1,13 @@
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/data_state.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
+import 'package:lettutor/data/data_source/remote/review/feedback_service.dart';
 import 'package:lettutor/data/data_source/remote/tutorial/tutor_service.dart';
 
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
+import 'package:lettutor/data/entities/response/feedback_response.dart';
 
 import 'package:lettutor/data/entities/response/tutor_response.dart';
 
@@ -20,8 +23,9 @@ import '../entities/response/search_tutor_response.dart';
 @Injectable(as: TutorRepository)
 class TutorRepositoryImpl extends TutorRepository {
   final TutorService tutorService;
+  final FeedbackService feedbackService;
 
-  TutorRepositoryImpl(this.tutorService);
+  TutorRepositoryImpl(this.tutorService, this.feedbackService);
 
   @override
   Future<Either<String, TutorResponse>> fetchListTutor(
@@ -29,7 +33,7 @@ class TutorRepositoryImpl extends TutorRepository {
     final dataState = await getStateOf<TutorResponse>(
       request: () async => await tutorService.fetchTutorialPage(
         page: page,
-        size: page,
+        size: perPage,
       ),
     );
 
@@ -46,7 +50,7 @@ class TutorRepositoryImpl extends TutorRepository {
   Future<Either<String, TutorDetailEntity>> getTutorDetail(
       {required String id}) async {
     final dataState = await getStateOf<TutorDetailEntity>(
-      request: () async => await tutorService.getTutorById(id),
+      request: () async => tutorService.getTutorById(id),
     );
 
     if (dataState is DataSuccess) {
@@ -107,5 +111,28 @@ class TutorRepositoryImpl extends TutorRepository {
     }
     return Left(
         dataState.dioException?.message ?? "Error: Can not search tutor");
+  }
+
+  @override
+  Future<Either<String, FeedbackResponse>> getTutorFeedbackById(
+      {required String id, int perPage = 10, int page = 1}) async {
+    final dataState = await getStateOf<FeedbackResponse>(
+      request: () async => await feedbackService.getReviews(
+        id,
+        body: {
+          "perPage": perPage,
+          "page": page,
+        },
+      ),
+    );
+
+    if (dataState is DataSuccess) {
+      if (dataState.data != null) {
+        return Right(dataState.data!);
+      }
+      return const Left("Data is Null");
+    }
+    return Left(
+        dataState.dioException?.message ?? "Error: Can not get tutor feedback");
   }
 }

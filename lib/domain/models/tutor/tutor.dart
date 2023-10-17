@@ -1,93 +1,93 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class Tutor {
   final String id;
-  final String? level;
-  final String? email;
-  final String? google;
-  final String? facebook;
-  final String? apple;
-  final String? avatar;
-  final String? name;
-  final String? country;
-  final String? phone;
-  final String? language;
-  final DateTime? birthday;
-  final bool? requestPassword;
-  final bool? isActivated;
-  final bool? isPhoneActivated;
-  final String? requireNote;
-  final int? timezone;
-  final String? phoneAuth;
-  final bool? isPhoneAuthActivated;
-  // final String? studySchedule;
-  final bool? canSendMessage;
-  final bool? isPublicRecord;
-  final String? caredByStaffId;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final String? deletedAt;
-  final String? studentGroupId;
-  final String? userId;
-  final String? video;
-  final String? bio;
-  final String? education;
-  final String? experience;
-  final String? profession;
-  final String? accent;
-  final String? targetStudent;
-  final String? interests;
-  final String? languages;
-  final String? specialties;
-  final String? resume;
-  final double? rating;
-  final bool? isNative;
-  final double? price;
-  final bool? isOnline;
-  final bool? isFavoriteTutor;
+  final String level;
+  final String email;
+  final String google;
+  final String facebook;
+  final String apple;
+  final String avatar;
+  final String name;
+  final String country;
+  final String phone;
+  final String language;
+  final DateTime birthday;
+  final bool requestPassword;
+  final bool isActivated;
+  final bool isPhoneActivated;
+  final String requireNote;
+  final int timezone;
+  final String phoneAuth;
+  final bool isPhoneAuthActivated;
+  // final String studySchedule;
+  final bool canSendMessage;
+  final bool isPublicRecord;
+  final String caredByStaffId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String deletedAt;
+  final String studentGroupId;
+  final String userId;
+  final String video;
+  final String bio;
+  final String education;
+  final String experience;
+  final String profession;
+  final String accent;
+  final String targetStudent;
+  final String interests;
+  final String languages;
+  final String specialties;
+  final String resume;
+  final double rating;
+  final bool isNative;
+  final double price;
+  final bool isOnline;
+  final bool isFavoriteTutor;
 
   Tutor({
     required this.id,
-    this.level,
-    this.email,
-    this.google,
-    this.facebook,
-    this.apple,
-    this.avatar,
-    this.name,
-    this.country,
-    this.phone,
-    this.language,
-    this.birthday,
-    this.requestPassword,
-    this.isActivated,
-    this.isPhoneActivated,
-    this.requireNote,
-    this.timezone,
-    this.phoneAuth,
-    this.isPhoneAuthActivated,
-    this.canSendMessage,
-    this.isPublicRecord,
-    this.caredByStaffId,
-    this.createdAt,
-    this.updatedAt,
-    this.deletedAt,
-    this.studentGroupId,
-    this.userId,
-    this.video,
-    this.bio,
-    this.education,
-    this.experience,
-    this.profession,
-    this.accent,
-    this.targetStudent,
-    this.interests,
-    this.languages,
-    this.specialties,
-    this.resume,
-    this.rating,
-    this.isNative,
-    this.price,
-    this.isOnline,
+    required this.level,
+    required this.email,
+    required this.google,
+    required this.facebook,
+    required this.apple,
+    required this.avatar,
+    required this.name,
+    required this.country,
+    required this.phone,
+    required this.language,
+    required this.birthday,
+    required this.requestPassword,
+    required this.isActivated,
+    required this.isPhoneActivated,
+    required this.requireNote,
+    required this.timezone,
+    required this.phoneAuth,
+    required this.isPhoneAuthActivated,
+    required this.canSendMessage,
+    required this.isPublicRecord,
+    required this.caredByStaffId,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deletedAt,
+    required this.studentGroupId,
+    required this.userId,
+    required this.video,
+    required this.bio,
+    required this.education,
+    required this.experience,
+    required this.profession,
+    required this.accent,
+    required this.targetStudent,
+    required this.interests,
+    required this.languages,
+    required this.specialties,
+    required this.resume,
+    required this.rating,
+    required this.isNative,
+    required this.price,
+    required this.isOnline,
     this.isFavoriteTutor = false,
   });
 
