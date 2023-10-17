@@ -24,7 +24,11 @@ class CourseUseCase {
   }) async =>
       courseRepository
           .fetchCoursePage(
-              page: page, perPge: size, q: q, categoryId: categoryId)
+            page: page,
+            perPge: size,
+            q: q,
+            categoryId: categoryId,
+          )
           .either(
             (left) => left,
             (right) => Pagination(

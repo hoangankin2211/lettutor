@@ -10,19 +10,19 @@ part 'tutor_state.dart';
 class TutorBloc extends Cubit<TutorState> {
   final TutorUseCase tutorUseCase;
   TutorBloc(this.tutorUseCase)
-      : super(const TutorInitial(
-            data: TutorDataState(page: 0, count: 0, tutors: [])));
+      : super(const TutorInitial(data: TutorDataState()));
 
-  void loadTutor() async {
+  void loadTutor({int page = 1, int perPage = 10}) async {
     emit(TutorLoading(data: state.data));
-    final response = await tutorUseCase.fetchTutorPage(page: 1, perPage: 10);
+    final response =
+        await tutorUseCase.fetchTutorPage(page: page, perPage: perPage);
     response.fold((left) {
       emit(TutorError(data: state.data, message: left));
     }, (right) {
       emit(
         TutorLoaded(
             data: state.data.copyWith(
-          tutors: right.rows,
+          tutors: state.data.tutors.toList()..addAll(right.rows),
           count: right.count,
           page: right.currentPage,
         )),

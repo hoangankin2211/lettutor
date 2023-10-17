@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
+import 'package:lettutor/domain/models/tutor/tutor.dart';
 import 'package:lettutor/ui/course/views/widgets/course_search_bar.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
+
+import '../../../core/logger/custom_logger.dart';
 
 class TutorScreen extends StatefulWidget {
   const TutorScreen({super.key});
@@ -51,8 +55,7 @@ class _TutorScreenState extends State<TutorScreen>
               children: [
                 CourseSearchBar(controller: TextEditingController()),
                 Expanded(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.only(top: 20),
+                  child: DefaultPagination<Tutor>(
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       final tutor = tutorState.data.tutors[index];
@@ -75,7 +78,19 @@ class _TutorScreenState extends State<TutorScreen>
                     },
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),
-                    itemCount: tutorState.data.tutors.length,
+                    items: tutorState.data.tutors,
+                    listenScrollBottom: () {
+                      logger.d(
+                          "${tutorState.data.page}---${tutorState.data.count}");
+                      if (tutorState.data.page + 1 >
+                          (tutorState.data.count.toDouble() /
+                                  tutorState.data.perPage)
+                              .ceil()) {
+                        return;
+                      }
+                      tutorBloc.loadTutor(page: tutorState.data.page + 1);
+                    },
+                    loading: tutorState is TutorLoading,
                   ),
                 )
               ],

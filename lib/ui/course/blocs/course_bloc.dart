@@ -12,17 +12,18 @@ class CourseBloc extends Cubit<CourseState> {
   CourseBloc(this.courseUseCase) : super(InitialCourseListPage());
 
   void fetchCourseList({
-    required int page,
+    int page = 1,
+    int perPage = 10,
   }) {
     emit(LoadingListCourse(data: state.data));
 
-    courseUseCase.fetchListCourse(page: page, size: 10).then((value) {
+    courseUseCase.fetchListCourse(page: page, size: perPage).then((value) {
       if (!isClosed) {
         value.fold(
           (l) => emit(ErrorCourseList(message: l, data: state.data)),
           (r) => emit(LoadListCourseSuccess(
             data: state.data.copyWith(
-              course: r.rows,
+              course: state.data.course.toList()..addAll(r.rows),
               page: page,
               count: r.count,
             ),

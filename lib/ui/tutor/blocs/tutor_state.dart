@@ -2,17 +2,21 @@ part of 'tutor_bloc.dart';
 
 class TutorDataState {
   final int page;
+  final int perPage;
   final int count;
   final List<Tutor> tutors;
 
   const TutorDataState({
-    required this.page,
-    required this.count,
-    required this.tutors,
+    this.page = 1,
+    this.count = 0,
+    this.perPage = 10,
+    this.tutors = const [],
   });
 
-  TutorDataState copyWith({int? page, int? count, List<Tutor>? tutors}) {
+  TutorDataState copyWith(
+      {int? perPage, int? page, int? count, List<Tutor>? tutors}) {
     return TutorDataState(
+      perPage: perPage ?? this.perPage,
       page: page ?? this.page,
       count: count ?? this.count,
       tutors: tutors ?? this.tutors,

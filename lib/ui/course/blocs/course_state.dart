@@ -5,10 +5,12 @@ class CourseDataState {
   final List<CourseDetail> course;
   final int page;
   final int count;
+  final int perPage;
   const CourseDataState({
     this.course = const [],
     this.page = 1,
     this.count = 0,
+    this.perPage = 10,
   });
 
   CourseDataState copyWith({
