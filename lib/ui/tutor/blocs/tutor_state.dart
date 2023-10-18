@@ -13,6 +13,8 @@ class TutorDataState {
     this.tutors = const [],
   });
 
+  int get totalPage => (count.toDouble() / perPage).ceil();
+
   TutorDataState copyWith(
       {int? perPage, int? page, int? count, List<Tutor>? tutors}) {
     return TutorDataState(
@@ -26,7 +28,6 @@ class TutorDataState {
 
 abstract class TutorState {
   final TutorDataState data;
-
   const TutorState({required this.data});
 }
 

@@ -17,6 +17,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../../core/components/widgets/pagination_widget.dart';
 import '../../../core/components/widgets/ratting_widget_custom.dart';
 import '../blocs/tutor_detail_bloc.dart';
+import 'widgets/tutor_info_header.dart';
 
 class TutorDetailScreen extends StatefulWidget {
   const TutorDetailScreen({
@@ -293,100 +294,6 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
           ),
         );
       },
-    );
-  }
-}
-
-class TutorInfoHeader extends StatefulWidget {
-  const TutorInfoHeader({
-    super.key,
-    required this.avatar,
-    required this.name,
-    required this.numOfFeedback,
-    required this.country,
-    required this.profession,
-  });
-
-  final String avatar;
-  final String name;
-  final String profession;
-  final int numOfFeedback;
-  final String country;
-
-  @override
-  State<TutorInfoHeader> createState() => _TutorInfoHeaderState();
-}
-
-class _TutorInfoHeaderState extends State<TutorInfoHeader> {
-  late String _avatar = widget.avatar;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          radius: 40,
-          foregroundImage: NetworkImage(_avatar),
-          onForegroundImageError: (exception, stackTrace) {
-            setState(() {
-              _avatar =
-                  'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png';
-            });
-          },
-        ),
-        const SizedBox(width: 20),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.name,
-              style: context.textTheme.titleLarge?.boldTextTheme,
-            ),
-            Text(
-              widget.profession,
-              style: context.textTheme.bodyLarge,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CountryFlag.fromCountryCode(
-                  widget.country.toUpperCase(),
-                  height: 25,
-                  width: 45,
-                  borderRadius: 8,
-                ),
-                Text(
-                  Country.tryParse(widget.country)?.name ?? "Unknown",
-                  style: context.textTheme.bodyLarge,
-                )
-              ],
-            ),
-          ]
-              .expand<Widget>((element) => [element, const SizedBox(height: 5)])
-              .toList(),
-        ),
-        const Spacer(),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            5,
-            (index) => const Icon(
-              Icons.star,
-              color: Colors.orangeAccent,
-              size: 16,
-            ),
-          )
-              .expand<Widget>((element) => [element, const SizedBox(width: 4)])
-              .toList()
-            ..add(Text(
-              "(${widget.numOfFeedback})",
-              style: context.textTheme.titleMedium,
-            )),
-        ),
-      ],
     );
   }
 }

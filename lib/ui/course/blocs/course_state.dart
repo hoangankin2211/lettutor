@@ -13,6 +13,8 @@ class CourseDataState {
     this.perPage = 10,
   });
 
+  int get totalPage => (count.toDouble() / perPage).ceil();
+
   CourseDataState copyWith({
     List<CourseDetail>? course,
     int? page,

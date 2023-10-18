@@ -17,6 +17,10 @@ class CourseBloc extends Cubit<CourseState> {
   }) {
     emit(LoadingListCourse(data: state.data));
 
+    if (page > state.data.totalPage) {
+      return;
+    }
+
     courseUseCase.fetchListCourse(page: page, size: perPage).then((value) {
       if (!isClosed) {
         value.fold(

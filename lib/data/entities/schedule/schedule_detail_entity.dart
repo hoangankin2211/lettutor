@@ -52,8 +52,8 @@ class ScheduleDetailEntity {
       scheduleId: map['scheduleId'] as String,
       startPeriod: map['startPeriod'] as String,
       endPeriod: map['endPeriod'] as String,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
+      createdAt: DateTime.parse(map['createdAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
       startPeriodTimestamp: map['startPeriodTimestamp'] as int,
       endPeriodTimestamp: map['endPeriodTimestamp'] as int,
       scheduleInfo: map['scheduleInfo'] != null

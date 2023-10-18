@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/data/entities/response/booking_info_response.dart';
+import 'package:lettutor/data/entities/response/upcoming_class_response.dart';
 import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -23,14 +25,14 @@ abstract class ScheduleService {
   Future<HttpResponse<ScheduleEntity>> getOwnScheduleList();
 
   @POST('$getTutorSchedule?tutorId={tutorId}')
-  Future<HttpResponse<ScheduleResponse?>> getScheduleByTutor(
+  Future<HttpResponse<ScheduleResponse>> getScheduleByTutor(
     @Path('tutorId') String tutorId,
     // @Path('sT') int st,
     // @Path('eT') int et,
   );
 
   @GET(getScheduleListUrl)
-  Future<HttpResponse<ScheduleEntity>> getScheduleListForStudent(
+  Future<HttpResponse<BookingResponse>> getScheduleListForStudent(
       {@Queries() required Map<String, dynamic> queries});
 
   @POST(branch)
@@ -45,6 +47,6 @@ abstract class ScheduleService {
       {@Path("bookedId") required String id});
 
   @GET("$getNextAppointmentUrl?dateTime={time}")
-  Future<HttpResponse<dynamic>> getNextAppointment(
+  Future<HttpResponse<UpcomingClassResponse>> getNextAppointment(
       {@Path("time") required int time});
 }

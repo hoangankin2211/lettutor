@@ -7,6 +7,8 @@ import 'package:lettutor/ui/course/blocs/course_bloc.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
+import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
+import 'package:lettutor/ui/schedule/view/schedule_screen.dart';
 import 'package:lettutor/ui/tutor/views/tutor_screen.dart';
 
 import '../../tutor/blocs/tutor_bloc.dart';
@@ -44,7 +46,10 @@ class _DashboardScreenState extends State<DashboardScreen>
     {
       'title': 'Schedule',
       'icon': CupertinoIcons.calendar,
-      "widget": Placeholder(),
+      "widget": BlocProvider(
+        create: (context) => injector.get<ScheduleBloc>(),
+        child: ScheduleScreen(),
+      ),
     },
     {
       'title': 'Courses',

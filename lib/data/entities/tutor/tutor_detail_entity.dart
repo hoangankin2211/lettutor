@@ -77,7 +77,9 @@ class TutorDetailEntity {
       specialties:
           map['specialties'] != null ? map['specialties'] as String : null,
       rating: map['rating'] != null ? map['rating'] as double : null,
-      avgRating: map['avgRating'] != null ? map['avgRating'] as double : null,
+      avgRating: map['avgRating'] != null
+          ? (map['avgRating'] as num).toDouble()
+          : null,
       totalFeedback:
           map['totalFeedback'] != null ? map['totalFeedback'] as int : null,
       isNative: map['isNative'] != null ? map['isNative'] as bool : null,

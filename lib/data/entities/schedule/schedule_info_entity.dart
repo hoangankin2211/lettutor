@@ -24,6 +24,7 @@ class ScheduleInfoEntity {
   final DateTime updatedAt;
 
   final TutorEntity tutorInfo;
+
   ScheduleInfoEntity({
     required this.id,
     required this.tutorId,
@@ -64,8 +65,8 @@ class ScheduleInfoEntity {
       startTimestamp: map['startTimestamp'] as int,
       endTimestamp: map['endTimestamp'] as int,
       isDeleted: map['isDeleted'] as bool,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
+      createdAt: DateTime.parse(map['createdAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
       tutorInfo: TutorEntity.fromJson(map['tutorInfo'] as Map<String, dynamic>),
     );
   }

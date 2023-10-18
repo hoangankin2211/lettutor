@@ -89,7 +89,7 @@ class TutorRepositoryImpl extends TutorRepository {
       request: () async =>
           tutorService.addTutorToFavorite(body: {"tutorId": tutorId}),
     );
-    if (dataState is DataSuccess && dataState.statusCode == 201) {
+    if (dataState is DataSuccess && dataState.statusCode == 200) {
       return true;
     }
 

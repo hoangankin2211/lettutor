@@ -12,6 +12,8 @@ class DefaultPagination<T> extends StatefulWidget {
 
   final ScrollPhysics? physics;
   final Widget? loadingWidget;
+  final int totalPage;
+  final int page;
 
   const DefaultPagination({
     super.key,
@@ -19,9 +21,11 @@ class DefaultPagination<T> extends StatefulWidget {
     this.separatorBuilder,
     this.loadingWidget,
     required this.items,
-    required this.loading,
+    this.loading = false,
     required this.itemBuilder,
     required this.listenScrollBottom,
+    this.totalPage = 0,
+    this.page = 1,
   });
 
   @override
@@ -66,12 +70,12 @@ class _DefaultPaginationState<T> extends State<DefaultPagination<T>> {
         if (index < widget.items.length) {
           return widget.itemBuilder(context, index);
         }
-        if (index >= widget.items.length && (widget.loading)) {
-          Timer(const Duration(milliseconds: 30), () {
-            _scrollController!.jumpTo(
-              _scrollController!.position.maxScrollExtent,
-            );
-          });
+        if (index >= widget.items.length && widget.page < widget.totalPage) {
+          // Timer(const Duration(milliseconds: 30), () {
+          //   _scrollController!.jumpTo(
+          //     _scrollController!.position.maxScrollExtent,
+          //   );
+          // });
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: widget.loadingWidget ?? const AppLoadingIndicator(),

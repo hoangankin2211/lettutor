@@ -104,20 +104,11 @@ class _ListCoursePageState extends State<ListCoursePage>
               CourseSearchBar(controller: searchController),
               Expanded(
                 child: DefaultPagination<CourseDetail>(
-                  listenScrollBottom: () async {
-                    if (state.data.page + 1 >
-                        (state.data.count.toDouble() / state.data.perPage)
-                            .ceil()) {
-                      return;
-                    }
-                    courseBloc.fetchCourseList(page: state.data.page + 1);
-                  },
+                  page: state.data.page,
+                  totalPage: state.data.totalPage,
+                  listenScrollBottom: () =>
+                      courseBloc.fetchCourseList(page: state.data.page + 1),
                   physics: const BouncingScrollPhysics(),
-                  // padding: const EdgeInsets.symmetric(horizontal: 10),
-                  // separatorBuilder: (context, index) => const SizedBox(height: 20),
-                  // shrinkWrap: true,
-                  // itemCount: 10,
-                  // addAutomaticKeepAlives: true,
                   items: state.data.course,
                   loading: state is LoadingListCourse,
                   itemBuilder: (context, index) {

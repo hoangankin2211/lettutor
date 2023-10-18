@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 class Tutor {
   final String id;
   final String level;
@@ -90,6 +92,9 @@ class Tutor {
     required this.isOnline,
     this.isFavoriteTutor = false,
   });
+
+  final StreamController<bool> favoriteController =
+      StreamController.broadcast();
 
   Tutor copyWith({
     String? id,

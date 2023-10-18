@@ -16,6 +16,8 @@ class TutorWidget extends StatefulWidget {
     required this.description,
     required this.price,
     this.onTap,
+    this.isFavorite = false,
+    this.markFavorite,
   });
   final String imageUrl;
   final String name;
@@ -25,6 +27,8 @@ class TutorWidget extends StatefulWidget {
   final String description;
   final double price;
   final void Function()? onTap;
+  final bool isFavorite;
+  final void Function(bool)? markFavorite;
 
   @override
   State<TutorWidget> createState() => _TutorWidgetState();
@@ -123,11 +127,20 @@ class _TutorWidgetState extends State<TutorWidget> {
                 constraints: const BoxConstraints(),
                 splashRadius: 8,
                 padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: Icon(
-                  CupertinoIcons.heart,
-                  color: context.theme.hintColor,
-                ),
+                onPressed: () {
+                  widget.markFavorite != null
+                      ? widget.markFavorite!(!widget.isFavorite)
+                      : () {};
+                },
+                icon: widget.isFavorite
+                    ? Icon(
+                        CupertinoIcons.heart_fill,
+                        color: Colors.red.shade600,
+                      )
+                    : Icon(
+                        CupertinoIcons.heart,
+                        color: context.theme.hintColor,
+                      ),
               ),
             ],
           ),
