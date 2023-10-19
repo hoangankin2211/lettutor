@@ -30,7 +30,7 @@ class CourseRepositoryImpl extends CourseRepository {
       request: () async => courseService.fetchCoursePage(queries: {
         "page": page,
         "per_page": perPge,
-        "q": q,
+        "q": (q?.isEmpty ?? true) ? null : q,
         "category_id": categoryId,
       }),
     );

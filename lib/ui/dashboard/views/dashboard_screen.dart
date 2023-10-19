@@ -9,6 +9,7 @@ import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
 import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
 import 'package:lettutor/ui/schedule/view/schedule_screen.dart';
+import 'package:lettutor/ui/setting/views/setting_screen.dart';
 import 'package:lettutor/ui/tutor/views/tutor_screen.dart';
 
 import '../../tutor/blocs/tutor_bloc.dart';
@@ -69,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     {
       'title': 'Setting',
       'icon': CupertinoIcons.settings_solid,
-      "widget": Placeholder(),
+      "widget": SettingScreen(),
     },
   ];
 

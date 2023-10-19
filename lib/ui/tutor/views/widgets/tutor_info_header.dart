@@ -12,6 +12,7 @@ class TutorInfoHeader extends StatefulWidget {
     required this.numOfFeedback,
     required this.country,
     required this.profession,
+    this.radius = 40,
   });
 
   final String avatar;
@@ -19,6 +20,7 @@ class TutorInfoHeader extends StatefulWidget {
   final String profession;
   final int numOfFeedback;
   final String country;
+  final double radius;
 
   @override
   State<TutorInfoHeader> createState() => _TutorInfoHeaderState();
@@ -32,7 +34,7 @@ class _TutorInfoHeaderState extends State<TutorInfoHeader> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          radius: 40,
+          radius: widget.radius,
           foregroundImage: NetworkImage(_avatar),
           onForegroundImageError: (exception, stackTrace) {
             setState(() {

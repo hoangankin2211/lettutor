@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/domain/models/course/course_detail.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
@@ -49,8 +51,14 @@ class _CourseScreenState extends State<CourseScreen>
             ),
           ),
           Expanded(
-            child: PageView(
-              children: const [ListCoursePage(), ListEBookPage()],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: PageView(
+                children: const [
+                  ListCoursePage(),
+                  ListEBookPage(),
+                ],
+              ),
             ),
           ),
         ]
@@ -80,15 +88,33 @@ class _ListCoursePageState extends State<ListCoursePage>
   final TextEditingController searchController = TextEditingController();
 
   @override
+  void initState() {
+    courseBloc.fetchCourseList();
+
+    super.initState();
+  }
+
+  @override
   void dispose() {
     searchController.dispose();
     super.dispose();
   }
 
-  @override
-  void didChangeDependencies() {
-    courseBloc.fetchCourseList();
-    super.didChangeDependencies();
+  void showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.theme.dialogBackgroundColor,
+      clipBehavior: Clip.hardEdge,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(10),
+        ),
+      ),
+      builder: (context) {
+        return FilterSheet();
+      },
+    );
   }
 
   @override
@@ -98,37 +124,60 @@ class _ListCoursePageState extends State<ListCoursePage>
       builder: (context, state) {
         if (state is InitialCourseListPage) {
           return const AppLoadingIndicator();
+        } else if (state is ErrorCourseList) {
+          return Center(child: Text(state.message));
         } else {
           return Column(
             children: [
-              CourseSearchBar(controller: searchController),
-              Expanded(
-                child: DefaultPagination<CourseDetail>(
-                  page: state.data.page,
-                  totalPage: state.data.totalPage,
-                  listenScrollBottom: () =>
-                      courseBloc.fetchCourseList(page: state.data.page + 1),
-                  physics: const BouncingScrollPhysics(),
-                  items: state.data.course,
-                  loading: state is LoadingListCourse,
-                  itemBuilder: (context, index) {
-                    final courseItem = state.data.course.elementAt(index);
-                    return CourseWidget(
-                      onTap: (id) {
-                        context.push(
-                          RouteLocation.courseDetail,
-                          extra: {"courseId": id},
-                        );
-                      },
-                      courseId: courseItem.id,
-                      imageUrl: courseItem.imageUrl,
-                      title: courseItem.name,
-                      subTitle: courseItem.description,
-                      level: courseItem.level,
-                    );
-                  },
-                ),
+              CourseSearchBar(
+                controller: searchController,
+                onTapFilter: () {
+                  showFilterBottomSheet();
+                },
+                onSearch: (text) {
+                  courseBloc.searchCourse(
+                    q: text.isEmpty ? null : text,
+                    isFilter: true,
+                  );
+                },
               ),
+              const SizedBox(height: 20),
+              state is LoadingListCourse
+                  ? const Center(child: AppLoadingIndicator())
+                  : Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: courseBloc.fetchCourseList,
+                        child: DefaultPagination<CourseDetail>(
+                          page: state.data.page,
+                          totalPage: state.data.totalPage,
+                          separatorBuilder: (p0, p1) {
+                            return const SizedBox(height: 20);
+                          },
+                          listenScrollBottom: () => courseBloc.loadMoreCourse(
+                              page: state.data.page + 1),
+                          physics: const BouncingScrollPhysics(),
+                          items: state.data.course,
+                          loading: state is LoadingListCourse,
+                          itemBuilder: (context, index) {
+                            final courseItem =
+                                state.data.course.elementAt(index);
+                            return CourseWidget(
+                              onTap: (id) {
+                                context.push(
+                                  RouteLocation.courseDetail,
+                                  extra: {"courseId": id},
+                                );
+                              },
+                              courseId: courseItem.id,
+                              imageUrl: courseItem.imageUrl,
+                              title: courseItem.name,
+                              subTitle: courseItem.description,
+                              level: courseItem.level,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
             ],
           );
         }
@@ -212,4 +261,224 @@ class _ListEBookPageState extends State<ListEBookPage>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+enum National {
+  vietnam,
+  england,
+}
+
+enum TutorTag {
+  All("All"),
+  Englishforkids("English for kids"),
+  EnglishforBusiness('English for Business'),
+  Conversational("Conversational"),
+  STARTERS("STARTERS"),
+  MOVERS("MOVERS"),
+  FLYERS("FLYERS"),
+  KET("KET"),
+  PET("PET"),
+  IELTS("IELTS"),
+  TOEFL("TOEFL"),
+  TOEIC("TOEIC");
+
+  final String name;
+  const TutorTag(this.name);
+}
+
+class FilterSheet extends StatefulWidget {
+  const FilterSheet({super.key});
+
+  @override
+  State<FilterSheet> createState() => _FilterSheetState();
+}
+
+class _FilterSheetState extends State<FilterSheet> {
+  DateTime? selectedDate;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
+  TutorTag selectedTag = TutorTag.All;
+
+  void openCalendar() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
+      confirmText: "Select",
+      cancelText: "Cancel",
+    ).then((value) {
+      setState(() {
+        selectedDate = value ?? selectedDate;
+      });
+    });
+  }
+
+  Future<TimeOfDay?> openDateRange(TimeOfDay? startTime) {
+    return showTimePicker(
+      context: context,
+      initialTime: startTime ?? TimeOfDay.now(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Select your tutor's national",
+              style: context.textTheme.titleMedium?.boldTextTheme,
+            ),
+            DropdownMenu<National>(
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide:
+                      BorderSide(color: context.theme.hintColor, width: 0.5),
+                ),
+              ),
+              dropdownMenuEntries: const [
+                DropdownMenuEntry(
+                  value: National.vietnam,
+                  label: "Vietnamese Tutor",
+                ),
+                DropdownMenuEntry(
+                  value: National.england,
+                  label: "Native English Tutor",
+                ),
+              ],
+              label: Text(
+                "National",
+                style: context.textTheme.bodyLarge,
+              ),
+              leadingIcon: Icon(Icons.location_pin),
+            ),
+            Text(
+              "Select Available tutoring time",
+              style: context.textTheme.titleMedium?.boldTextTheme,
+            ),
+            ElevatedButton.icon(
+              onPressed: openCalendar,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.colorScheme.onPrimary,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: context.theme.hintColor, width: 1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                elevation: 0,
+              ),
+              icon: Icon(
+                Icons.calendar_month,
+                color: context.theme.hintColor,
+              ),
+              label: Text(
+                selectedDate == null
+                    ? "Select Date"
+                    : DateFormat().add_yMd().format(selectedDate!),
+                style: context.textTheme.bodyLarge,
+              ),
+            ),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    openDateRange(startTime).then((value) {
+                      setState(() {
+                        startTime = value ?? startTime;
+                      });
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      side:
+                          BorderSide(color: context.theme.hintColor, width: 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 0,
+                  ),
+                  icon: Icon(
+                    Icons.calendar_month,
+                    color: context.theme.hintColor,
+                  ),
+                  label: Text(
+                    startTime == null
+                        ? "Select Start Time"
+                        : "${startTime!.hour}:${startTime!.minute}",
+                    style: context.textTheme.bodyLarge,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    openDateRange(startTime).then((value) {
+                      if (value == null) return;
+                      setState(() {
+                        endTime = value;
+                      });
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      side:
+                          BorderSide(color: context.theme.hintColor, width: 1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 0,
+                  ),
+                  icon: Icon(
+                    Icons.calendar_month,
+                    color: context.theme.hintColor,
+                  ),
+                  label: Text(
+                    endTime == null
+                        ? "Select End Time"
+                        : "${endTime!.hour}:${endTime!.minute}",
+                    style: context.textTheme.bodyLarge,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              "Select Tutor Tags",
+              style: context.textTheme.titleMedium?.boldTextTheme,
+            ),
+            Wrap(
+              direction: Axis.horizontal,
+              spacing: 5,
+              runSpacing: 4,
+              children: [
+                for (final tag in TutorTag.values)
+                  ChoiceChip(
+                    selectedColor: context.theme.primaryColor.withOpacity(0.1),
+                    label: Text(tag.name),
+                    selected: tag == selectedTag,
+                    onSelected: (value) {
+                      if (value) {
+                        setState(() {
+                          selectedTag = tag;
+                        });
+                      }
+                    },
+                  ),
+              ],
+            ),
+          ]
+              .expand<Widget>((element) => [
+                    element,
+                    if (element is! Text) const SizedBox(height: 20),
+                  ])
+              .toList(),
+        ),
+      ),
+    );
+  }
 }

@@ -68,6 +68,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               final schedule =
                                   scheduleState.data.schedules[index];
                               return ScheduleWidget(
+                                studentRequest: schedule.studentRequest ?? "",
                                 tutor: TutorMapper.fromTutorEntity(schedule
                                     .scheduleDetailInfo!
                                     .scheduleInfo!
