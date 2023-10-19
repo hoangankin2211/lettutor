@@ -70,4 +70,17 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
     return Left("Error: ${response.dioException?.message}");
   }
+
+  @override
+  Future<Either<String, bool>> cancelBookedSchedule(
+      {required List<String> schedulesId}) async {
+    final result = await getStateOf(
+      request: () => scheduleService
+          .cancelScheduleClass(body: {"scheduleDetailIds": schedulesId}),
+    );
+
+    return result.isSuccess().mapLeft(
+          (left) => left.message ?? "Error: Can not cancel the booked schedule",
+        );
+  }
 }

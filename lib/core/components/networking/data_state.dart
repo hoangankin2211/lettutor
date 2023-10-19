@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:either_dart/either.dart';
 
 abstract class DataState<T> {
   final T? data;
@@ -25,4 +26,13 @@ class DataFailed<T> extends DataState<T> {
     required super.statusCode,
     required DioException exception,
   }) : super(data: null, dioException: exception);
+}
+
+extension DataStateExtensions<T> on DataState<T> {
+  Either<DioException, bool> isSuccess() {
+    if (this is DataFailed) {
+      return Left((this as DataFailed).dioException!);
+    }
+    return const Right(true);
+  }
 }

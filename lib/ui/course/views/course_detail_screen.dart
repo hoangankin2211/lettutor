@@ -214,7 +214,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           }
 
           return Scaffold(
-            appBar: CustomAppBar(
+            appBar: CustomAppBar<Color?>(
               appBarBuilder: (context, color, child) {
                 return AppBar(
                   elevation: 0,
@@ -231,7 +231,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                   ),
                 );
               },
-              color: color,
+              value: color,
             ),
             body: Stack(
               children: [
@@ -313,8 +313,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   }
 }
 
-class CustomAppBar extends AppBar implements ValueListenableBuilder {
-  final ValueNotifier color;
+class CustomAppBar<T> extends AppBar implements ValueListenableBuilder {
+  final ValueNotifier<T> value;
   final Widget? appBarChild;
   final ValueWidgetBuilder appBarBuilder;
 
@@ -322,7 +322,7 @@ class CustomAppBar extends AppBar implements ValueListenableBuilder {
     super.key,
     this.appBarChild,
     required this.appBarBuilder,
-    required this.color,
+    required this.value,
   });
 
   @override
@@ -332,14 +332,14 @@ class CustomAppBar extends AppBar implements ValueListenableBuilder {
   Widget? get child => appBarChild;
 
   @override
-  ValueListenable get valueListenable => color;
+  ValueListenable get valueListenable => value;
 
   @override
-  State<AppBar> createState() => _CustomAppBarState();
+  State<AppBar> createState() => _CustomAppBarState<T>();
 }
 
-class _CustomAppBarState extends State<CustomAppBar> {
-  late Color? value;
+class _CustomAppBarState<T> extends State<CustomAppBar<T>> {
+  late T? value;
 
   @override
   void initState() {
@@ -349,7 +349,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   }
 
   @override
-  void didUpdateWidget(covariant CustomAppBar oldWidget) {
+  void didUpdateWidget(covariant CustomAppBar<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.valueListenable != widget.valueListenable) {
       oldWidget.valueListenable.removeListener(_valueChanged);

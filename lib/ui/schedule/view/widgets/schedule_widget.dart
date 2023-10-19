@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_info_header.dart';
 
 import '../../../../domain/models/tutor/tutor.dart';
@@ -13,15 +14,19 @@ class ScheduleWidget extends StatefulWidget {
   final String startTime;
   final String endTime;
   final String studentRequest;
+  final void Function()? cancelSchedule;
+  final bool isCanceling;
 
   const ScheduleWidget({
     super.key,
+    this.cancelSchedule,
     required this.time,
     required this.numberLesson,
     required this.tutor,
     required this.startTime,
     required this.endTime,
     required this.studentRequest,
+    this.isCanceling = false,
   });
 
   @override
@@ -151,16 +156,21 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                         BorderSide(width: 1, color: context.colorScheme.error),
                   ),
                 ),
-                icon: Icon(
-                  Icons.cancel,
-                  color: context.colorScheme.error,
-                ),
+                icon: widget.isCanceling
+                    ? AppLoadingIndicator(
+                        color: context.colorScheme.error,
+                        radius: 20,
+                      )
+                    : Icon(
+                        Icons.cancel,
+                        color: context.colorScheme.error,
+                      ),
                 label: Text(
                   "Cancel",
                   style: context.textTheme.bodyLarge
                       ?.copyWith(color: context.colorScheme.error),
                 ),
-                onPressed: () {},
+                onPressed: widget.cancelSchedule,
               ),
             ],
           ),
@@ -202,7 +212,9 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
             axis: Axis.vertical,
             child: Padding(
               padding: const EdgeInsets.only(left: 25),
-              child: Text(widget.studentRequest),
+              child: Text(widget.studentRequest.isEmpty
+                  ? "Currently there are no requests for this class. Please write down any requests for the teacher."
+                  : widget.studentRequest),
             ),
           ),
         ],

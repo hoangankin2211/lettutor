@@ -40,4 +40,8 @@ class ScheduleUseCase {
       scheduleRepository
           .getNextAppointment(dateTime: time)
           .mapRight((right) => right.data);
+
+  Future<Either<String, bool>> cancelBookedSchedule(
+          {required List<String> schedulesId}) =>
+      scheduleRepository.cancelBookedSchedule(schedulesId: schedulesId);
 }

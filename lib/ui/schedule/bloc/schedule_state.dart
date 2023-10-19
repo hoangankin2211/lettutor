@@ -25,6 +25,20 @@ class ScheduleError extends ScheduleState {
   ScheduleError({required this.message, required super.data});
 }
 
+class CancelingSchedule extends ScheduleState {
+  CancelingSchedule({required super.data});
+}
+
+class CancelScheduleSuccess extends ScheduleState {
+  CancelScheduleSuccess({required super.data});
+}
+
+class CancelScheduleFailed extends ScheduleState {
+  final String message;
+
+  CancelScheduleFailed({required super.data, required this.message});
+}
+
 class ScheduleData {
   final int page;
   final int perPage;

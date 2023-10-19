@@ -2,9 +2,12 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/widgets/custom_appbar.dart';
 import 'package:lettutor/core/components/widgets/custom_stack_scroll.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 
 import '../../auth/blocs/auth_bloc.dart';
 
@@ -17,6 +20,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   late final authBloc = BlocProvider.of<AuthBloc>(context);
+  late final appBloc = BlocProvider.of<ApplicationBloc>(context);
 
   String get userEmail => authBloc.state.user?.email ?? "";
   String get userName => authBloc.state.user?.name ?? "";
@@ -26,35 +30,136 @@ class _SettingScreenState extends State<SettingScreen> {
       ? Icons.dark_mode
       : Icons.light_mode;
 
-  late final List<Map<String, dynamic>> displayInformation = [
-    {
-      'title': 'displayInformation',
-      'icon': CupertinoIcons.mail,
-      'content': userEmail,
-    },
-    {
-      'title': 'displayInformation',
-      'icon': Icons.location_on_sharp,
-      'content': Country.parse(location).name,
-    },
-  ];
-  late final List<Map<String, dynamic>> displaySettingChoice = [
-    {
-      'title': 'displaySettingChoice',
-      'icon': CupertinoIcons.person_2_alt,
-      'content': "Become a tutor",
-    },
-    {
-      'title': 'displaySettingChoice',
-      'icon': CupertinoIcons.globe,
-      'content': "Language",
-    },
-    {
-      'title': 'displaySettingChoice',
-      'icon': themeIcon,
-      'content': "Appearance",
-    },
-  ];
+  int selectedLanguage = 0;
+  List<String> language = ["English", "Vietnamese"];
+  String languageSelection() => language.elementAt(selectedLanguage);
+
+  int selectedTheme = 0;
+  List<String> theme = ["System", "Light", "Dark"];
+  String themeSelection() => theme.elementAt(selectedTheme);
+
+  List<Map<String, dynamic>> get displayInformation => [
+        {
+          'title': 'displayInformation',
+          'icon': CupertinoIcons.mail,
+          'content': userEmail,
+        },
+        {
+          'title': 'displayInformation',
+          'icon': Icons.location_on_sharp,
+          'content': Country.parse(location).name,
+        },
+      ];
+  List<Map<String, dynamic>> get displaySettingChoice => [
+        {
+          'title': 'displaySettingChoice',
+          'icon': Icons.history,
+          'content': "History",
+        },
+        {
+          'title': 'displaySettingChoice',
+          'icon': CupertinoIcons.person_2_alt,
+          'content': "Become a tutor",
+        },
+        {
+          'title': 'displaySettingChoice',
+          'icon': CupertinoIcons.globe,
+          'onTap': () => showCupertinoChoiceBottomSheet(
+                initialItem: selectedLanguage,
+                data: language,
+                onSelectedItemChanged: (value) {
+                  logger.d(value);
+                  setState(() => selectedLanguage = value);
+                },
+              ),
+          'selection': languageSelection,
+          'content': "Language",
+        },
+        {
+          'title': 'displaySettingChoice',
+          'icon': themeIcon,
+          'onTap': () => showCupertinoChoiceBottomSheet(
+              data: theme,
+              onSelectedItemChanged: (value) =>
+                  setState(() => selectedTheme = value),
+              initialItem: selectedTheme),
+          'selection': themeSelection,
+          'content': "Appearance",
+        },
+      ];
+
+  void showCupertinoChoiceBottomSheet({
+    required void Function(int) onSelectedItemChanged,
+    required List<String> data,
+    required int initialItem,
+  }) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) {
+          int tempIndex = initialItem;
+          return Container(
+            height: 216,
+            padding: const EdgeInsets.only(top: 6.0),
+            margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            color: CupertinoColors.systemBackground.resolveFrom(context),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: CupertinoPicker(
+                      magnification: 1.22,
+                      squeeze: 1.2,
+                      useMagnifier: true,
+                      itemExtent: 50,
+                      scrollController: FixedExtentScrollController(
+                        initialItem: tempIndex,
+                      ),
+                      onSelectedItemChanged: (value) {
+                        tempIndex = value;
+                      },
+                      children:
+                          data.map((e) => Center(child: Text(e))).toList(),
+                    ),
+                  ),
+                  SizedBox(
+                    width: context.width * 0.5,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: context.colorScheme.onPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            color: context.colorScheme.primary,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        onSelectedItemChanged(tempIndex);
+                        context.pop();
+                      },
+                      icon: Icon(
+                        Icons.check,
+                        color: context.colorScheme.primary,
+                      ),
+                      label: Text(
+                        "Ok",
+                        style: context.textTheme.titleMedium,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void openUserProfile() {}
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +171,7 @@ class _SettingScreenState extends State<SettingScreen> {
         appBar: AppBarCustom(
           expandedHeight: context.height * 0.32,
           backgroundColor: Colors.transparent,
+          paddingLeft: 20,
           title: const [],
         ),
         children: [
@@ -80,34 +186,39 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: ([...displayInformation, ...displaySettingChoice]
-                          .map<Widget>((e) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 20,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: e['title'] == "displaySettingChoice"
-                                      ? context.theme.hintColor
-                                          .withOpacity(0.05)
-                                      : null,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(flex: 1, child: Icon(e['icon'])),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                        flex: 6, child: Text(e['content'])),
-                                    if (e['title'] == "displaySettingChoice")
-                                      IconButton(
-                                        constraints: const BoxConstraints(),
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          size: 15,
+                          .map<Widget>((e) => GestureDetector(
+                                onTap: e['onTap'],
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                    horizontal: 20,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: e['title'] == "displaySettingChoice"
+                                        ? context.theme.hintColor
+                                            .withOpacity(0.05)
+                                        : null,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(flex: 1, child: Icon(e['icon'])),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                          flex: 6, child: Text(e['content'])),
+                                      if (e["selection"] != null)
+                                        Text(e["selection"]()),
+                                      if (e['title'] == "displaySettingChoice")
+                                        IconButton(
+                                          constraints: const BoxConstraints(),
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            size: 15,
+                                          ),
                                         ),
-                                      ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ))
                           .toList()
@@ -163,6 +274,13 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ),
                               ],
                             ),
+                          ),
+                        )
+                        ..insert(
+                          0,
+                          Text(
+                            "Profile Settings",
+                            style: context.textTheme.titleLarge,
                           ),
                         ))
                       .toList()

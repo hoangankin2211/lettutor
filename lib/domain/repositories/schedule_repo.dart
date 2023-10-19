@@ -14,4 +14,7 @@ abstract class ScheduleRepository {
 
   Future<Either<String, UpcomingClassResponse>> getNextAppointment(
       {required DateTime dateTime});
+
+  Future<Either<String, bool>> cancelBookedSchedule(
+      {required List<String> schedulesId});
 }
