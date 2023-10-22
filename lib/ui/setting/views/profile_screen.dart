@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -78,16 +80,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required TextEditingController controller,
     required String labelText,
     required String hintText,
+    IconData? iconData,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          labelText,
-          style: context.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w400,
-            color: Theme.of(context).hintColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (iconData != null)
+              Icon(
+                iconData,
+                color: context.theme.hintColor,
+                size: 25,
+              ),
+            const SizedBox(width: 5),
+            Text(
+              labelText,
+              style: context.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+          ],
         ),
         TextFormField(
           controller: controller,
@@ -130,36 +147,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
             radius: 80,
           ),
         ),
-        const SizedBox(width: 40),
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              [Icons.email, userEmail],
-              [Icons.phone, phone],
-              [Icons.wallet, amount]
-            ]
-                .map<Widget>(
-                  (e) => Row(
-                    children: [
-                      Icon(
-                        e[0] as IconData,
-                        color: context.theme.hintColor,
-                        size: 35,
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  [Icons.email, userEmail],
+                  [Icons.phone, phone],
+                  [Icons.wallet, amount]
+                ]
+                    .map<Widget>(
+                      (e) => Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            e[0] as IconData,
+                            color: context.theme.hintColor,
+                            size: 35,
+                          ),
+                          const SizedBox(width: 10),
+                          AutoSizeText(
+                            e[1] as String,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            style: context.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        e[1] as String,
-                        textAlign: TextAlign.center,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).hintColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-                .toList()),
+                    )
+                    .toList()),
+          ),
+        ),
       ],
     );
   }
@@ -293,6 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             _avatarField(),
             _informationTextField(
+              iconData: CupertinoIcons.person_fill,
               controller: TextEditingController(),
               labelText: "Name",
               hintText: "Name",
