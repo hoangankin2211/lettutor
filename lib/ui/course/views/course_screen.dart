@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
@@ -30,12 +31,24 @@ class _CourseScreenState extends State<CourseScreen>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: context.height * 0.1,
         elevation: 0,
         centerTitle: true,
         backgroundColor: context.theme.scaffoldBackgroundColor,
-        title: Text(
-          'Courses',
-          style: context.textTheme.titleLarge?.boldTextTheme,
+        title: Row(
+          children: [
+            SvgPicture.asset("assets/images/course_icon.svg", height: 80),
+            const SizedBox(width: 10),
+            Text(
+              'Course',
+              style: context.textTheme.headlineMedium?.boldTextTheme
+                  .copyWith(color: context.textTheme.bodyLarge?.color),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+          ],
         ),
       ),
       body: Column(
@@ -100,23 +113,6 @@ class _ListCoursePageState extends State<ListCoursePage>
     super.dispose();
   }
 
-  void showFilterBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: context.theme.dialogBackgroundColor,
-      clipBehavior: Clip.hardEdge,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10),
-        ),
-      ),
-      builder: (context) {
-        return FilterSheet();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -132,7 +128,7 @@ class _ListCoursePageState extends State<ListCoursePage>
               CourseSearchBar(
                 controller: searchController,
                 onTapFilter: () {
-                  showFilterBottomSheet();
+                  // showFilterBottomSheet();
                 },
                 onSearch: (text) {
                   courseBloc.searchCourse(
@@ -142,10 +138,10 @@ class _ListCoursePageState extends State<ListCoursePage>
                 },
               ),
               const SizedBox(height: 20),
-              state is LoadingListCourse
-                  ? const Center(child: AppLoadingIndicator())
-                  : Expanded(
-                      child: RefreshIndicator(
+              Expanded(
+                child: state is LoadingListCourse
+                    ? const Center(child: AppLoadingIndicator())
+                    : RefreshIndicator(
                         onRefresh: courseBloc.fetchCourseList,
                         child: DefaultPagination<CourseDetail>(
                           page: state.data.page,
@@ -177,7 +173,7 @@ class _ListCoursePageState extends State<ListCoursePage>
                           },
                         ),
                       ),
-                    ),
+              ),
             ],
           );
         }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/widgets/CusButton.dart';
+import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
 
 import 'specialties_component.dart';
 
@@ -162,7 +162,7 @@ class _TutorWidgetState extends State<TutorWidget> {
   _buildActionButton() {
     return Row(
       children: [
-        CusButton(
+        ElevatedBorderButton(
           onPressed: () {},
           child: Row(
             mainAxisSize: MainAxisSize.min,

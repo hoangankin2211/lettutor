@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
@@ -101,20 +100,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
   }
 
   Widget _buildTimeInfo() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          DateFormat().add_yMMMEd().format(widget.time),
-          style: context.textTheme.titleLarge?.boldTextTheme,
-        ),
-        Text(
-          "${widget.numberLesson} lesson",
-          style: context.textTheme.titleMedium,
-        ),
-      ],
-    );
+    return TimeInfoField(numberLesson: widget.numberLesson, time: widget.time);
   }
 
   Widget _buildTutorHeader() {
@@ -219,6 +205,34 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
           ),
         ],
       ),
+    );
+  }
+}
+
+class TimeInfoField extends StatelessWidget {
+  const TimeInfoField({
+    super.key,
+    required this.time,
+    required this.numberLesson,
+  });
+  final DateTime time;
+  final int numberLesson;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          DateFormat().add_yMMMEd().format(time),
+          style: context.textTheme.titleLarge?.boldTextTheme,
+        ),
+        Text(
+          "$numberLesson lesson",
+          style: context.textTheme.titleMedium,
+        ),
+      ],
     );
   }
 }

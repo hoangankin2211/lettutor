@@ -29,15 +29,15 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       'orderBy': orderBy,
       'sortBy': sortBy,
     };
-    if (isHistoryGet) {
-      queries.addAll(
-        {'dateTimeLte': time.millisecondsSinceEpoch},
-      );
-    } else {
-      queries.addAll(
-        {'dateTimeGte': time.millisecondsSinceEpoch},
-      );
-    }
+    // if (isHistoryGet) {
+    //   queries.addAll(
+    //     {'dateTimeLte': time.millisecondsSinceEpoch},
+    //   );
+    // } else {
+    //   queries.addAll(
+    //     {'dateTimeGte': time.millisecondsSinceEpoch},
+    //   );
+    // }
     final response = await getStateOf<BookingResponse>(
       request: () async =>
           scheduleService.getScheduleListForStudent(queries: queries),

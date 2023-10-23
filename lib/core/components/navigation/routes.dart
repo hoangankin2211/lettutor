@@ -6,7 +6,10 @@ import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/course/views/course_detail_screen.dart';
 import 'package:lettutor/ui/course/views/widgets/page_view_pdf.dart';
 import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
+import 'package:lettutor/ui/history/views/history_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
+import 'package:lettutor/ui/setting/views/profile_screen.dart';
+import 'package:lettutor/ui/setting/views/setting_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
 import 'package:lettutor/ui/tutor/views/tutor_detail_screen.dart';
 
@@ -74,5 +77,20 @@ final routes = [
     path: RouteLocation.splash,
     parentNavigatorKey: AppBuilder.appNavigationKey,
     builder: (context, state) => const SplashScreen(),
+  ),
+  GoRoute(
+    parentNavigatorKey: AppBuilder.appNavigationKey,
+    path: RouteLocation.setting,
+    builder: (context, state) => const SettingScreen(),
+    routes: [
+      GoRoute(
+        path: RouteLocation.profile,
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: RouteLocation.history,
+        builder: (context, state) => const HistoryScreen(),
+      ),
+    ],
   ),
 ];

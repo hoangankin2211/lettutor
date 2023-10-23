@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/core/components/widgets/custom_appbar.dart';
 import 'package:lettutor/core/components/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
@@ -55,6 +56,7 @@ class _SettingScreenState extends State<SettingScreen> {
           'title': 'displaySettingChoice',
           'icon': Icons.history,
           'content': "History",
+          'onTap': openHistoryPage,
         },
         {
           'title': 'displaySettingChoice',
@@ -159,7 +161,13 @@ class _SettingScreenState extends State<SettingScreen> {
         });
   }
 
-  void openUserProfile() {}
+  void openUserProfile() {
+    context.push("${RouteLocation.setting}/${RouteLocation.profile}");
+  }
+
+  void openHistoryPage() {
+    context.push("${RouteLocation.setting}/${RouteLocation.history}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,49 +238,52 @@ class _SettingScreenState extends State<SettingScreen> {
                             ))
                         ..insert(
                           0,
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 7, horizontal: 20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: avatar != null
-                                      ? CircleAvatar(
-                                          foregroundImage:
-                                              NetworkImage(avatar!),
-                                          backgroundImage: const AssetImage(
-                                              "assets/images/user.png"),
-                                        )
-                                      : Image.asset(
-                                          "assets/images/user.png",
-                                          fit: BoxFit.contain,
-                                          cacheHeight: 60,
-                                        ),
-                                ),
-                                Expanded(
-                                  flex: 6,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 9),
-                                    child: Text(
-                                      userName,
-                                      style: context.textTheme.bodyLarge,
+                          GestureDetector(
+                            onTap: openUserProfile,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 7, horizontal: 20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: avatar != null
+                                        ? CircleAvatar(
+                                            foregroundImage:
+                                                NetworkImage(avatar!),
+                                            backgroundImage: const AssetImage(
+                                                "assets/images/user.png"),
+                                          )
+                                        : Image.asset(
+                                            "assets/images/user.png",
+                                            fit: BoxFit.contain,
+                                            cacheHeight: 60,
+                                          ),
+                                  ),
+                                  Expanded(
+                                    flex: 6,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 9),
+                                      child: Text(
+                                        userName,
+                                        style: context.textTheme.bodyLarge,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                IconButton(
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 15,
+                                  IconButton(
+                                    constraints: const BoxConstraints(),
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 15,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         )

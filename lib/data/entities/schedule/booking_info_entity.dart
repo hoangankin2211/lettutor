@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:lettutor/data/entities/schedule/history_feedback_entity.dart';
 import 'package:lettutor/data/entities/schedule/schedule_detail_entity.dart';
 
 class BookingInfoEntity {
@@ -26,6 +27,9 @@ class BookingInfoEntity {
   final int? createdAtTimeStamp;
   final int? updatedAtTimeStamp;
   final ScheduleDetailEntity? scheduleDetailInfo;
+  final bool? showRecordUrl;
+  final List<dynamic>? studentMaterials;
+  final List<HistoryFeedbackEntity>? feedbacks;
 
   BookingInfoEntity({
     required this.id,
@@ -50,6 +54,9 @@ class BookingInfoEntity {
     this.createdAtTimeStamp,
     this.updatedAtTimeStamp,
     this.scheduleDetailInfo,
+    this.showRecordUrl,
+    this.studentMaterials,
+    this.feedbacks,
   });
 
   Map<String, dynamic> toMap() {
@@ -129,6 +136,13 @@ class BookingInfoEntity {
           ? ScheduleDetailEntity.fromJson(
               map['scheduleDetailInfo'] as Map<String, dynamic>)
           : null,
+      feedbacks: List<dynamic>.of(map['feedbacks'])
+          .map<HistoryFeedbackEntity>(
+            (e) => HistoryFeedbackEntity.fromJson(e),
+          )
+          .toList(),
+      showRecordUrl: map['showRecordUrl'] as bool? ?? false,
+      studentMaterials: map['studentMaterials'] as List<dynamic>?,
     );
   }
 }

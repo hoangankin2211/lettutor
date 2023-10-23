@@ -3,6 +3,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
@@ -67,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: context.textTheme.titleLarge?.boldTextTheme,
         ),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: context.pop,
           icon: Icon(Icons.arrow_back_ios,
               color: context.textTheme.titleLarge?.color),
         ),
@@ -321,19 +322,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
               labelText: "Name",
               hintText: "Name",
             ),
-            ...["Birthday", "Country", "Levels", "Topics And Preparations"]
-                .asMap()
-                .entries
-                .map<Widget>(
+            ...[
+              {
+                "label": "Birthday",
+                "icon": Icons.calendar_month,
+              },
+              {
+                "label": "Country",
+                "icon": Icons.pin_drop,
+              },
+              {
+                "label": "Levels",
+                "icon": Icons.bookmark_outlined,
+              },
+              {
+                "label": "Topics And Preparations",
+                "icon": Icons.topic,
+              },
+            ].asMap().entries.map<Widget>(
                   (e) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        e.value,
-                        style: context.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).hintColor,
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            e.value["icon"] as IconData,
+                            color: context.theme.hintColor,
+                            size: 25,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            e.value["label"] as String,
+                            style: context.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 5.0),
                       switch (e.key) {

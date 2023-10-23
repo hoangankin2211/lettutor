@@ -13,6 +13,7 @@ class ScheduleBloc extends Cubit<ScheduleState> {
   Future<void> fetchScheduleList({
     int page = 1,
     int perPage = 10,
+    bool isHistoryGet = false,
   }) async {
     emit(ScheduleLoading(data: state.data));
     scheduleUseCase
@@ -20,7 +21,7 @@ class ScheduleBloc extends Cubit<ScheduleState> {
           page: page,
           perPage: perPage,
           dateTime: DateTime.now().subtract(const Duration(days: 15)),
-          isHistoryGet: false,
+          isHistoryGet: isHistoryGet,
         )
         .then(
           (value) => value.fold(
@@ -36,9 +37,37 @@ class ScheduleBloc extends Cubit<ScheduleState> {
         );
   }
 
-  Future<void> loadMoreSchedule() async {
+  Future<void> loadMoreSchedule({
+    int? page,
+    int? perPage,
+  }) async {
     if (state.data.page < state.data.totalPage) {
-      await fetchScheduleList(page: state.data.page + 1);
+      scheduleUseCase
+          .getListBooking(
+            page: page ?? state.data.page + 1,
+            perPage: perPage ?? state.data.perPage,
+            dateTime: DateTime.now().subtract(const Duration(days: 15)),
+            isHistoryGet: false,
+          )
+          .then(
+            (value) => value.fold(
+              (left) => emit(ScheduleError(data: state.data, message: left)),
+              (right) {
+                final listCourse = List.of(state.data.schedules, growable: true)
+                  ..addAll(right.rows);
+
+                emit(
+                  ScheduleLoaded(
+                    data: state.data.copyWith(
+                      page: right.currentPage,
+                      perPage: right.perPage,
+                      schedules: listCourse,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
     }
   }
 
