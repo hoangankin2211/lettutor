@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
-import 'package:lettutor/ui/course/blocs/course_bloc.dart';
-import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
+import 'package:lettutor/ui/dashboard/blocs/dashboard_state.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
-import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
 import 'package:lettutor/ui/schedule/view/schedule_screen.dart';
 import 'package:lettutor/ui/setting/views/setting_screen.dart';
 import 'package:lettutor/ui/tutor/views/tutor_screen.dart';
 
-import '../../tutor/blocs/tutor_bloc.dart';
+import '../blocs/dashboard_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -30,18 +28,19 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   final ValueNotifier<int> currentIndex = ValueNotifier<int>(0);
 
-  final List<Map<String, dynamic>> _tabs = [
+  final dashboardBloc = injector.get<DashboardBloc>();
+
+  late final List<Map<String, dynamic>> _tabs = [
     {
       'title': 'Home',
       'icon': CupertinoIcons.house_alt_fill,
-      // "widget": ProfileScreen(),
       "widget": HomeScreen(),
     },
     {
       'title': 'Teachers',
       'icon': CupertinoIcons.person_2_fill,
       "widget": BlocProvider(
-        create: (context) => injector.get<TutorBloc>(),
+        create: (context) => dashboardBloc.tutorBloc,
         child: const TutorScreen(),
       ),
     },
@@ -49,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       'title': 'Schedule',
       'icon': CupertinoIcons.calendar,
       "widget": BlocProvider(
-        create: (context) => injector.get<ScheduleBloc>(),
+        create: (context) => dashboardBloc.scheduleBloc,
         child: ScheduleScreen(),
       ),
     },
@@ -59,10 +58,10 @@ class _DashboardScreenState extends State<DashboardScreen>
       "widget": MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => injector.get<CourseBloc>(),
+            create: (context) => dashboardBloc.courseBloc,
           ),
           BlocProvider(
-            create: (context) => injector.get<EBookBloc>(),
+            create: (context) => dashboardBloc.courseBloc,
           ),
         ],
         child: CourseScreen(),
@@ -74,6 +73,13 @@ class _DashboardScreenState extends State<DashboardScreen>
       "widget": SettingScreen(),
     },
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dashboardBloc.fetchInitialApplicationData();
+  }
 
   void _onTap(int index) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -88,37 +94,51 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colorScheme.background,
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: controller,
-        children: _tabs.map((e) => e["widget"] as Widget).toList(),
-      ),
-      bottomNavigationBar: ValueListenableBuilder<int>(
-        valueListenable: currentIndex,
-        builder: (context, value, _) => BottomNavigationBar(
-          onTap: _onTap,
-          backgroundColor: context.colorScheme.background,
-          currentIndex: value,
-          selectedIconTheme: IconThemeData(color: context.theme.indicatorColor),
-          unselectedIconTheme:
-              IconThemeData(color: context.theme.disabledColor),
-          selectedLabelStyle: context.textTheme.bodyMedium,
-          unselectedLabelStyle:
-              context.textTheme.bodyMedium?.copyWith(color: Colors.black),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: _tabs
-              .map(
-                (tab) => BottomNavigationBarItem(
-                  icon: Icon(tab['icon']),
-                  label: tab['title'],
+    return BlocProvider(
+      create: (context) => dashboardBloc,
+      child: Builder(builder: (context) {
+        return SafeArea(
+          child: BlocConsumer<DashboardBloc, DashboardState>(
+            bloc: dashboardBloc,
+            listener: (context, state) {},
+            builder: (context, dashboardState) {
+              return Scaffold(
+                backgroundColor: context.colorScheme.background,
+                body: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: controller,
+                  children: _tabs.map((e) => e["widget"] as Widget).toList(),
                 ),
-              )
-              .toList(),
-        ),
-      ),
+                bottomNavigationBar: ValueListenableBuilder<int>(
+                  valueListenable: currentIndex,
+                  builder: (context, value, _) => BottomNavigationBar(
+                    onTap: _onTap,
+                    backgroundColor: context.colorScheme.background,
+                    currentIndex: value,
+                    selectedIconTheme:
+                        IconThemeData(color: context.theme.indicatorColor),
+                    unselectedIconTheme:
+                        IconThemeData(color: context.theme.disabledColor),
+                    selectedLabelStyle: context.textTheme.bodyMedium,
+                    unselectedLabelStyle: context.textTheme.bodyMedium
+                        ?.copyWith(color: Colors.black),
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    items: _tabs
+                        .map(
+                          (tab) => BottomNavigationBarItem(
+                            icon: Icon(tab['icon']),
+                            label: tab['title'],
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      }),
     );
   }
 }

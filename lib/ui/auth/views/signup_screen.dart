@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/auth/views/signin_screen.dart';
 
@@ -18,17 +19,11 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPwdController = TextEditingController();
 
-  final FocusNode _focusFirstName = FocusNode();
-  final FocusNode _focusLastName = FocusNode();
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPassword = FocusNode();
-  final FocusNode _focusConfirmPwd = FocusNode();
 
   Widget buildBackgroundView() {
     return Container(
@@ -99,51 +94,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'First name',
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
-          TCInputField(
-            height: 45,
-            fillColor: fillColor,
-            autocorrect: false,
-            controller: _firstNameController,
-            enableSuggestions: false,
-            hintText: 'First name',
-            focusNode: _focusFirstName,
-            borderRadius: 5,
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.text,
-            maxLines: 1,
-            ignoreShadow: true,
-            onFieldSubmitted: (text) {},
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Last name',
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
-          TCInputField(
-            height: 45,
-            fillColor: fillColor,
-            autocorrect: false,
-            controller: _lastNameController,
-            enableSuggestions: false,
-            hintText: 'Last name',
-            focusNode: _focusLastName,
-            borderRadius: 5,
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.text,
-            maxLines: 1,
-            ignoreShadow: true,
-            onFieldSubmitted: (text) {},
-          ),
           const SizedBox(height: 16),
           Text(
             'Email address',
@@ -194,28 +144,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onFieldSubmitted: (text) {},
           ),
           const SizedBox(height: 16),
-          Text(
-            'Confirm password',
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
-          TCInputField(
-            height: 45,
-            fillColor: fillColor,
-            autocorrect: false,
-            controller: _confirmPwdController,
-            enableSuggestions: false,
-            hintText: 'Password',
-            focusNode: _focusConfirmPwd,
-            borderRadius: 5,
-            keyboardType: TextInputType.text,
-            maxLines: 1,
-            ignoreShadow: true,
-            obscureText: true,
-            onFieldSubmitted: (v) {},
-          ),
           const SizedBox(height: 10),
           buildSignUpButton(),
         ],
@@ -228,7 +156,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: TCBottomButton(
         color: context.colorScheme.primary,
         title: 'Create account',
-        onPressed: () {},
+        onPressed: () {
+          BlocProvider.of<AuthBloc>(context).add(EmailRegisterRequest(
+            email: _emailController.text,
+            password: _passwordController.text,
+          ));
+        },
       ),
     );
   }

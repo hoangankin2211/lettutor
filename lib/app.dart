@@ -56,7 +56,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: widget.title,
-      theme: light,
+      theme: dark,
       darkTheme: dark,
       locale: locale,
       supportedLocales: S.delegate.supportedLocales,
@@ -97,12 +97,16 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
       listener: _applicationStateListener,
       builder: (context, appState) {
         return AdaptiveTheme(
-          initial: widget.savedThemeMode ?? AdaptiveThemeMode.light,
+          initial: widget.savedThemeMode ?? AdaptiveThemeMode.dark,
           light: ThemeData.light(),
           dark: ThemeData.dark(),
           builder: (light, dark) => BlocListener<AuthBloc, AuthState>(
             listener: _authStateListener,
-            child: _buildMaterialApp(locale: const Locale("en", "")),
+            child: _buildMaterialApp(
+              locale: const Locale("en", ""),
+              dark: dark,
+              light: light,
+            ),
           ),
         );
       },

@@ -16,3 +16,12 @@ class EmailLoginRequest extends AuthEvent {
 class LogoutAuthenticationRequest extends AuthEvent {}
 
 class InitAuthenticationStatus extends AuthEvent {}
+
+class EmailRegisterRequest extends AuthEvent {
+  final String email;
+  final String password;
+  EmailRegisterRequest({
+    required this.email,
+    required this.password,
+  });
+}

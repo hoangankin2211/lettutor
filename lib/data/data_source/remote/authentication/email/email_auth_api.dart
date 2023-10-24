@@ -29,6 +29,10 @@ abstract class EmailAuthApi implements AuthenticationApi {
   @POST(logoutApi)
   Future<HttpResponse<dynamic>> signOut();
 
+  @POST(registerApi)
+  Future<HttpResponse<AuthResponse>> signUp(
+      {@Body() required Map<String, dynamic> body});
+
   @override
   @POST(refreshTokenApi)
   Future<HttpResponse<AuthResponse>> refreshToken(

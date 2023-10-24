@@ -192,114 +192,153 @@ class _SettingScreenState extends State<SettingScreen> {
                     const BorderRadius.vertical(top: Radius.circular(25)),
               ),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: ([...displayInformation, ...displaySettingChoice]
-                          .map<Widget>((e) => GestureDetector(
-                                onTap: e['onTap'],
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
-                                    horizontal: 20,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: e['title'] == "displaySettingChoice"
-                                        ? context.theme.hintColor
-                                            .withOpacity(0.05)
-                                        : null,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(flex: 1, child: Icon(e['icon'])),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                          flex: 6, child: Text(e['content'])),
-                                      if (e["selection"] != null)
-                                        Text(e["selection"]()),
-                                      if (e['title'] == "displaySettingChoice")
-                                        IconButton(
-                                          constraints: const BoxConstraints(),
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            size: 15,
-                                          ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: ([...displayInformation, ...displaySettingChoice]
+                        .map<Widget>((e) => GestureDetector(
+                              onTap: e['onTap'],
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: e['title'] == "displaySettingChoice"
+                                      ? context.theme.hintColor
+                                          .withOpacity(0.05)
+                                      : null,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(flex: 1, child: Icon(e['icon'])),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                        flex: 6, child: Text(e['content'])),
+                                    if (e["selection"] != null)
+                                      Text(e["selection"]()),
+                                    if (e['title'] == "displaySettingChoice")
+                                      IconButton(
+                                        constraints: const BoxConstraints(),
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          size: 15,
                                         ),
-                                    ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ))
+                        .toList()
+                      ..insert(
+                          2,
+                          Text(
+                            "Other Settings",
+                            style: context.textTheme.titleLarge,
+                          ))
+                      ..insert(
+                        0,
+                        GestureDetector(
+                          onTap: openUserProfile,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 7, horizontal: 20),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: avatar != null
+                                      ? CircleAvatar(
+                                          foregroundImage:
+                                              NetworkImage(avatar!),
+                                          backgroundImage: const AssetImage(
+                                              "assets/images/user.png"),
+                                        )
+                                      : Image.asset(
+                                          "assets/images/user.png",
+                                          fit: BoxFit.contain,
+                                          cacheHeight: 60,
+                                        ),
+                                ),
+                                Expanded(
+                                  flex: 6,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 9),
+                                    child: Text(
+                                      userName,
+                                      style: context.textTheme.bodyLarge,
+                                    ),
                                   ),
                                 ),
-                              ))
-                          .toList()
-                        ..insert(
-                            2,
-                            Text(
-                              "Other Settings",
-                              style: context.textTheme.titleLarge,
-                            ))
-                        ..insert(
-                          0,
-                          GestureDetector(
-                            onTap: openUserProfile,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 7, horizontal: 20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: avatar != null
-                                        ? CircleAvatar(
-                                            foregroundImage:
-                                                NetworkImage(avatar!),
-                                            backgroundImage: const AssetImage(
-                                                "assets/images/user.png"),
-                                          )
-                                        : Image.asset(
-                                            "assets/images/user.png",
-                                            fit: BoxFit.contain,
-                                            cacheHeight: 60,
-                                          ),
+                                IconButton(
+                                  constraints: const BoxConstraints(),
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 15,
                                   ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 9),
-                                      child: Text(
-                                        userName,
-                                        style: context.textTheme.bodyLarge,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    constraints: const BoxConstraints(),
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      size: 15,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        )
-                        ..insert(
-                          0,
-                          Text(
-                            "Profile Settings",
-                            style: context.textTheme.titleLarge,
+                        ),
+                      )
+                      ..insert(
+                        0,
+                        Text(
+                          "Profile Settings",
+                          style: context.textTheme.titleLarge,
+                        ),
+                      )
+                      ..add(GestureDetector(
+                        onTap: () {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(LogoutAuthenticationRequest());
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 20,
                           ),
-                        ))
-                      .toList()
-                      .expand<Widget>((element) => [
-                            element,
-                            const SizedBox(height: 10),
-                          ])
-                      .toList()),
+                          decoration: BoxDecoration(
+                            color: context.theme.hintColor.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: Icon(
+                                    Icons.logout,
+                                    color: context.colorScheme.error,
+                                  )),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                  flex: 6,
+                                  child: Text(
+                                    "Logout",
+                                    style:
+                                        context.textTheme.bodyLarge?.copyWith(
+                                      color: context.colorScheme.error,
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      )))
+                    .toList()
+                    .expand<Widget>(
+                      (element) => [
+                        element,
+                        const SizedBox(height: 10),
+                      ],
+                    )
+                    .toList(),
+              ),
             ),
           ),
         ],

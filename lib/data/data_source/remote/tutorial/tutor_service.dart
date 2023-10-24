@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:lettutor/data/entities/tutor/tutor_detail_entity.dart';
 import '../../../entities/response/search_tutor_response.dart';
@@ -17,6 +18,7 @@ abstract class TutorService {
   static const String fetchTutorial = "$branch/more";
   static const String searchTutorApi = "$branch/search";
   static const String getTutorByIdApi = branch;
+  static const String getTotalTimeApi = "/call/total";
   static const String markFavorite = "/user/manageFavoriteTutor";
 
   @factoryMethod
@@ -35,6 +37,9 @@ abstract class TutorService {
   @POST(searchTutorApi)
   Future<HttpResponse<SearchTutorResponse>> searchTutor(
       {@Body() required Map<String, dynamic> body});
+
+  @GET(getTotalTimeApi)
+  Future<HttpResponse> getTotalTime();
 
   @GET('$getTutorByIdApi/{id}')
   Future<HttpResponse<TutorDetailEntity>> getTutorById(@Path('id') String id);

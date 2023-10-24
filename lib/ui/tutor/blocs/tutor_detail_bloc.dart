@@ -2,14 +2,16 @@ import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
 import 'package:lettutor/domain/models/tutor/tutor_detail.dart';
+import 'package:lettutor/domain/usecases/schedule_usecase.dart';
 import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
 
 @injectable
 class TutorDetailBloc extends Cubit<TutorDetailState> {
   final TutorUseCase tutorUseCase;
+  final ScheduleUseCase scheduleUseCase;
 
-  TutorDetailBloc(this.tutorUseCase)
+  TutorDetailBloc(this.tutorUseCase, this.scheduleUseCase)
       : super(TutorDetailInitial(data: TutorDetailDataState()));
 
   void fetchTutorDetailData(String id) async {
@@ -34,6 +36,23 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
       }
     }
     emit(TutorDetailLoaded(data: data));
+  }
+
+  void getTutorFreeBooking(DateTime from, DateTime to) {
+    emit(LoadingFreeBooking(data: state.data));
+    scheduleUseCase
+        .getScheduleByTutorId(
+          tutorId: state.data.tutorDetail.user!.id,
+          from: from,
+          to: to,
+        )
+        .then(
+          (value) => value.fold(
+            (left) => emit(ErrorFreeBooking(data: state.data, message: left)),
+            (right) => emit(LoadedFreeBooking(
+                data: state.data.copyWith(bookingTime: right))),
+          ),
+        );
   }
 
   void fetchTutorFeedbackData() {}

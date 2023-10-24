@@ -136,11 +136,13 @@ class BookingInfoEntity {
           ? ScheduleDetailEntity.fromJson(
               map['scheduleDetailInfo'] as Map<String, dynamic>)
           : null,
-      feedbacks: List<dynamic>.of(map['feedbacks'])
-          .map<HistoryFeedbackEntity>(
-            (e) => HistoryFeedbackEntity.fromJson(e),
-          )
-          .toList(),
+      feedbacks: map['feedbacks'] != null
+          ? List<dynamic>.of(map['feedbacks'])
+              .map<HistoryFeedbackEntity>(
+                (e) => HistoryFeedbackEntity.fromJson(e),
+              )
+              .toList()
+          : null,
       showRecordUrl: map['showRecordUrl'] as bool? ?? false,
       studentMaterials: map['studentMaterials'] as List<dynamic>?,
     );

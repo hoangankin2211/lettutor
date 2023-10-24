@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
@@ -18,14 +20,27 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   late final scheduleBloc = BlocProvider.of<ScheduleBloc>(context);
   final ValueNotifier<bool> isExtend = ValueNotifier(false);
-
   final TextEditingController searchController = TextEditingController();
+
+  late final Animation<double> animation;
+  late final AnimationController animationController;
+
   @override
   void initState() {
-    scheduleBloc.fetchScheduleList();
+    // scheduleBloc.fetchScheduleList();
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    animation = CurvedAnimation(
+      parent: animationController,
+      curve: Curves.bounceIn,
+    );
+
     super.initState();
   }
 
@@ -37,33 +52,69 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       builder: (context, scheduleState) {
         return Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
-          appBar: AppBar(
-            toolbarHeight: context.height * 0.1,
-            elevation: 0,
-            centerTitle: true,
-            backgroundColor: context.theme.scaffoldBackgroundColor,
-            title: Row(
-              children: [
-                SvgPicture.asset("assets/images/schedule_icon.svg"),
-                const SizedBox(width: 10),
-                Text(
-                  'Schedule',
-                  style: context.textTheme.headlineMedium?.boldTextTheme
-                      .copyWith(color: context.textTheme.bodyLarge?.color),
-                ),
-                IconButton(
-                  onPressed: () {
-                    isExtend.value = !isExtend.value;
-                  },
-                  icon: Icon(Icons.arrow_drop_down),
-                ),
-              ],
-            ),
-          ),
+          // appBar: AppBar(
+          //   toolbarHeight: context.height * 0.1,
+          //   elevation: 0,
+          //   centerTitle: true,
+          //   backgroundColor: context.theme.scaffoldBackgroundColor,
+          //   title:
+          // ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(
               children: [
+                Row(
+                  children: [
+                    SvgPicture.asset("assets/images/schedule_icon.svg"),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Schedule',
+                                style: context
+                                    .textTheme.headlineMedium?.boldTextTheme
+                                    .copyWith(
+                                        color:
+                                            context.textTheme.bodyLarge?.color),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  if (animation.status ==
+                                      AnimationStatus.completed) {
+                                    animationController.reverse();
+                                  } else {
+                                    animationController.forward();
+                                  }
+                                },
+                                constraints: const BoxConstraints(),
+                                splashRadius: 30,
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Flexible(
+                            child: SizeTransition(
+                              sizeFactor: animation,
+                              axis: Axis.vertical,
+                              child: Text(
+                                "Here is a list of the sessions you have booked\nYou can track when the meeting starts, join the meeting with one click or can cancel the meeting before 2 hours",
+                                style: context.textTheme.titleMedium,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
                 Expanded(
                   child: scheduleState is ScheduleLoading ||
                           scheduleState is ScheduleInitial
@@ -78,6 +129,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               final schedule =
                                   scheduleState.data.schedules[index];
                               return ScheduleWidget(
+                                openMeeting: () {
+                                  context.push(RouteLocation.meeting, extra: {
+                                    "meetingUrl": schedule.studentMeetingLink
+                                  });
+                                },
                                 isCanceling: scheduleState is CancelingSchedule,
                                 cancelSchedule: () {
                                   scheduleBloc.cancelSchedule([schedule.id]);

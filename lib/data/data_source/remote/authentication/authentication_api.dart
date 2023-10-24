@@ -8,6 +8,9 @@ abstract class AuthenticationApi {
 
   Future<HttpResponse<dynamic>> signOut();
 
+  Future<HttpResponse<AuthResponse>> signUp(
+      {@Body() required Map<String, dynamic> body});
+
   Future<HttpResponse<AuthResponse>> refreshToken(
       {@Body() required Map<String, dynamic> body});
 }

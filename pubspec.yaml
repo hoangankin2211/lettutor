@@ -57,6 +57,8 @@ dependencies:
   syncfusion_flutter_calendar: ^23.1.41
   country_code_picker: ^3.0.0
   auto_size_text: ^3.0.0
+  timer_count_down: ^2.2.2
+  jitsi_meet_wrapper: ^0.2.0+1
 
 dev_dependencies:
   flutter_test:

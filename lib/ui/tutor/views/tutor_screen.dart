@@ -5,11 +5,13 @@ import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
+import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/domain/models/tutor/tutor.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/course/views/widgets/course_search_bar.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
+import 'package:lettutor/ui/tutor/views/widgets/upcoming_lesson_widget.dart';
 
 class TutorScreen extends StatefulWidget {
   const TutorScreen({super.key});
@@ -25,7 +27,8 @@ class _TutorScreenState extends State<TutorScreen>
 
   @override
   void initState() {
-    tutorBloc.loadTutor();
+    // tutorBloc.loadTutor();
+    // tutorBloc.fetchUpcomingClass();
     super.initState();
   }
 
@@ -41,7 +44,7 @@ class _TutorScreenState extends State<TutorScreen>
         ),
       ),
       builder: (context) {
-        return FilterSheet();
+        return const FilterSheet();
       },
     );
   }
@@ -53,21 +56,42 @@ class _TutorScreenState extends State<TutorScreen>
       bloc: tutorBloc,
       builder: (context, tutorState) {
         return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: context.theme.scaffoldBackgroundColor,
-            title: Text(
-              'Find A Tutor',
-              style: context.textTheme.headlineSmall?.boldTextTheme,
-            ),
-          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () {
+                    tutorBloc.fetchUpcomingClass();
+                  },
+                  child: UpComingWidget(
+                    nextClass: tutorState.data.nextTutor,
+                    totalLearnTime: tutorState.data.totalLearnTime,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () {
+                    tutorBloc.loadTutor();
+                  },
+                  child: Text(
+                    'Find A Tutor',
+                    style: context.textTheme.headlineSmall?.boldTextTheme,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 CourseSearchBar(
-                    controller: searchController,
-                    onTapFilter: showFilterBottomSheet),
+                  controller: searchController,
+                  onTapFilter: showFilterBottomSheet,
+                  onSearch: (value) => tutorBloc.searchTutor(
+                    TutorSearchRequest(
+                      perPage: 10,
+                      page: 1,
+                      search: value,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Expanded(
                   child: tutorState is TutorLoading

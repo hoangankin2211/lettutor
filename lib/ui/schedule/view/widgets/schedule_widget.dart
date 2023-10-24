@@ -14,6 +14,7 @@ class ScheduleWidget extends StatefulWidget {
   final String endTime;
   final String studentRequest;
   final void Function()? cancelSchedule;
+  final void Function()? openMeeting;
   final bool isCanceling;
 
   const ScheduleWidget({
@@ -25,6 +26,7 @@ class ScheduleWidget extends StatefulWidget {
     required this.startTime,
     required this.endTime,
     required this.studentRequest,
+    this.openMeeting,
     this.isCanceling = false,
   });
 
@@ -84,7 +86,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                 style: context.textTheme.bodyLarge
                     ?.copyWith(color: context.colorScheme.primary),
               ),
-              onPressed: () {},
+              onPressed: widget.openMeeting,
             ),
           ),
         ]

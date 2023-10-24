@@ -1,16 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/ui/history/views/widgets/history_widget.dart';
 import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
-import 'package:lettutor/ui/tutor/views/widgets/tutor_info_header.dart';
 
 import '../../../core/components/widgets/infinity_scroll_view.dart';
 
@@ -104,77 +101,86 @@ class _HistoryScreenState extends State<HistoryScreen>
   Widget build(BuildContext context) {
     return BlocBuilder<ScheduleBloc, ScheduleState>(
       bloc: scheduleBloc,
-      builder: (context, scheduleState) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/images/history_icon.svg",
-                    height: 100,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'History',
-                              style: context
-                                  .textTheme.headlineMedium?.boldTextTheme
-                                  .copyWith(
-                                      color:
-                                          context.textTheme.bodyLarge?.color),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (animationController.status !=
-                                    AnimationStatus.completed) {
-                                  animationController.forward();
-                                } else {
-                                  animationController.reverse();
-                                }
-                              },
-                              splashRadius: 20,
-                              icon: Icon(Icons.arrow_drop_down),
-                            ),
-                          ],
-                        ),
-                        SizeTransition(
-                          sizeFactor: animation,
-                          axis: Axis.vertical,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+      builder: (context, scheduleState) => SafeArea(
+        child: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: context.pop,
+                      constraints: const BoxConstraints(),
+                      splashRadius: 20,
+                      icon: Icon(Icons.arrow_back_ios),
+                    ),
+                    SvgPicture.asset(
+                      "assets/images/history_icon.svg",
+                      height: 100,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
                             children: [
-                              IntrinsicHeight(
-                                child: VerticalDivider(
-                                  width: 5,
-                                  thickness: 5,
-                                  color: Colors.red,
-                                ),
+                              Text(
+                                'History',
+                                style: context
+                                    .textTheme.headlineMedium?.boldTextTheme
+                                    .copyWith(
+                                        color:
+                                            context.textTheme.bodyLarge?.color),
                               ),
-                              Expanded(
-                                child: Text(
-                                  "The following is a list of lessons you have attended\nYou can review the details of the lessons you have attended",
-                                  style: context.textTheme.bodyLarge,
-                                ),
+                              IconButton(
+                                onPressed: () {
+                                  if (animationController.status !=
+                                      AnimationStatus.completed) {
+                                    animationController.forward();
+                                  } else {
+                                    animationController.reverse();
+                                  }
+                                },
+                                constraints: const BoxConstraints(),
+                                splashRadius: 20,
+                                icon: Icon(Icons.arrow_drop_down),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          SizeTransition(
+                            sizeFactor: animation,
+                            axis: Axis.vertical,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const IntrinsicHeight(
+                                  child: VerticalDivider(
+                                    width: 5,
+                                    thickness: 5,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "The following is a list of lessons you have attended\nYou can review the details of the lessons you have attended",
+                                    style: context.textTheme.bodyLarge,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              _buildBody(scheduleState),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 10),
+                _buildBody(scheduleState),
+              ],
+            ),
           ),
         ),
       ),

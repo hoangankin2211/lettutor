@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<EmailLoginRequest>(_onEmailLoginRequest);
     on<LogoutAuthenticationRequest>(_onLogoutAuthenticationRequest);
     on<InitAuthenticationStatus>(_onInitAuthenticationStatus);
+    on<EmailRegisterRequest>(_onEmailRegisterRequest);
   }
 
   FutureOr<void> _onInitAuthenticationStatus(
@@ -33,6 +34,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> _onEmailLoginRequest(
       EmailLoginRequest event, Emitter<AuthState> emit) async {
     (await authUseCase.signInEmail(event.email, event.password)).fold(
+      (left) {
+        emit(AuthState.authenticated(user: left));
+      },
+      (right) => emit(AuthState.unauthenticated(message: right)),
+    );
+  }
+
+  FutureOr<void> _onEmailRegisterRequest(
+      EmailRegisterRequest event, Emitter<AuthState> emit) async {
+    (await authUseCase.signUpEmail(event.email, event.password)).fold(
       (left) {
         emit(AuthState.authenticated(user: left));
       },

@@ -57,8 +57,27 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<User> register(String email, String password) {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<Either<UserEntity, String>> register(
+      String email, String password) async {
+    final state = await getStateOf(
+      request: () async {
+        return await _authenticationApi.signUp(body: {
+          'email': email,
+          'password': password,
+          'source': null,
+        });
+      },
+    );
+
+    if (state is DataSuccess) {
+      await _appLocalStorage.saveString(
+        accessTokenKey,
+        state.data!.tokens.access.token,
+      );
+
+      return Left(state.data!.user);
+    }
+
+    return Right(state.dioException?.message ?? "Error while sign in");
   }
 }

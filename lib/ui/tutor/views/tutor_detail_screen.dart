@@ -1,4 +1,4 @@
-import 'package:country_flags/country_flags.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +10,6 @@ import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
 import 'package:lettutor/ui/tutor/views/widgets/specialties_component.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_video_player.dart';
-import 'package:country_picker/country_picker.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -95,10 +94,28 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
     );
   }
 
-  Widget get buildListButton {
+  Widget buildListButton(VoidCallback openBooking) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              elevation: 0, backgroundColor: Colors.transparent),
+          onPressed: openBooking,
+          child: Column(
+            children: [
+              Icon(
+                CupertinoIcons.calendar,
+                color: context.colorScheme.primary,
+              ),
+              Text(
+                "Book this tutor",
+                style: context.textTheme.bodyLarge
+                    ?.copyWith(color: context.colorScheme.primary),
+              )
+            ],
+          ),
+        ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               elevation: 0, backgroundColor: Colors.transparent),
@@ -117,7 +134,6 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
             ],
           ),
         ),
-        SizedBox(width: context.width * 0.25),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               elevation: 0, backgroundColor: Colors.transparent),
@@ -158,6 +174,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<TutorDetailBloc, TutorDetailState>(
       bloc: tutorDetailBloc,
+      buildWhen: (previous, current) =>
+          previous != current &&
+          current is! LoadingFreeBooking &&
+          current is! LoadedFreeBooking &&
+          current is! ErrorFreeBooking,
       builder: (context, tutorDetailState) {
         final tutorDetail = tutorDetailState.data.tutorDetail;
         final feedbacks = tutorDetailState.data.feedbacks;
@@ -186,7 +207,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                       name: tutorDetail.user!.name ?? "",
                       numOfFeedback: tutorDetail.totalFeedback ?? 0,
                     ),
-                  buildListButton,
+                  buildListButton(() {
+                    context.push(RouteLocation.booking,
+                        extra: {"tutorDetailBloc": tutorDetailBloc});
+                  }),
                   buildDescription(tutorDetail.bio ?? ""),
                   HomeItemComponent(
                     isPadding: false,

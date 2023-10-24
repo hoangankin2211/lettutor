@@ -47,12 +47,13 @@ import '../../ui/auth/blocs/auth_bloc.dart' as _i36;
 import '../../ui/course/blocs/course_bloc.dart' as _i37;
 import '../../ui/course/blocs/course_detail_bloc.dart' as _i38;
 import '../../ui/course/blocs/ebook_bloc.dart' as _i32;
+import '../../ui/dashboard/blocs/dashboard_bloc.dart' as _i39;
 import '../../ui/schedule/bloc/schedule_bloc.dart' as _i33;
 import '../../ui/tutor/blocs/tutor_bloc.dart' as _i34;
 import '../../ui/tutor/blocs/tutor_detail_bloc.dart' as _i35;
 import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
 import '../components/navigation/routes_service.dart' as _i8;
-import 'module.dart' as _i39;
+import 'module.dart' as _i40;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> init(
@@ -111,6 +112,7 @@ Future<_i1.GetIt> init(
   gh.factory<_i26.TutorUseCase>(() => _i26.TutorUseCase(
         gh<_i24.TutorRepository>(),
         gh<_i13.FeedbackService>(),
+        gh<_i15.TutorService>(),
       ));
   gh.factory<_i27.AuthUseCase>(
       () => _i27.AuthUseCase(gh<_i28.AuthenticationRepository>()));
@@ -123,16 +125,27 @@ Future<_i1.GetIt> init(
   gh.factory<_i32.EBookBloc>(() => _i32.EBookBloc(gh<_i31.CourseUseCase>()));
   gh.factory<_i33.ScheduleBloc>(
       () => _i33.ScheduleBloc(gh<_i23.ScheduleUseCase>()));
-  gh.factory<_i34.TutorBloc>(() => _i34.TutorBloc(gh<_i26.TutorUseCase>()));
-  gh.factory<_i35.TutorDetailBloc>(
-      () => _i35.TutorDetailBloc(gh<_i26.TutorUseCase>()));
+  gh.factory<_i34.TutorBloc>(() => _i34.TutorBloc(
+        gh<_i26.TutorUseCase>(),
+        gh<_i23.ScheduleUseCase>(),
+      ));
+  gh.factory<_i35.TutorDetailBloc>(() => _i35.TutorDetailBloc(
+        gh<_i26.TutorUseCase>(),
+        gh<_i23.ScheduleUseCase>(),
+      ));
   gh.factory<_i36.AuthBloc>(() => _i36.AuthBloc(gh<_i27.AuthUseCase>()));
   gh.factory<_i37.CourseBloc>(() => _i37.CourseBloc(gh<_i31.CourseUseCase>()));
   gh.factory<_i38.CourseDetailBloc>(
       () => _i38.CourseDetailBloc(gh<_i31.CourseUseCase>()));
+  gh.factory<_i39.DashboardBloc>(() => _i39.DashboardBloc(
+        gh<_i37.CourseBloc>(),
+        gh<_i32.EBookBloc>(),
+        gh<_i34.TutorBloc>(),
+        gh<_i33.ScheduleBloc>(),
+      ));
   return getIt;
 }
 
-class _$HiveModule extends _i39.HiveModule {}
+class _$HiveModule extends _i40.HiveModule {}
 
-class _$DioModule extends _i39.DioModule {}
+class _$DioModule extends _i40.DioModule {}

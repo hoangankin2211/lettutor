@@ -5,23 +5,39 @@ class TutorDataState {
   final int perPage;
   final int count;
   final List<Tutor> tutors;
+  final TutorSearchRequest? filter;
+  final BookingInfoEntity? nextTutor;
+  final int totalLearnTime;
 
   const TutorDataState({
     this.page = 1,
     this.count = 0,
     this.perPage = 10,
+    this.filter,
     this.tutors = const [],
+    this.nextTutor,
+    this.totalLearnTime = 0,
   });
 
   int get totalPage => (count.toDouble() / perPage).ceil();
 
   TutorDataState copyWith(
-      {int? perPage, int? page, int? count, List<Tutor>? tutors}) {
+      {int? perPage,
+      int? page,
+      int? count,
+      List<Tutor>? tutors,
+      List<ScheduleEntity>? bookingTime,
+      int? totalLearnTime,
+      BookingInfoEntity? nextTutor,
+      TutorSearchRequest? filter}) {
     return TutorDataState(
       perPage: perPage ?? this.perPage,
       page: page ?? this.page,
       count: count ?? this.count,
       tutors: tutors ?? this.tutors,
+      filter: filter ?? this.filter,
+      nextTutor: nextTutor ?? this.nextTutor,
+      totalLearnTime: totalLearnTime ?? this.totalLearnTime,
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/schedule/schedule_service.dart';
 import 'package:lettutor/data/entities/response/booking_info_response.dart';
+import 'package:lettutor/data/entities/response/schedule_response.dart';
 import 'package:lettutor/data/entities/response/upcoming_class_response.dart';
 
 import '../../core/components/networking/data_state.dart';
@@ -82,5 +83,25 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     return result.isSuccess().mapLeft(
           (left) => left.message ?? "Error: Can not cancel the booked schedule",
         );
+  }
+
+  @override
+  Future<Either<String, ScheduleResponse>> getScheduleByTutorId({
+    required String tutorId,
+    required int from,
+    required int to,
+  }) async {
+    final dataState = await getStateOf(
+      request: () async =>
+          scheduleService.getScheduleByTutor(tutorId, from, to),
+    );
+
+    if (dataState is DataSuccess) {
+      if (dataState.data != null) {
+        return Right(dataState.data!);
+      }
+    }
+
+    return Left("Error: ${dataState.dioException?.message}");
   }
 }

@@ -25,4 +25,11 @@ class FacebookAuthImpl implements AuthenticationApi {
     // TODO: implement signOut
     throw UnimplementedError();
   }
+
+  @override
+  Future<HttpResponse<AuthResponse>> signUp(
+      {required Map<String, dynamic> body}) {
+    // TODO: implement signUp
+    throw UnimplementedError();
+  }
 }

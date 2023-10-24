@@ -16,6 +16,7 @@ import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
 import 'package:lettutor/data/entities/tutor/tutor_detail_entity.dart';
 
 import 'package:lettutor/data/entities/tutor/tutor_entity.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../domain/repositories/tutor_repo.dart';
 import '../entities/response/search_tutor_response.dart';
@@ -30,6 +31,18 @@ class TutorRepositoryImpl extends TutorRepository {
   @override
   Future<Either<String, TutorResponse>> fetchListTutor(
       {required int perPage, required int page}) async {
+    // final dataState = await compute<String, DataState<TutorResponse>>(
+    //   (message) async {
+    //     logger.i("begin");
+    //     return await getStateOf<TutorResponse>(
+    //       request: () async => await tutorService.fetchTutorialPage(
+    //         page: page,
+    //         size: perPage,
+    //       ),
+    //     );
+    //   },
+    //   "begin",
+    // );
     final dataState = await getStateOf<TutorResponse>(
       request: () async => await tutorService.fetchTutorialPage(
         page: page,

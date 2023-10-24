@@ -54,10 +54,10 @@ class ScheduleEntity {
       endTime: map['endTime'] as String,
       startTimestamp: map['startTimestamp'] as int,
       endTimestamp: map['endTimestamp'] as int,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      createdAt: DateTime.parse(map['createdAt']),
       isBooked: map['isBooked'] as bool,
       scheduleDetails: List<ScheduleDetailEntity>.from(
-        (map['scheduleDetails'] as List<int>).map<ScheduleDetailEntity>(
+        (map['scheduleDetails'] as List<dynamic>).map<ScheduleDetailEntity>(
           (x) => ScheduleDetailEntity.fromJson(x as Map<String, dynamic>),
         ),
       ),

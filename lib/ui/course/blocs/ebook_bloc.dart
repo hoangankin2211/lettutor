@@ -8,10 +8,10 @@ class EBookBloc extends Cubit<EBookState> {
   final CourseUseCase courseUseCase;
   EBookBloc(this.courseUseCase) : super(const InitialEBookListPage());
 
-  void fetchEBookList({
-    required int perPage,
-    required int page,
-  }) {
+  Future<void> fetchEBookList({
+    int perPage = 10,
+    int page = 1,
+  }) async {
     emit(LoadingListEBook(data: state.data));
 
     courseUseCase.getEBookList(page: page, size: 10).then((value) {

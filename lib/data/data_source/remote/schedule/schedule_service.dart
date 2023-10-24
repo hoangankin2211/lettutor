@@ -24,11 +24,12 @@ abstract class ScheduleService {
   @POST(getTutorSchedule)
   Future<HttpResponse<ScheduleEntity>> getOwnScheduleList();
 
-  @POST('$getTutorSchedule?tutorId={tutorId}')
+  @GET(
+      '$getTutorSchedule?tutorId={tutorId}&startTimestamp={sT}&endTimestamp={eT}')
   Future<HttpResponse<ScheduleResponse>> getScheduleByTutor(
     @Path('tutorId') String tutorId,
-    // @Path('sT') int st,
-    // @Path('eT') int et,
+    @Path('sT') int st,
+    @Path('eT') int et,
   );
 
   @GET(getScheduleListUrl)

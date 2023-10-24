@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/domain/models/course/course_detail.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
@@ -102,7 +103,7 @@ class _ListCoursePageState extends State<ListCoursePage>
 
   @override
   void initState() {
-    courseBloc.fetchCourseList();
+    // courseBloc.fetchCourseList();
 
     super.initState();
   }
@@ -198,7 +199,7 @@ class _ListEBookPageState extends State<ListEBookPage>
 
   @override
   void didChangeDependencies() {
-    eBookBloc.fetchEBookList(page: 1, perPage: 12);
+    // eBookBloc.fetchEBookList(page: 1, perPage: 12);
     super.didChangeDependencies();
   }
 
@@ -283,7 +284,9 @@ enum TutorTag {
 }
 
 class FilterSheet extends StatefulWidget {
-  const FilterSheet({super.key});
+  const FilterSheet({super.key, this.onDone});
+
+  final void Function(Map<String, dynamic> result)? onDone;
 
   @override
   State<FilterSheet> createState() => _FilterSheetState();
@@ -294,6 +297,7 @@ class _FilterSheetState extends State<FilterSheet> {
   TimeOfDay? startTime;
   TimeOfDay? endTime;
   TutorTag selectedTag = TutorTag.All;
+  National? national = National.vietnam;
 
   void openCalendar() {
     showDatePicker(
@@ -331,6 +335,7 @@ class _FilterSheetState extends State<FilterSheet> {
               style: context.textTheme.titleMedium?.boldTextTheme,
             ),
             DropdownMenu<National>(
+              initialSelection: national,
               inputDecorationTheme: InputDecorationTheme(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -338,6 +343,13 @@ class _FilterSheetState extends State<FilterSheet> {
                       BorderSide(color: context.theme.hintColor, width: 0.5),
                 ),
               ),
+              onSelected: (value) {
+                if (value != null) {
+                  setState(() {
+                    national = value;
+                  });
+                }
+              },
               dropdownMenuEntries: const [
                 DropdownMenuEntry(
                   value: National.vietnam,
@@ -466,6 +478,31 @@ class _FilterSheetState extends State<FilterSheet> {
                     },
                   ),
               ],
+            ),
+            Center(
+              child: SizedBox(
+                width: context.width * 0.5,
+                child: ElevatedBorderButton(
+                  onPressed: () {
+                    if (widget.onDone != null) {
+                      widget.onDone!({
+                        "national": national,
+                        "startTime": startTime,
+                        "endTime": endTime,
+                        "selectedDate": selectedDate,
+                        "selectedTag": selectedTag,
+                      });
+                    }
+                  },
+                  backgroundColor: context.theme.dialogBackgroundColor,
+                  borderColor: context.theme.primaryColor,
+                  child: Text(
+                    "Ok",
+                    style: context.textTheme.bodyLarge
+                        ?.copyWith(color: context.theme.primaryColor),
+                  ),
+                ),
+              ),
             ),
           ]
               .expand<Widget>((element) => [

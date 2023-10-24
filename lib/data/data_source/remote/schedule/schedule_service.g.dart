@@ -48,20 +48,23 @@ class _ScheduleService implements ScheduleService {
 
   @override
   Future<HttpResponse<ScheduleResponse>> getScheduleByTutor(
-      String tutorId) async {
+    String tutorId,
+    int st,
+    int et,
+  ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<ScheduleResponse>>(Options(
-      method: 'POST',
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/schedule?tutorId=${tutorId}',
+              '/schedule?tutorId=${tutorId}&startTimestamp=${st}&endTimestamp=${et}',
               queryParameters: queryParameters,
               data: _data,
             )

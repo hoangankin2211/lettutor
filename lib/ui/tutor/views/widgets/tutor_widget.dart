@@ -90,11 +90,13 @@ class _TutorWidgetState extends State<TutorWidget> {
           subtitle: Row(
             children: [
               Icon(Icons.flag),
-              Text(
-                widget.country,
-                style: context.textTheme.bodyLarge?.copyWith(
-                  color: context.theme.disabledColor,
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  widget.country,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: context.theme.disabledColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
@@ -154,7 +156,7 @@ class _TutorWidgetState extends State<TutorWidget> {
     return Text(
       widget.description,
       style: context.hintBoldText,
-      maxLines: 4,
+      maxLines: 2,
       overflow: TextOverflow.ellipsis,
     );
   }

@@ -37,8 +37,8 @@ class AppBuilder {
     //Get routeService
     final routeService = injector.get<RouteService>().getRouter();
 
-    //Turn off default status bar for application
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    // //Turn off default status bar for application
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
 
     return MultiBlocProvider(
       providers: [
