@@ -71,21 +71,20 @@ class ScheduleBloc extends Cubit<ScheduleState> {
     }
   }
 
-  Future<void> cancelSchedule(List<String> scheduleId) async {
-    emit(CancelingSchedule(data: state.data));
-    scheduleUseCase.cancelBookedSchedule(schedulesId: scheduleId).then(
-          (value) => value.fold(
-            (left) =>
-                emit(CancelScheduleFailed(data: state.data, message: left)),
-            (right) => emit(
-              CancelScheduleSuccess(
-                  data: state.data.copyWith(
-                count: state.data.count - 1,
-                schedules: state.data.schedules.toList()
-                  ..removeWhere((element) => scheduleId.contains(element.id)),
-              )),
-            ),
-          ),
-        );
+  Future<void> cancelSchedule(String scheduleId) async {
+    emit(CancelingSchedule(data: state.data, scheduleId: scheduleId));
+    scheduleUseCase.cancelBookedSchedule(schedulesId: [scheduleId]).then(
+      (value) => value.fold(
+        (left) => emit(CancelScheduleFailed(data: state.data, message: left)),
+        (right) => emit(
+          CancelScheduleSuccess(
+              data: state.data.copyWith(
+            count: state.data.count - 1,
+            schedules: state.data.schedules.toList()
+              ..removeWhere((element) => scheduleId == element.id),
+          )),
+        ),
+      ),
+    );
   }
 }

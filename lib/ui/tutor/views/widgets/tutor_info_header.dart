@@ -2,6 +2,7 @@ import 'package:country_flags/country_flags.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/components/widgets/ratting_widget_custom.dart';
 import 'package:lettutor/ui/tutor/views/tutor_detail_screen.dart';
 
 class TutorInfoHeader extends StatefulWidget {
@@ -15,6 +16,7 @@ class TutorInfoHeader extends StatefulWidget {
     this.radius = 40,
     this.isShowReview = true,
     this.onTap,
+    this.rating = 4,
   });
 
   final String avatar;
@@ -24,6 +26,7 @@ class TutorInfoHeader extends StatefulWidget {
   final String country;
   final double radius;
   final bool isShowReview;
+  final double rating;
   final VoidCallback? onTap;
 
   @override
@@ -88,21 +91,13 @@ class _TutorInfoHeaderState extends State<TutorInfoHeader> {
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                5,
-                (index) => const Icon(
-                  Icons.star,
-                  color: Colors.orangeAccent,
-                  size: 16,
-                ),
-              )
-                  .expand<Widget>(
-                      (element) => [element, const SizedBox(width: 4)])
-                  .toList()
-                ..add(Text(
+              children: [
+                RattingWidgetCustom(rating: widget.rating),
+                Text(
                   "(${widget.numOfFeedback})",
-                  style: context.textTheme.titleMedium,
-                )),
+                  style: context.textTheme.bodyLarge,
+                ),
+              ],
             ),
         ],
       ),

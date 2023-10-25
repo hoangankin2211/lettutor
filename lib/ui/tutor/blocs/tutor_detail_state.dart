@@ -7,6 +7,7 @@ class TutorDetailDataState {
   final TutorDetail tutorDetail;
   final List<FeedbackEntity> feedbacks;
   final List<ScheduleEntity> bookingTime;
+
   TutorDetailDataState({
     this.bookingTime = const [],
     this.tutorDetail = const TutorDetail(),
@@ -28,8 +29,11 @@ class TutorDetailDataState {
 
 abstract class TutorDetailState {
   final TutorDetailDataState data;
-
-  TutorDetailState({required this.data});
+  final bool isMainState;
+  TutorDetailState({
+    required this.data,
+    this.isMainState = true,
+  });
 }
 
 class TutorDetailInitial extends TutorDetailState {
@@ -52,15 +56,39 @@ class TutorDetailError extends TutorDetailState {
 }
 
 class LoadingFreeBooking extends TutorDetailState {
-  LoadingFreeBooking({required super.data});
+  LoadingFreeBooking({required super.data}) : super(isMainState: false);
 }
 
 class LoadedFreeBooking extends TutorDetailState {
-  LoadedFreeBooking({required super.data});
+  LoadedFreeBooking({required super.data}) : super(isMainState: false);
 }
 
 class ErrorFreeBooking extends TutorDetailState {
   final String message;
 
-  ErrorFreeBooking({required super.data, required this.message});
+  ErrorFreeBooking({required super.data, required this.message})
+      : super(isMainState: false);
+}
+
+class BookClass extends TutorDetailState {
+  final String scheduleId;
+  BookClass({required super.data, required this.scheduleId})
+      : super(isMainState: false);
+}
+
+class BookingClass extends BookClass {
+  BookingClass({required super.data, required super.scheduleId});
+}
+
+class BookClassSuccess extends BookClass {
+  BookClassSuccess({required super.data, required super.scheduleId});
+}
+
+class BookClassFailed extends BookClass {
+  final String message;
+  BookClassFailed({
+    required this.message,
+    required super.data,
+    required super.scheduleId,
+  });
 }

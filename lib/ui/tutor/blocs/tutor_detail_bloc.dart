@@ -55,5 +55,25 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
         );
   }
 
+  Future<void> bookTutor({
+    required String scheduleId,
+    String note = "",
+  }) async {
+    emit(BookingClass(data: state.data, scheduleId: scheduleId));
+    await scheduleUseCase
+        .bookClassById(scheduleId: scheduleId, studentNote: note)
+        .then(
+          (value) => value.fold(
+            (left) => emit(BookClassFailed(
+              message: left,
+              data: state.data,
+              scheduleId: scheduleId,
+            )),
+            (right) => emit(
+                BookClassSuccess(data: state.data, scheduleId: scheduleId)),
+          ),
+        );
+  }
+
   void fetchTutorFeedbackData() {}
 }

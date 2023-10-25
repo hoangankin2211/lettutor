@@ -75,5 +75,15 @@ class ScheduleUseCase {
             from: from.millisecondsSinceEpoch,
             to: to.millisecondsSinceEpoch,
           )
-          .mapRight((right) => right.schedules);
+          .mapRight((right) => right.schedules
+            ..sort(
+              (a, b) => a.startTimestamp.compareTo(b.startTimestamp),
+            ));
+
+  Future<Either<String, bool>> bookClassById({
+    required String scheduleId,
+    String studentNote = "",
+  }) =>
+      scheduleRepository
+          .bookClass(scheduleId: [scheduleId], studentNote: studentNote);
 }

@@ -21,8 +21,25 @@ class UpComingWidget extends StatefulWidget {
   State<UpComingWidget> createState() => _UpComingWidgetState();
 }
 
-class _UpComingWidgetState extends State<UpComingWidget> {
+class _UpComingWidgetState extends State<UpComingWidget>
+    with SingleTickerProviderStateMixin {
   final CountdownController controller = CountdownController(autoStart: true);
+  late final Animation<double> animation;
+  late final AnimationController animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+
+    animation = CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeIn,
+    );
+  }
 
   RichText _renderRichText(int hours, int minutes, int? seconds,
       {required String header}) {
@@ -59,6 +76,14 @@ class _UpComingWidgetState extends State<UpComingWidget> {
     return dateFormat.parse(combinedDateTimeStr);
   }
 
+  void _onTapShowMore() {
+    if (animationController.isCompleted) {
+      animationController.reverse();
+    } else {
+      animationController.forward();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final meetingTime = parseDateTime(
@@ -69,87 +94,125 @@ class _UpComingWidgetState extends State<UpComingWidget> {
     final data = ((widget.totalLearnTime)).round();
     int hours = data ~/ 60;
     int minutes = data % 60;
-
-    return Container(
-      width: context.width,
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade700,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (widget.nextClass == null)
-            Flexible(
-              child: Text(
-                "You have no upcoming lesson",
-                style: context.textTheme.titleMedium?.copyWith(
-                  color: context.colorScheme.onPrimary,
-                ),
-              ),
-            )
-          else ...[
-            Text(
-              "Upcoming Lesson",
-              style: context.textTheme.titleMedium
-                  ?.copyWith(
+    return GestureDetector(
+      onTap: _onTapShowMore,
+      child: Container(
+        width: context.width,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.blue.shade700,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (widget.nextClass == null)
+              Flexible(
+                child: Text(
+                  "You have no upcoming lesson",
+                  style: context.textTheme.titleMedium?.copyWith(
                     color: context.colorScheme.onPrimary,
-                  )
-                  .boldTextTheme,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "${DateFormat().add_MMMEd().format(
-                        DateFormat("yyyy-MM-dd").parse(widget
-                            .nextClass!.scheduleDetailInfo!.scheduleInfo!.date),
-                      )}\n${widget.nextClass!.scheduleDetailInfo!.scheduleInfo!.startTime} - ${widget.nextClass!.scheduleDetailInfo!.scheduleInfo!.endTime}",
-                  style: context.textTheme.titleMedium
-                      ?.copyWith(color: context.colorScheme.onPrimary)
-                      .boldTextTheme,
-                ),
-                const SizedBox(width: 20),
-                ElevatedBorderButton(
-                  onPressed: () {
-                    context.push(RouteLocation.meeting, extra: {
-                      "meetingUrl": widget.nextClass?.studentMeetingLink
-                    });
-                  },
-                  backgroundColor: context.theme.cardColor,
-                  child: Text(
-                    "Go to meeting",
-                    style: context.textTheme.titleMedium?.boldTextTheme,
                   ),
                 ),
-              ],
-            ),
-            Countdown(
-              controller: controller,
-              seconds: meetingTime.difference(DateTime.now()).inSeconds,
-              build: (BuildContext context, double time) {
-                int hours = time.round() ~/ 3600;
-                int minutes = (time.round() % 3600) ~/ 60;
-                int seconds = time.round() % 60;
-                return _renderRichText(hours, minutes, seconds,
-                    header: 'Your next class will begin in ');
-              },
-              interval: const Duration(milliseconds: 100),
-              onFinished: () {},
-            ),
+              )
+            else
+              ...([
+                Row(
+                  children: [
+                    const Spacer(flex: 3),
+                    Text(
+                      "Upcoming Lesson",
+                      style: context.textTheme.titleMedium
+                          ?.copyWith(
+                            color: context.colorScheme.onPrimary,
+                          )
+                          .boldTextTheme,
+                    ),
+                    const Spacer(flex: 2),
+                    Material(
+                      color: Colors.blue.shade700,
+                      child: InkWell(
+                        onTap: _onTapShowMore,
+                        splashColor: Colors.grey,
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: context.colorScheme.onPrimary,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${DateFormat().add_MMMEd().format(
+                            DateFormat("yyyy-MM-dd").parse(widget.nextClass!
+                                .scheduleDetailInfo!.scheduleInfo!.date),
+                          )}\n${widget.nextClass!.scheduleDetailInfo!.scheduleInfo!.startTime} - ${widget.nextClass!.scheduleDetailInfo!.scheduleInfo!.endTime}",
+                      style: context.textTheme.titleMedium
+                          ?.copyWith(color: context.colorScheme.onPrimary)
+                          .boldTextTheme,
+                    ),
+                    const SizedBox(width: 20),
+                    ElevatedBorderButton(
+                      onPressed: () {
+                        context.push(RouteLocation.meeting, extra: {
+                          "meetingUrl": widget.nextClass?.studentMeetingLink
+                        });
+                      },
+                      backgroundColor: context.theme.cardColor,
+                      child: Text(
+                        "Go to meeting",
+                        style: context.textTheme.titleMedium?.boldTextTheme
+                            .copyWith(color: context.theme.primaryColor),
+                      ),
+                    ),
+                  ],
+                ),
+                SizeTransition(
+                  axis: Axis.vertical,
+                  sizeFactor: animation,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Countdown(
+                        controller: controller,
+                        seconds:
+                            meetingTime.difference(DateTime.now()).inSeconds,
+                        build: (BuildContext context, double time) {
+                          int hours = time.round() ~/ 3600;
+                          int minutes = (time.round() % 3600) ~/ 60;
+                          int seconds = time.round() % 60;
+                          return _renderRichText(
+                            hours,
+                            minutes,
+                            seconds,
+                            header: 'Your next class will begin in \n',
+                          );
+                        },
+                        interval: const Duration(milliseconds: 100),
+                        onFinished: () {},
+                      ),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: _renderRichText(
+                          hours,
+                          minutes,
+                          null,
+                          header: "Your total lesson time is ",
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ]).expand<Widget>((element) {
+                return [const SizedBox(height: 10), element];
+              }),
           ],
-          const SizedBox(height: 20),
-          Flexible(
-              child: _renderRichText(
-            hours,
-            minutes,
-            null,
-            header: "Your total lesson time is ",
-          )),
-        ],
+        ),
       ),
     );
   }

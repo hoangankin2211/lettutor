@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../../core/components/networking/networking.dart';
@@ -16,9 +17,11 @@ Future<DataState<T>> getStateOf<T>({
         statusCode: httpResponse.response.statusCode!,
       );
     } else {
+      final String? extraMessage = httpResponse.response.data["message"];
       throw DioException(
         response: httpResponse.response,
-        message: httpResponse.response.statusMessage,
+        message:
+            '${httpResponse.response.statusMessage}' + '\n' + '$extraMessage',
         requestOptions: httpResponse.response.requestOptions,
         error: httpResponse.response,
       );

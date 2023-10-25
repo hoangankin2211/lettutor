@@ -82,19 +82,6 @@ class _CourseSearchBarState extends State<CourseSearchBar> {
                 borderRadius: BorderRadius.circular(11),
                 borderSide: BorderSide.none,
               ),
-              // suffixIcon: TextButton(
-              //   onPressed: () {
-              //     logger.d(controller.text);
-              //     if (onSearch != null && controller.text.isNotEmpty) {
-              //       onSearch!(controller.text);
-              //     }
-              //   },
-              //   child: Text(
-              //     "Search",
-              //     style: context.textTheme.bodyLarge
-              //         ?.copyWith(color: context.theme.primaryColor),
-              //   ),
-              // ),
               fillColor: context.theme.hintColor.withOpacity(0.1),
             ),
           ),

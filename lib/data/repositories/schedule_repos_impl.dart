@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:either_dart/src/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
@@ -81,7 +83,11 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     );
 
     return result.isSuccess().mapLeft(
-          (left) => left.message ?? "Error: Can not cancel the booked schedule",
+          (left) =>
+              (result.statusCode == 400
+                  ? left.response?.data["message"]
+                  : left.message) ??
+              "Error: Can not cancel the booked schedule",
         );
   }
 
@@ -103,5 +109,23 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     return Left("Error: ${dataState.dioException?.message}");
+  }
+
+  @override
+  Future<Either<String, bool>> bookClass(
+      {required List<String> scheduleId, required String studentNote}) async {
+    final result = await getStateOf(
+      request: () async => await scheduleService.bookClass(body: {
+        'scheduleDetailIds': scheduleId,
+        'note': studentNote,
+      }),
+    );
+
+    if (result is DataSuccess) {
+      return const Right(true);
+    }
+
+    return Left(
+        result.dioException?.message ?? "Error: Can not book this tutor");
   }
 }

@@ -47,8 +47,16 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocBuilder<ScheduleBloc, ScheduleState>(
+    return BlocConsumer<ScheduleBloc, ScheduleState>(
       bloc: scheduleBloc,
+      listener: (context, state) {
+        if (state is ScheduleError) {
+          context.showSnackBarAlert(state.message);
+        }
+        if (state is CancelScheduleFailed) {
+          context.showSnackBarAlert(state.message);
+        }
+      },
       builder: (context, scheduleState) {
         return Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -134,9 +142,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                                     "meetingUrl": schedule.studentMeetingLink
                                   });
                                 },
-                                isCanceling: scheduleState is CancelingSchedule,
+                                isCanceling:
+                                    scheduleState is CancelingSchedule &&
+                                        scheduleState.scheduleId == schedule.id,
                                 cancelSchedule: () {
-                                  scheduleBloc.cancelSchedule([schedule.id]);
+                                  scheduleBloc.cancelSchedule(schedule.id);
                                 },
                                 studentRequest: schedule.studentRequest ?? "",
                                 tutor: TutorMapper.fromTutorEntity(schedule

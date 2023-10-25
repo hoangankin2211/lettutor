@@ -26,7 +26,11 @@ class ScheduleError extends ScheduleState {
 }
 
 class CancelingSchedule extends ScheduleState {
-  CancelingSchedule({required super.data});
+  final String scheduleId;
+  CancelingSchedule({
+    required super.data,
+    required this.scheduleId,
+  });
 }
 
 class CancelScheduleSuccess extends ScheduleState {

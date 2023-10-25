@@ -22,4 +22,8 @@ abstract class ScheduleRepository {
 
   Future<Either<String, ScheduleResponse>> getScheduleByTutorId(
       {required String tutorId, required int from, required int to});
+  Future<Either<String, bool>> bookClass({
+    required List<String> scheduleId,
+    required String studentNote,
+  });
 }

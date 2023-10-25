@@ -52,7 +52,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 1, color: context.theme.dividerColor),
@@ -90,12 +90,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
             ),
           ),
         ]
-            .expand<Widget>((element) => [
-                  element,
-                  const SizedBox(
-                    height: 10,
-                  )
-                ])
+            .expand<Widget>((element) => [element, const SizedBox(height: 10)])
             .toList(),
       ),
     );
@@ -118,7 +113,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
 
   Widget _buildScheduleInfo() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: context.colorScheme.primary.withOpacity(0.1),
@@ -185,6 +180,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                 ),
                 const Spacer(),
                 TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   onPressed: () {},
                   child: Text(
                     "Edit",
@@ -228,7 +224,7 @@ class TimeInfoField extends StatelessWidget {
       children: [
         Text(
           DateFormat().add_yMMMEd().format(time),
-          style: context.textTheme.titleLarge?.boldTextTheme,
+          style: context.textTheme.titleMedium?.boldTextTheme,
         ),
         Text(
           "$numberLesson lesson",

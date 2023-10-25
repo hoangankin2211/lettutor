@@ -46,6 +46,23 @@ extension BuildContextExt on BuildContext {
       );
   TextStyle? get hintBoldText => textTheme.bodyLarge
       ?.copyWith(fontWeight: FontWeight.w500, color: theme.hintColor);
+
+  void showSnackBarAlert(String content) {
+    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(content)));
+  }
+
+  void showAppModalBottomSheet(
+      {required Widget Function(BuildContext) builder}) {
+    showModalBottomSheet(
+      context: this,
+      backgroundColor: theme.cardColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      clipBehavior: Clip.hardEdge,
+      builder: builder,
+    );
+  }
 }
 
 extension CustomTextTheme on TextStyle {
