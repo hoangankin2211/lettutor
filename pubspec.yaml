@@ -59,6 +59,8 @@ dependencies:
   auto_size_text: ^3.0.0
   timer_count_down: ^2.2.2
   jitsi_meet_wrapper: ^0.2.0+1
+  flutter_riverpod: ^2.4.4
+  riverpod_annotation: ^2.2.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +71,8 @@ dev_dependencies:
   injectable_generator: ^2.4.0
   retrofit_generator: ^7.0.8
   json_serializable: ^6.7.1
+  custom_lint: ^0.5.4
+  riverpod_generator: ^2.3.5
 
 
 flutter_intl:

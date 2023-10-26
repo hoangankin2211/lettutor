@@ -76,20 +76,23 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dashboardBloc.fetchInitialApplicationData();
   }
 
   void _onTap(int index) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // if ((index - currentIndex.value).abs() > 1) {
+      //   controller.jumpToPage(index);
+      // } else {
+      controller.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      // }
       currentIndex.value = index;
     });
-    controller.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override

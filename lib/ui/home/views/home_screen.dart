@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -121,11 +119,15 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final courseItem = state.data.course.elementAt(index);
                 return CourseWidget(
+                  key: ValueKey("${courseItem.id}_HomeScreen"),
                   courseId: courseItem.id,
                   onTap: (id) {
-                    context.pushNamed(
+                    context.push(
                       RouteLocation.courseDetail,
-                      extra: {"courseId": id},
+                      extra: {
+                        "courseId": id,
+                        "from": "HomeScreen",
+                      },
                     );
                   },
                   imageUrl: courseItem.imageUrl,
@@ -153,9 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
           bloc: dashboardBloc.tutorBloc,
           builder: (context, state) {
             return ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 20,
-              ),
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               itemBuilder: (context, index) {

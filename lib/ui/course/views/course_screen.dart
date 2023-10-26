@@ -128,9 +128,7 @@ class _ListCoursePageState extends State<ListCoursePage>
             children: [
               CourseSearchBar(
                 controller: searchController,
-                onTapFilter: () {
-                  // showFilterBottomSheet();
-                },
+                onTapFilter: () {},
                 onSearch: (text) {
                   courseBloc.searchCourse(
                     q: text.isEmpty ? null : text,
@@ -159,10 +157,14 @@ class _ListCoursePageState extends State<ListCoursePage>
                             final courseItem =
                                 state.data.course.elementAt(index);
                             return CourseWidget(
+                              key: ValueKey("${courseItem.id}_CourseScreen"),
                               onTap: (id) {
                                 context.push(
                                   RouteLocation.courseDetail,
-                                  extra: {"courseId": id},
+                                  extra: {
+                                    "courseId": id,
+                                    "from": "CourseScreen"
+                                  },
                                 );
                               },
                               courseId: courseItem.id,

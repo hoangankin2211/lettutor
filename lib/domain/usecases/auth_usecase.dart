@@ -18,6 +18,10 @@ class AuthUseCase {
     );
   }
 
+  Future<bool> logout() async {
+    return (await repository.logout());
+  }
+
   Future<Either<User, String>> signUpEmail(
     String email,
     String password,

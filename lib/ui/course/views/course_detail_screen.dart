@@ -207,12 +207,6 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           }
         },
         builder: (context, state) {
-          if (state is InitialCourseDetailPage ||
-              state is LoadingCourseDetail ||
-              color.value == null) {
-            return const AppLoadingIndicator();
-          }
-
           return Scaffold(
             appBar: CustomAppBar<Color?>(
               appBarBuilder: (context, color, child) {
@@ -233,81 +227,85 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
               },
               value: color,
             ),
-            body: Stack(
-              children: [
-                CustomTemplateScreenStackScroll(
-                  color: Colors.transparent,
-                  paddingAll: const EdgeInsets.all(5),
-                  afterMainScreen: Hero(
-                    tag: widget.courseId,
-                    child: FadeInImage.assetNetwork(
-                      image: state.course?.imageUrl ?? "",
-                      placeholder: "assets/images/placeholder.png",
-                      fit: BoxFit.cover,
-                      height: (context.height * 0.45 + 5),
-                    ),
-                  ),
-                  bottomSheet: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: context.width * 0.1, vertical: 10),
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+            body: (state is InitialCourseDetailPage ||
+                    state is LoadingCourseDetail ||
+                    color.value == null)
+                ? const AppLoadingIndicator()
+                : Stack(
+                    children: [
+                      CustomTemplateScreenStackScroll(
+                        color: Colors.transparent,
+                        paddingAll: const EdgeInsets.all(5),
+                        afterMainScreen: Hero(
+                          tag: widget.key ?? UniqueKey(),
+                          child: FadeInImage.assetNetwork(
+                            image: state.course?.imageUrl ?? "",
+                            placeholder: "assets/images/placeholder.png",
+                            fit: BoxFit.cover,
+                            height: (context.height * 0.45 + 5),
+                          ),
                         ),
-                        minimumSize: Size(context.width * 0.9, 50),
-                        maximumSize: Size(context.width * 0.9, 60),
-                      ),
-                      onPressed: () {},
-                      icon: const Icon(
-                          CupertinoIcons.arrowtriangle_right_circle_fill),
-                      label: Text(
-                        "Discover",
-                        style: context.textTheme.titleLarge?.copyWith(
-                          color: context.colorScheme.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  appBar: AppBarCustom(
-                    expandedHeight: context.height * 0.4,
-                    backgroundColor: Colors.transparent,
-                    title: const [],
-                  ),
-                  children: [
-                    SliverToBoxAdapter(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
-                        decoration: BoxDecoration(
-                          color: context.colorScheme.onPrimary,
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(25)),
-                        ),
-                        child: Column(
-                          children: [
-                            _buildOverviewSection(
-                              purpose: state.course?.purpose ?? "",
-                              reason: state.course?.reason ?? "",
+                        bottomSheet: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: context.width * 0.1, vertical: 10),
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              minimumSize: Size(context.width * 0.9, 50),
+                              maximumSize: Size(context.width * 0.9, 60),
                             ),
-                            _buildExperienceLevel(),
-                            _buildCourseLength(
-                                state.course?.topics?.length ?? 0),
-                            _buildListTopic(state.course?.topics ?? []),
-                            const SizedBox(height: 40),
-                          ]
-                              .expand<Widget>((element) => [
-                                    element,
-                                    const SizedBox(height: 10),
-                                  ])
-                              .toList(),
+                            onPressed: () {},
+                            icon: const Icon(
+                                CupertinoIcons.arrowtriangle_right_circle_fill),
+                            label: Text(
+                              "Discover",
+                              style: context.textTheme.titleLarge?.copyWith(
+                                color: context.colorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
                         ),
+                        appBar: AppBarCustom(
+                          expandedHeight: context.height * 0.4,
+                          backgroundColor: Colors.transparent,
+                          title: const [],
+                        ),
+                        children: [
+                          SliverToBoxAdapter(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 20),
+                              decoration: BoxDecoration(
+                                color: context.colorScheme.onPrimary,
+                                borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(25)),
+                              ),
+                              child: Column(
+                                children: [
+                                  _buildOverviewSection(
+                                    purpose: state.course?.purpose ?? "",
+                                    reason: state.course?.reason ?? "",
+                                  ),
+                                  _buildExperienceLevel(),
+                                  _buildCourseLength(
+                                      state.course?.topics?.length ?? 0),
+                                  _buildListTopic(state.course?.topics ?? []),
+                                  const SizedBox(height: 40),
+                                ]
+                                    .expand<Widget>((element) => [
+                                          element,
+                                          const SizedBox(height: 10),
+                                        ])
+                                    .toList(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    ],
+                  ),
           );
         });
   }

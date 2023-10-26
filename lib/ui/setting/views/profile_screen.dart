@@ -1,28 +1,33 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/data/data_source/remote/chore/chores_provider.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
+import 'package:lettutor/domain/models/user.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/setting/views/widgets/custom_drop_down_btn.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _studySchedule = TextEditingController();
-  late ValueNotifier<String?> _countryCode = ValueNotifier(countryCode);
-  late ValueNotifier<String> _birthday = ValueNotifier(birthday);
-  late ValueNotifier<String> _level = ValueNotifier(level);
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  late final TextEditingController _nameController =
+      TextEditingController(text: userName);
+  late final TextEditingController _studySchedule = TextEditingController();
+  late final ValueNotifier<String?> _countryCode = ValueNotifier(countryCode);
+  late final ValueNotifier<String> _birthday = ValueNotifier(birthday);
+  late final ValueNotifier<String> _level = ValueNotifier(level);
 
   late final authBloc = BlocProvider.of<AuthBloc>(context);
 
@@ -36,6 +41,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String get amount => authBloc.state.user?.walletInfo.amount ?? "";
   String get level => authBloc.state.user?.level ?? "";
   List<LearnTopics> get topic => authBloc.state.user?.learnTopics ?? [];
+  late final AsyncValue<List<TestPreparation>> testPreparation =
+      ref.watch(getTestPreparationProvider);
+  late final AsyncValue<List<LearnTopics>> learnTopics =
+      ref.watch(getLearnTopicProvider);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,10 +201,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Widget informationField(){
-
-  // }
-
   Container _selectedCountryField() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
@@ -318,7 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _avatarField(),
             _informationTextField(
               iconData: CupertinoIcons.person_fill,
-              controller: TextEditingController(),
+              controller: _nameController,
               labelText: "Name",
               hintText: "Name",
             ),
@@ -367,8 +376,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         1 => _selectedCountryField(),
                         2 => _levelField(),
                         _ => _topicsField(
-                            topics: topic,
-                            topicsSelected: [],
+                            topics: (learnTopics.value ?? [])
+                              ..addAll(
+                                (testPreparation.value ?? []).map(
+                                  (e) => LearnTopics(
+                                    id: e.id,
+                                    key: e.key,
+                                    name: e.name,
+                                  ),
+                                ),
+                              ),
+                            topicsSelected: topic,
                           ),
                       }
                     ],

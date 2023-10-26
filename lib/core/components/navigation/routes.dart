@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app_init.dart';
 import 'package:lettutor/core/components/navigation/error_screen.dart';
@@ -40,6 +41,20 @@ final routes = [
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
     path: RouteLocation.courseDetail,
+    builder: (context, state) {
+      if (state.extra != null && state.extra is Map) {
+        final Map<String, dynamic> data = state.extra as Map<String, dynamic>;
+        final String? courseId = data["courseId"];
+        final String? from = data["from"];
+        if (courseId != null) {
+          return CourseDetailScreen(
+            courseId: courseId,
+            key: ValueKey("${courseId}_$from"),
+          );
+        }
+      }
+      return const ErrorScreen();
+    },
     routes: [
       GoRoute(
         path: RouteLocation.topicDetail,
@@ -56,16 +71,6 @@ final routes = [
         },
       ),
     ],
-    builder: (context, state) {
-      if (state.extra != null && state.extra is Map) {
-        final Map<String, dynamic> data = state.extra as Map<String, dynamic>;
-        final String? courseId = data["courseId"];
-        if (courseId != null) {
-          return CourseDetailScreen(courseId: courseId);
-        }
-      }
-      return const ErrorScreen();
-    },
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,

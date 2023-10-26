@@ -47,13 +47,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(state.data!.user);
     }
 
-    return Right(state.dioException?.message ?? "Error while sign in");
+    print(state.dioException?.response?.data);
+
+    return Right((state.dioException?.response?.data["message"] ??
+        (state.dioException!.message) ??
+        "Error while sign in"));
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<bool> logout() async {
+    return await Future<bool>.delayed(const Duration(seconds: 2), () => true);
   }
 
   @override

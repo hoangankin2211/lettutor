@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/auth/views/signup_screen.dart';
 import 'package:lettutor/ui/auth/views/widgets/custom_scaffold_body.dart';
@@ -31,6 +32,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final FocusNode _focusUsernameEmail = FocusNode();
   final FocusNode _focusPassword = FocusNode();
   late final authBloc = BlocProvider.of<AuthBloc>(context);
+  final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   void initState() {
@@ -44,6 +46,25 @@ class _SignInScreenState extends State<SignInScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  String? validateEmail(String value) {
+    if (value.isEmpty) {
+      return 'Email is required';
+    } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+        .hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+    return null;
+  }
+
+  String? validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Password is required';
+    } else if (value.length < 6) {
+      return 'Password must be at least 8 characters long';
+    }
+    return null;
   }
 
   Widget buildBackgroundView() {
@@ -103,7 +124,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           const SizedBox(height: 8),
           TCInputField(
-            height: 45,
+            validator: (value) => validateEmail(value ?? ""),
             fillColor: fillColor,
             autocorrect: false,
             controller: _emailController,
@@ -127,10 +148,10 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           const SizedBox(height: 8),
           TCInputField(
-            height: 45,
             autocorrect: false,
             enableSuggestions: false,
             fillColor: fillColor,
+            validator: (value) => validatePassword(value ?? ""),
             onChanged: (value) => {},
             focusNode: _focusPassword,
             obscureText: true,
@@ -218,10 +239,11 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget buildSignInButton() {
+  Widget buildSignInButton(AuthState authState) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: TCBottomButton(
+        isLoading: authState.isLoading,
         color: context.colorScheme.primary,
         title: 'Sign In',
         onPressed: _onLogin,
@@ -263,10 +285,14 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _onLogin() {
-    authBloc.add(EmailLoginRequest(
-      email: "phhai@ymail.com",
-      password: "123456",
-    ));
+    if (formKey.currentState?.validate() ?? false) {
+      authBloc.add(EmailLoginRequest(
+        // email: "phhai@ymail.com",
+        // password: "123456",
+        email: _emailController.text,
+        password: _passwordController.text,
+      ));
+    }
     // if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
     // } else {
 
@@ -282,14 +308,27 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        buildHeader(),
-        buildSignInForm(),
-        buildAnotherSignInOption(),
-        buildSignInButton(),
-      ],
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.authStatus == AuthStatus.unauthenticated &&
+            (state.message?.isNotEmpty ?? false)) {
+          context.showSnackBarAlert(state.message!);
+        }
+      },
+      builder: (context, state) {
+        return Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              buildHeader(),
+              buildSignInForm(),
+              buildAnotherSignInOption(),
+              buildSignInButton(state),
+            ],
+          ),
+        );
+      },
     );
   }
 }

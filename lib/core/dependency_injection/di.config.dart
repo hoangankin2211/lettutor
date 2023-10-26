@@ -24,36 +24,37 @@ import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl
     as _i5;
 import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
     as _i6;
-import '../../data/data_source/remote/course/course_service.dart' as _i20;
+import '../../data/data_source/remote/chore/chores_service.dart' as _i20;
+import '../../data/data_source/remote/course/course_service.dart' as _i21;
 import '../../data/data_source/remote/ebook/ebook_service.dart' as _i12;
 import '../../data/data_source/remote/review/feedback_service.dart' as _i13;
 import '../../data/data_source/remote/schedule/schedule_service.dart' as _i14;
 import '../../data/data_source/remote/tutorial/tutor_service.dart' as _i15;
 import '../../data/data_source/remote/user/user_service.dart' as _i16;
 import '../../data/repositories/authentication_repos_impl.dart' as _i19;
-import '../../data/repositories/course_repos_impl.dart' as _i30;
-import '../../data/repositories/schedule_repos_impl.dart' as _i22;
-import '../../data/repositories/tutor_repos_impl.dart' as _i25;
-import '../../domain/repositories/authentication_repo.dart' as _i28;
-import '../../domain/repositories/course_repo.dart' as _i29;
+import '../../data/repositories/course_repos_impl.dart' as _i31;
+import '../../data/repositories/schedule_repos_impl.dart' as _i23;
+import '../../data/repositories/tutor_repos_impl.dart' as _i26;
+import '../../domain/repositories/authentication_repo.dart' as _i29;
+import '../../domain/repositories/course_repo.dart' as _i30;
 import '../../domain/repositories/repositories.dart' as _i18;
-import '../../domain/repositories/schedule_repo.dart' as _i21;
-import '../../domain/repositories/tutor_repo.dart' as _i24;
-import '../../domain/usecases/auth_usecase.dart' as _i27;
-import '../../domain/usecases/course_usecase.dart' as _i31;
-import '../../domain/usecases/schedule_usecase.dart' as _i23;
-import '../../domain/usecases/tutor_usecase.dart' as _i26;
-import '../../ui/auth/blocs/auth_bloc.dart' as _i36;
-import '../../ui/course/blocs/course_bloc.dart' as _i37;
-import '../../ui/course/blocs/course_detail_bloc.dart' as _i38;
-import '../../ui/course/blocs/ebook_bloc.dart' as _i32;
-import '../../ui/dashboard/blocs/dashboard_bloc.dart' as _i39;
-import '../../ui/schedule/bloc/schedule_bloc.dart' as _i33;
-import '../../ui/tutor/blocs/tutor_bloc.dart' as _i34;
-import '../../ui/tutor/blocs/tutor_detail_bloc.dart' as _i35;
+import '../../domain/repositories/schedule_repo.dart' as _i22;
+import '../../domain/repositories/tutor_repo.dart' as _i25;
+import '../../domain/usecases/auth_usecase.dart' as _i28;
+import '../../domain/usecases/course_usecase.dart' as _i32;
+import '../../domain/usecases/schedule_usecase.dart' as _i24;
+import '../../domain/usecases/tutor_usecase.dart' as _i27;
+import '../../ui/auth/blocs/auth_bloc.dart' as _i37;
+import '../../ui/course/blocs/course_bloc.dart' as _i38;
+import '../../ui/course/blocs/course_detail_bloc.dart' as _i39;
+import '../../ui/course/blocs/ebook_bloc.dart' as _i33;
+import '../../ui/dashboard/blocs/dashboard_bloc.dart' as _i40;
+import '../../ui/schedule/bloc/schedule_bloc.dart' as _i34;
+import '../../ui/tutor/blocs/tutor_bloc.dart' as _i35;
+import '../../ui/tutor/blocs/tutor_detail_bloc.dart' as _i36;
 import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
 import '../components/navigation/routes_service.dart' as _i8;
-import 'module.dart' as _i40;
+import 'module.dart' as _i41;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 Future<_i1.GetIt> init(
@@ -100,52 +101,56 @@ Future<_i1.GetIt> init(
             gh<_i4.AuthenticationApi>(instanceName: 'EmailAuthApi'),
             gh<_i9.AppLocalStorage>(),
           ));
-  gh.factory<_i20.CourseService>(() => _i20.CourseService(gh<_i11.Dio>()));
-  gh.factory<_i21.ScheduleRepository>(
-      () => _i22.ScheduleRepositoryImpl(gh<_i14.ScheduleService>()));
-  gh.factory<_i23.ScheduleUseCase>(
-      () => _i23.ScheduleUseCase(gh<_i21.ScheduleRepository>()));
-  gh.factory<_i24.TutorRepository>(() => _i25.TutorRepositoryImpl(
+  gh.factory<_i20.ChoresService>(
+    () => _i20.ChoresService(gh<_i11.Dio>()),
+    instanceName: 'ChoresService',
+  );
+  gh.factory<_i21.CourseService>(() => _i21.CourseService(gh<_i11.Dio>()));
+  gh.factory<_i22.ScheduleRepository>(
+      () => _i23.ScheduleRepositoryImpl(gh<_i14.ScheduleService>()));
+  gh.factory<_i24.ScheduleUseCase>(
+      () => _i24.ScheduleUseCase(gh<_i22.ScheduleRepository>()));
+  gh.factory<_i25.TutorRepository>(() => _i26.TutorRepositoryImpl(
         gh<_i15.TutorService>(),
         gh<_i13.FeedbackService>(),
       ));
-  gh.factory<_i26.TutorUseCase>(() => _i26.TutorUseCase(
-        gh<_i24.TutorRepository>(),
+  gh.factory<_i27.TutorUseCase>(() => _i27.TutorUseCase(
+        gh<_i25.TutorRepository>(),
         gh<_i13.FeedbackService>(),
         gh<_i15.TutorService>(),
       ));
-  gh.factory<_i27.AuthUseCase>(
-      () => _i27.AuthUseCase(gh<_i28.AuthenticationRepository>()));
-  gh.factory<_i29.CourseRepository>(
-      () => _i30.CourseRepositoryImpl(courseService: gh<_i20.CourseService>()));
-  gh.factory<_i31.CourseUseCase>(() => _i31.CourseUseCase(
-        gh<_i29.CourseRepository>(),
+  gh.factory<_i28.AuthUseCase>(
+      () => _i28.AuthUseCase(gh<_i29.AuthenticationRepository>()));
+  gh.factory<_i30.CourseRepository>(
+      () => _i31.CourseRepositoryImpl(courseService: gh<_i21.CourseService>()));
+  gh.factory<_i32.CourseUseCase>(() => _i32.CourseUseCase(
+        gh<_i30.CourseRepository>(),
         gh<_i12.EbookService>(),
       ));
-  gh.factory<_i32.EBookBloc>(() => _i32.EBookBloc(gh<_i31.CourseUseCase>()));
-  gh.factory<_i33.ScheduleBloc>(
-      () => _i33.ScheduleBloc(gh<_i23.ScheduleUseCase>()));
-  gh.factory<_i34.TutorBloc>(() => _i34.TutorBloc(
-        gh<_i26.TutorUseCase>(),
-        gh<_i23.ScheduleUseCase>(),
+  gh.factory<_i33.EBookBloc>(() => _i33.EBookBloc(gh<_i32.CourseUseCase>()));
+  gh.factory<_i34.ScheduleBloc>(
+      () => _i34.ScheduleBloc(gh<_i24.ScheduleUseCase>()));
+  gh.factory<_i35.TutorBloc>(() => _i35.TutorBloc(
+        gh<_i27.TutorUseCase>(),
+        gh<_i24.ScheduleUseCase>(),
       ));
-  gh.factory<_i35.TutorDetailBloc>(() => _i35.TutorDetailBloc(
-        gh<_i26.TutorUseCase>(),
-        gh<_i23.ScheduleUseCase>(),
+  gh.factory<_i36.TutorDetailBloc>(() => _i36.TutorDetailBloc(
+        gh<_i27.TutorUseCase>(),
+        gh<_i24.ScheduleUseCase>(),
       ));
-  gh.factory<_i36.AuthBloc>(() => _i36.AuthBloc(gh<_i27.AuthUseCase>()));
-  gh.factory<_i37.CourseBloc>(() => _i37.CourseBloc(gh<_i31.CourseUseCase>()));
-  gh.factory<_i38.CourseDetailBloc>(
-      () => _i38.CourseDetailBloc(gh<_i31.CourseUseCase>()));
-  gh.factory<_i39.DashboardBloc>(() => _i39.DashboardBloc(
-        gh<_i37.CourseBloc>(),
-        gh<_i32.EBookBloc>(),
-        gh<_i34.TutorBloc>(),
-        gh<_i33.ScheduleBloc>(),
+  gh.factory<_i37.AuthBloc>(() => _i37.AuthBloc(gh<_i28.AuthUseCase>()));
+  gh.factory<_i38.CourseBloc>(() => _i38.CourseBloc(gh<_i32.CourseUseCase>()));
+  gh.factory<_i39.CourseDetailBloc>(
+      () => _i39.CourseDetailBloc(gh<_i32.CourseUseCase>()));
+  gh.factory<_i40.DashboardBloc>(() => _i40.DashboardBloc(
+        gh<_i38.CourseBloc>(),
+        gh<_i33.EBookBloc>(),
+        gh<_i35.TutorBloc>(),
+        gh<_i34.ScheduleBloc>(),
       ));
   return getIt;
 }
 
-class _$HiveModule extends _i40.HiveModule {}
+class _$HiveModule extends _i41.HiveModule {}
 
-class _$DioModule extends _i40.DioModule {}
+class _$DioModule extends _i41.DioModule {}

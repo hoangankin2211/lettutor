@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/components/widgets/custom_appbar.dart';
 import 'package:lettutor/core/components/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
@@ -311,21 +312,30 @@ class _SettingScreenState extends State<SettingScreen> {
                           child: Row(
                             children: [
                               Expanded(
-                                  flex: 1,
-                                  child: Icon(
-                                    Icons.logout,
-                                    color: context.colorScheme.error,
-                                  )),
+                                flex: 1,
+                                child: Icon(
+                                  Icons.logout,
+                                  color: context.colorScheme.error,
+                                ),
+                              ),
                               const SizedBox(width: 10),
                               Expanded(
-                                  flex: 6,
-                                  child: Text(
-                                    "Logout",
-                                    style:
-                                        context.textTheme.bodyLarge?.copyWith(
-                                      color: context.colorScheme.error,
-                                    ),
-                                  )),
+                                flex: 6,
+                                child: BlocBuilder<AuthBloc, AuthState>(
+                                  bloc: authBloc,
+                                  builder: (context, state) {
+                                    return state.isLoading
+                                        ? const AppLoadingIndicator(radius: 15)
+                                        : Text(
+                                            "Logout",
+                                            style: context.textTheme.bodyLarge
+                                                ?.copyWith(
+                                              color: context.colorScheme.error,
+                                            ),
+                                          );
+                                  },
+                                ),
+                              ),
                             ],
                           ),
                         ),

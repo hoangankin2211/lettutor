@@ -17,7 +17,8 @@ Future<DataState<T>> getStateOf<T>({
         statusCode: httpResponse.response.statusCode!,
       );
     } else {
-      final String? extraMessage = httpResponse.response.data["message"];
+      final String? extraMessage =
+          (httpResponse.response.data as Map<String, dynamic>?)?["message"];
       throw DioException(
         response: httpResponse.response,
         message:

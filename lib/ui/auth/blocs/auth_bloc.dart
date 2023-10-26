@@ -28,11 +28,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> _onInitAuthenticationStatus(
       InitAuthenticationStatus event, Emitter<AuthState> emit) async {
     await Future.delayed(const Duration(seconds: 3));
-    emit(const AuthState.unauthenticated(message: "Not Sign In yet"));
+    emit(const AuthState.unauthenticated(message: ""));
   }
 
   FutureOr<void> _onEmailLoginRequest(
       EmailLoginRequest event, Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
     (await authUseCase.signInEmail(event.email, event.password)).fold(
       (left) {
         emit(AuthState.authenticated(user: left));
@@ -43,6 +44,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _onEmailRegisterRequest(
       EmailRegisterRequest event, Emitter<AuthState> emit) async {
+    emit(const AuthState.loading());
+
     (await authUseCase.signUpEmail(event.email, event.password)).fold(
       (left) {
         emit(AuthState.authenticated(user: left));
@@ -53,6 +56,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _onLogoutAuthenticationRequest(
       LogoutAuthenticationRequest event, Emitter<AuthState> emit) async {
-    emit(const AuthState.unauthenticated(message: "Logout"));
+    emit(const AuthState.loading());
+    if (await authUseCase.logout()) {
+      return emit(const AuthState.unauthenticated(message: "Logout"));
+    }
+    return emit(const AuthState.unknown());
   }
 }

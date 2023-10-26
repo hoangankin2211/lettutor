@@ -54,6 +54,13 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
     });
   }
 
+  Widget _buildEmptyAlert() {
+    return Center(
+      child: Text("Don't have any schedule booking in this date range",
+          style: context.textTheme.bodyLarge),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TutorDetailBloc, TutorDetailState>(
@@ -82,51 +89,62 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
                   .copyWith(color: context.colorScheme.onPrimary),
             ),
           ),
-          body: Column(
-            children: [
-              SizedBox(
-                width: context.width,
-                child: ElevatedBorderButton(
-                  onPressed: onTapBooking,
-                  borderColor: context.colorScheme.primary,
-                  child: Text(
-                    "${DateFormat().add_yMEd().format(from)}  -  ${DateFormat().add_yMEd().format(to)}",
-                    style: context.textTheme.bodyLarge?.boldTextTheme.copyWith(
-                      color: context.colorScheme.primary,
+          body: switch (tutorState) {
+            (TutorDetailState state) when state is LoadingFreeBooking =>
+              const AppLoadingIndicator(),
+            (TutorDetailState state) when state.data.bookingTime.isEmpty =>
+              _buildEmptyAlert(),
+            _ => Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: context.width,
+                      child: ElevatedBorderButton(
+                        onPressed: onTapBooking,
+                        borderColor: context.colorScheme.primary,
+                        child: Text(
+                          "${DateFormat().add_yMEd().format(from)}  -  ${DateFormat().add_yMEd().format(to)}",
+                          style: context.textTheme.bodyLarge?.boldTextTheme
+                              .copyWith(
+                            color: context.colorScheme.primary,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: ListView.separated(
+                        controller: scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        addAutomaticKeepAlives: true,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final schedule = tutorState.data.bookingTime[index];
+                          return BookingItem(
+                            onTapBookButton: (note) =>
+                                tutorDetailBloc.bookTutor(
+                              scheduleId: schedule.id,
+                              note: note,
+                            ),
+                            isLoading: tutorState is BookingClass &&
+                                tutorState.scheduleId == schedule.id,
+                            from: schedule.startTime,
+                            to: schedule.endTime,
+                            time: DateTime.fromMillisecondsSinceEpoch(
+                                schedule.startTimestamp),
+                          );
+                        },
+                        separatorBuilder: (_, __) => const SizedBox(height: 15),
+                        itemCount: tutorState.data.bookingTime.length,
+                      ),
+                    )
+                  ]
+                      .expand<Widget>(
+                          (element) => [const SizedBox(height: 10), element])
+                      .toList(),
                 ),
               ),
-              Expanded(
-                child: ListView.separated(
-                  controller: scrollController,
-                  physics: const BouncingScrollPhysics(),
-                  addAutomaticKeepAlives: true,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final schedule = tutorState.data.bookingTime[index];
-                    return BookingItem(
-                      onTapBookButton: (note) => tutorDetailBloc.bookTutor(
-                        scheduleId: schedule.id,
-                        note: note,
-                      ),
-                      isLoading: tutorState is BookingClass &&
-                          tutorState.scheduleId == schedule.id,
-                      from: schedule.startTime,
-                      to: schedule.endTime,
-                      time: DateTime.fromMillisecondsSinceEpoch(
-                          schedule.startTimestamp),
-                    );
-                  },
-                  separatorBuilder: (_, __) => const SizedBox(height: 15),
-                  itemCount: tutorState.data.bookingTime.length,
-                ),
-              )
-            ]
-                .expand<Widget>(
-                    (element) => [const SizedBox(height: 10), element])
-                .toList(),
-          ),
+          },
         );
       },
     );
@@ -208,7 +226,7 @@ class BookingItem extends StatelessWidget {
                 }
               },
               child: isLoading
-                  ? const AppLoadingIndicator(radius: 5)
+                  ? const AppLoadingIndicator(radius: 15)
                   : Text(
                       "Book",
                       style:

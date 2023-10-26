@@ -32,19 +32,13 @@ class TestPreparationEntity {
     };
   }
 
-  factory TestPreparationEntity.fromMap(Map<String, dynamic> map) {
+  factory TestPreparationEntity.fromJson(Map<String, dynamic> map) {
     return TestPreparationEntity(
       id: map['id'] as int,
       key: map['key'] as String,
       name: map['name'] as String,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory TestPreparationEntity.fromJson(String source) =>
-      TestPreparationEntity.fromMap(
-          json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => 'TestPreparationEntity(id: $id, key: $key, name: $name)';

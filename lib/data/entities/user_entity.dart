@@ -150,7 +150,7 @@ class UserEntity {
       ),
       testPreparations: List<TestPreparationEntity>.from(
         (map['testPreparations'] as List<dynamic>).map<TestPreparationEntity>(
-          (x) => TestPreparationEntity.fromMap(x as Map<String, dynamic>),
+          (x) => TestPreparationEntity.fromJson(x as Map<String, dynamic>),
         ),
       ),
       isPhoneActivated: map['isPhoneActivated'] as bool,

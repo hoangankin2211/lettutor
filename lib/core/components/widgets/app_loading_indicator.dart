@@ -7,15 +7,13 @@ class AppLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Center(
-        child: SizedBox(
-          height: radius,
-          width: radius,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: color,
-          ),
+    return Center(
+      child: SizedBox(
+        height: radius,
+        width: radius,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: color,
         ),
       ),
     );

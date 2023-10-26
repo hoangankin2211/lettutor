@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
@@ -183,8 +184,10 @@ class TCBottomButton extends StatelessWidget {
   final Color color;
   final VoidCallback onPressed;
   final bool disabled;
+  final bool isLoading;
   const TCBottomButton({
     super.key,
+    this.isLoading = false,
     required this.title,
     required this.onPressed,
     this.color = Colors.blue,
@@ -205,13 +208,18 @@ class TCBottomButton extends StatelessWidget {
           ),
         ),
         onPressed: disabled ? null : onPressed,
-        child: Text(
-          title.toUpperCase(),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+        child: isLoading
+            ? AppLoadingIndicator(
+                radius: 15,
+                color: context.colorScheme.onPrimary,
+              )
+            : Text(
+                title.toUpperCase(),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
-        ),
       ),
     );
   }

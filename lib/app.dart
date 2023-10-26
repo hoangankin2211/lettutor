@@ -4,6 +4,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
@@ -53,22 +54,24 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     ThemeData? light,
     ThemeData? dark,
   }) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: widget.title,
-      theme: dark,
-      darkTheme: dark,
-      locale: locale,
-      supportedLocales: S.delegate.supportedLocales,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      routerDelegate: widget.routeService.routerDelegate,
-      routeInformationParser: widget.routeService.routeInformationParser,
-      routeInformationProvider: widget.routeService.routeInformationProvider,
+    return ProviderScope(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: widget.title,
+        theme: dark,
+        darkTheme: dark,
+        locale: locale,
+        supportedLocales: S.delegate.supportedLocales,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        routerDelegate: widget.routeService.routerDelegate,
+        routeInformationParser: widget.routeService.routeInformationParser,
+        routeInformationProvider: widget.routeService.routeInformationProvider,
+      ),
     );
   }
 
