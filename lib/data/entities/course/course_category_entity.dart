@@ -28,7 +28,7 @@ class CourseCategoryEntity {
     };
   }
 
-  factory CourseCategoryEntity.fromJson(Map<String, dynamic> map) {
+  static CourseCategoryEntity fromJson(Map<String, dynamic> map) {
     return CourseCategoryEntity(
       id: map['id'] as String,
       title: map['title'] != null ? map['title'] as String : null,

@@ -53,7 +53,6 @@ class _CustomNavigatorBarState extends State<CustomNavigatorBar>
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 5)

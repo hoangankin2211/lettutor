@@ -6,7 +6,7 @@ class EBookResponse {
   final List<EBookEntity> eBoos;
   EBookResponse(this.status, this.count, this.eBoos);
 
-  factory EBookResponse.fromJson(Map<String, dynamic> data) {
+  static EBookResponse fromJson(Map<String, dynamic> data) {
     final cData = data['data'];
     if (cData == null) return EBookResponse('Error', 0, List.empty());
     return EBookResponse(

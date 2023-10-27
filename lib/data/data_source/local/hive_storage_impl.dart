@@ -67,4 +67,14 @@ class HiveStorageImpl implements AppLocalStorage {
   String? getString(String key) {
     return _box.get(key);
   }
+
+  @override
+  Future<void> saveMap(String key, Map value) {
+    return _box.put(key, value);
+  }
+
+  @override
+  Map? getMap(String key) {
+    return _box.get(key);
+  }
 }

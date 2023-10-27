@@ -60,7 +60,7 @@ class TutorDetailEntity {
     };
   }
 
-  factory TutorDetailEntity.fromJson(Map<String, dynamic> map) {
+  static TutorDetailEntity fromJson(Map<String, dynamic> map) {
     return TutorDetailEntity(
       video: map['video'] != null ? map['video'] as String : null,
       bio: map['bio'] != null ? map['bio'] as String : null,

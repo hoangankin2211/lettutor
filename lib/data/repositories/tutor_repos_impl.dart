@@ -1,4 +1,5 @@
 import 'package:either_dart/src/either.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/data_state.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
@@ -15,11 +16,10 @@ import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
 
 import 'package:lettutor/data/entities/tutor/tutor_detail_entity.dart';
 
-import 'package:lettutor/data/entities/tutor/tutor_entity.dart';
-import 'package:flutter/foundation.dart';
-
 import '../../domain/repositories/tutor_repo.dart';
 import '../entities/response/search_tutor_response.dart';
+
+typedef Mapping = Map<String, dynamic>;
 
 @Injectable(as: TutorRepository)
 class TutorRepositoryImpl extends TutorRepository {
@@ -31,23 +31,18 @@ class TutorRepositoryImpl extends TutorRepository {
   @override
   Future<Either<String, TutorResponse>> fetchListTutor(
       {required int perPage, required int page}) async {
-    // final dataState = await compute<String, DataState<TutorResponse>>(
-    //   (message) async {
-    //     logger.i("begin");
-    //     return await getStateOf<TutorResponse>(
-    //       request: () async => await tutorService.fetchTutorialPage(
-    //         page: page,
-    //         size: perPage,
-    //       ),
-    //     );
-    //   },
-    //   "begin",
-    // );
     final dataState = await getStateOf<TutorResponse>(
       request: () async => await tutorService.fetchTutorialPage(
         page: page,
         size: perPage,
       ),
+      parser: (data) {
+        return compute(
+          TutorResponse.fromJson,
+          data,
+          debugLabel: "fetchListTutor",
+        );
+      },
     );
 
     if (dataState is DataSuccess) {
@@ -63,7 +58,8 @@ class TutorRepositoryImpl extends TutorRepository {
   Future<Either<String, TutorDetailEntity>> getTutorDetail(
       {required String id}) async {
     final dataState = await getStateOf<TutorDetailEntity>(
-      request: () async => tutorService.getTutorById(id),
+      request: () => tutorService.getTutorById(id),
+      parser: (data) => compute(TutorDetailEntity.fromJson, data),
     );
 
     if (dataState is DataSuccess) {
@@ -99,7 +95,7 @@ class TutorRepositoryImpl extends TutorRepository {
   @override
   Future<bool> markFavoriteTutor({required String tutorId}) async {
     final dataState = await getStateOf(
-      request: () async =>
+      request: () =>
           tutorService.addTutorToFavorite(body: {"tutorId": tutorId}),
     );
     if (dataState is DataSuccess && dataState.statusCode == 200) {
@@ -113,8 +109,9 @@ class TutorRepositoryImpl extends TutorRepository {
   Future<Either<String, SearchTutorResponse>> searchTutor(
       {required TutorSearchRequest request}) async {
     final dataState = await getStateOf<SearchTutorResponse>(
-        request: () async =>
-            await tutorService.searchTutor(body: request.toMap()));
+      request: () => tutorService.searchTutor(body: request.toMap()),
+      parser: (data) => compute(SearchTutorResponse.fromJson, data),
+    );
 
     if (dataState is DataSuccess) {
       if (dataState.data != null) {
@@ -130,14 +127,9 @@ class TutorRepositoryImpl extends TutorRepository {
   Future<Either<String, FeedbackResponse>> getTutorFeedbackById(
       {required String id, int perPage = 10, int page = 1}) async {
     final dataState = await getStateOf<FeedbackResponse>(
-      request: () async => await feedbackService.getReviews(
-        id,
-        body: {
-          "perPage": perPage,
-          "page": page,
-        },
-      ),
-    );
+        request: () => feedbackService
+            .getReviews(id, body: {"perPage": perPage, "page": page}),
+        parser: (data) => compute(FeedbackResponse.fromJson, data));
 
     if (dataState is DataSuccess) {
       if (dataState.data != null) {

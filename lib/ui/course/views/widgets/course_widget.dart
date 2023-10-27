@@ -1,16 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
 
 class CourseWidget extends StatelessWidget {
   const CourseWidget({
-    super.key,
+    required Key key,
     required this.courseId,
     required this.imageUrl,
     required this.title,
     required this.subTitle,
     required this.level,
     this.onTap,
-  });
+  }) : super(key: key);
 
   final String courseId;
   final String? imageUrl;
@@ -28,7 +29,10 @@ class CourseWidget extends StatelessWidget {
                 constraints: BoxConstraints(maxHeight: context.height * 0.22),
                 child: Ink.image(
                   fit: BoxFit.cover, // Fixes border issues
-                  image: NetworkImage(imageUrl!),
+                  image: CachedNetworkImageProvider(
+                    imageUrl!,
+                    cacheKey: imageUrl!,
+                  ),
                 ),
               ),
             ),

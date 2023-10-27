@@ -61,6 +61,7 @@ dependencies:
   jitsi_meet_wrapper: ^0.2.0+1
   flutter_riverpod: ^2.4.4
   riverpod_annotation: ^2.2.1
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:

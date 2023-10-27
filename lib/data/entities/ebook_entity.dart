@@ -48,7 +48,7 @@ class EBookEntity {
     };
   }
 
-  factory EBookEntity.fromJson(Map<String, dynamic> map) {
+  static EBookEntity fromJson(Map<String, dynamic> map) {
     return EBookEntity(
       id: map['id'] as String,
       name: map['name'] != null ? map['name'] as String : null,

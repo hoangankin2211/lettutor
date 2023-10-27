@@ -31,16 +31,16 @@ class AuthLocalData {
     await _appLocalStorage.remove('refreshToken');
   }
 
-  Future<UserEntity?> getLocalUserEntity() async {
-    final userEntity = _appLocalStorage.getString('userEntity');
-    if (userEntity == null) {
-      return null;
-    }
-    return UserEntity.fromJson(userEntity);
-  }
+  // Future<UserEntity?> getLocalUserEntity() async {
+  //   final userEntity = _appLocalStorage.getString('userEntity');
+  //   if (userEntity == null) {
+  //     return null;
+  //   }
+  //   return UserEntity.fromJson(userEntity);
+  // }
 
-  Future<void> setLocalUserEntity(UserEntity userEntity) async {
-    await _appLocalStorage.saveString(
-        'userEntity', jsonEncode(userEntity.toJson()));
-  }
+  // Future<void> setLocalUserEntity(UserEntity userEntity) async {
+  //   await _appLocalStorage.saveString(
+  //       'userEntity', jsonEncode(userEntity.toJson()));
+  // }
 }

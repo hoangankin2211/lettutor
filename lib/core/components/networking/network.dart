@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 import 'interceptor/logger_interceptor.dart';
 
@@ -33,7 +34,9 @@ class NetworkService {
 
     final dio = Dio(baseOptions)
       ..interceptors.add(LoggerInterceptor())
-      ..interceptors.add(ApiTokenInterceptor(injector.get<AppLocalStorage>()));
+      ..interceptors.add(ApiTokenInterceptor(
+        injector.get<AppLocalStorage>(),
+      ));
 
     return dio;
   }

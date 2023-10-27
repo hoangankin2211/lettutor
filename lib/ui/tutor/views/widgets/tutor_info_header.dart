@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,10 @@ class _TutorInfoHeaderState extends State<TutorInfoHeader> {
         children: [
           CircleAvatar(
             radius: widget.radius,
-            foregroundImage: NetworkImage(_avatar),
+            foregroundImage: CachedNetworkImageProvider(
+              _avatar,
+              cacheKey: _avatar,
+            ),
             onForegroundImageError: (exception, stackTrace) {
               setState(() {
                 _avatar =

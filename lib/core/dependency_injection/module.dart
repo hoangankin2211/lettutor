@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/network.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../components/configuration/configuration.dart';

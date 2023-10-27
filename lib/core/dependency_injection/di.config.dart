@@ -21,9 +21,9 @@ import '../../data/data_source/remote/authentication/authentication.dart'
 import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
     as _i17;
 import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
-    as _i5;
-import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
     as _i6;
+import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
+    as _i5;
 import '../../data/data_source/remote/chore/chores_service.dart' as _i20;
 import '../../data/data_source/remote/course/course_service.dart' as _i21;
 import '../../data/data_source/remote/ebook/ebook_service.dart' as _i12;
@@ -71,12 +71,12 @@ Future<_i1.GetIt> init(
   final dioModule = _$DioModule();
   gh.factory<_i3.ApplicationBloc>(() => _i3.ApplicationBloc());
   gh.factory<_i4.AuthenticationApi>(
-    () => _i5.FacebookAuthImpl(),
-    instanceName: 'FacebookAuthImpl',
+    () => _i5.GoogleAuthImpl(),
+    instanceName: 'GoogleAuthImpl',
   );
   gh.factory<_i4.AuthenticationApi>(
-    () => _i6.GoogleAuthImpl(),
-    instanceName: 'GoogleAuthImpl',
+    () => _i6.FacebookAuthImpl(),
+    instanceName: 'FacebookAuthImpl',
   );
   await gh.singletonAsync<_i7.HiveInterface>(
     () => hiveModule.initHive(),
@@ -138,7 +138,11 @@ Future<_i1.GetIt> init(
         gh<_i27.TutorUseCase>(),
         gh<_i24.ScheduleUseCase>(),
       ));
-  gh.factory<_i37.AuthBloc>(() => _i37.AuthBloc(gh<_i28.AuthUseCase>()));
+  gh.singleton<_i37.AuthBloc>(_i37.AuthBloc(
+    gh<_i28.AuthUseCase>(),
+    gh<_i9.AppLocalStorage>(),
+    gh<_i16.UserService>(),
+  ));
   gh.factory<_i38.CourseBloc>(() => _i38.CourseBloc(gh<_i32.CourseUseCase>()));
   gh.factory<_i39.CourseDetailBloc>(
       () => _i39.CourseDetailBloc(gh<_i32.CourseUseCase>()));

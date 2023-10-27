@@ -17,13 +17,12 @@ abstract class CourseService {
   factory CourseService(Dio dio) = _CourseService;
 
   @GET(course)
-  Future<HttpResponse<CourseResponse>> fetchCoursePage(
+  Future<HttpResponse> fetchCoursePage(
       {@Queries() required Map<String, dynamic> queries});
 
   @GET("$course/{id}")
-  Future<HttpResponse<CourseDetailResponse>> getCourseDetail(
-      {@Path("id") required String id});
+  Future<HttpResponse> getCourseDetail({@Path("id") required String id});
 
   @GET(contentCategory)
-  Future<HttpResponse<ContentCategoryResponse>> getCategoryContent();
+  Future<HttpResponse> getCategoryContent();
 }

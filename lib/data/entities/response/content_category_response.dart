@@ -5,7 +5,7 @@ class ContentCategoryResponse {
   final int count;
   final List<CourseCategoryEntity> rows;
   ContentCategoryResponse(this.count, this.rows);
-  factory ContentCategoryResponse.fromJson(Map<String, dynamic> data) {
+  static ContentCategoryResponse fromJson(Map<String, dynamic> data) {
     return ContentCategoryResponse(
       (data['count'] as int?) ?? 0,
       data['rows'] != null

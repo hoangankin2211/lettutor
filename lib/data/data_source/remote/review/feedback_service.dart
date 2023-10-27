@@ -16,7 +16,7 @@ abstract class FeedbackService {
   factory FeedbackService(Dio dio) = _FeedbackService;
 
   @GET('$getReviewApi/{id}')
-  Future<HttpResponse<FeedbackResponse>> getReviews(
+  Future<HttpResponse> getReviews(
     @Path('id') String id, {
     @Body() required Map<String, dynamic> body,
   });

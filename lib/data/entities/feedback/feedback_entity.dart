@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'feedback_user_model_entity.dart';
 
@@ -35,7 +34,7 @@ class FeedbackEntity {
     };
   }
 
-  factory FeedbackEntity.fromJson(Map<String, dynamic> map) {
+  static FeedbackEntity fromJson(Map<String, dynamic> map) {
     return FeedbackEntity(
       id: map['id'] != null ? map['id'] as String : null,
       content: map['content'] != null ? map['content'] as String : null,

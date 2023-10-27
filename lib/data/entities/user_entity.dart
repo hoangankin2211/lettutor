@@ -122,7 +122,7 @@ class UserEntity {
     };
   }
 
-  factory UserEntity.fromMap(Map<String, dynamic> map) {
+  factory UserEntity.fromJson(Map<String, dynamic> map) {
     return UserEntity(
       id: map['id'] as String,
       email: map['email'] as String,
@@ -159,11 +159,6 @@ class UserEntity {
       canSendMessage: map['canSendMessage'] as bool,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserEntity.fromJson(String source) =>
-      UserEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

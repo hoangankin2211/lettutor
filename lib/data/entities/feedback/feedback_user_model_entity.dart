@@ -16,16 +16,10 @@ class FeedBackUserModelEntity {
     };
   }
 
-  factory FeedBackUserModelEntity.fromMap(Map<String, dynamic> map) {
+  static FeedBackUserModelEntity fromMap(Map<String, dynamic> map) {
     return FeedBackUserModelEntity(
       name: map['name'] != null ? map['name'] as String : null,
       avatar: map['avatar'] != null ? map['avatar'] as String : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory FeedBackUserModelEntity.fromJson(String source) =>
-      FeedBackUserModelEntity.fromMap(
-          json.decode(source) as Map<String, dynamic>);
 }

@@ -7,13 +7,16 @@ import 'package:retrofit/retrofit.dart';
 import '../../../core/components/networking/networking.dart';
 
 Future<DataState<T>> getStateOf<T>({
-  required Future<HttpResponse<T>> Function() request,
+  required Future<HttpResponse> Function() request,
+  Future<T> Function(Map<String, dynamic> data)? parser,
 }) async {
   try {
     final httpResponse = await request();
     if (httpResponse.response.statusCode == HttpStatus.ok) {
       return DataSuccess(
-        data: httpResponse.data,
+        data: parser == null
+            ? httpResponse.data
+            : await parser(httpResponse.data),
         statusCode: httpResponse.response.statusCode!,
       );
     } else {

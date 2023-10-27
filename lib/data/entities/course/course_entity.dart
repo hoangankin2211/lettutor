@@ -56,7 +56,7 @@ class CourseEntity {
     };
   }
 
-  factory CourseEntity.fromJson(Map<String, dynamic> map) {
+  static CourseEntity fromJson(Map<String, dynamic> map) {
     return CourseEntity(
         id: map['id'] as String,
         name: map['name'] != null ? map['name'] as String : null,

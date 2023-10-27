@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             create: (context) => dashboardBloc.courseBloc,
           ),
           BlocProvider(
-            create: (context) => dashboardBloc.courseBloc,
+            create: (context) => dashboardBloc.eBookBloc,
           ),
         ],
         child: CourseScreen(),

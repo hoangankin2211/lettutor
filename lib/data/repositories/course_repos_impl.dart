@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:either_dart/either.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/data_state.dart';
 
@@ -27,12 +28,13 @@ class CourseRepositoryImpl extends CourseRepository {
       String? q,
       String? categoryId}) async {
     final dataState = await getStateOf<CourseResponse>(
-      request: () async => courseService.fetchCoursePage(queries: {
+      request: () => courseService.fetchCoursePage(queries: {
         "page": page,
         "per_page": perPge,
         "q": (q?.isEmpty ?? true) ? null : q,
         "category_id": categoryId,
       }),
+      parser: (data) => compute(CourseResponse.fromJson, data),
     );
 
     if (dataState is DataSuccess) {
@@ -44,7 +46,8 @@ class CourseRepositoryImpl extends CourseRepository {
   @override
   Future<Either<String, List<CourseCategoryEntity>>> getCourseCategory() async {
     final dataState = await getStateOf<ContentCategoryResponse>(
-      request: () async => courseService.getCategoryContent(),
+      request: () => courseService.getCategoryContent(),
+      parser: (data) => compute(ContentCategoryResponse.fromJson, data),
     );
 
     if (dataState is DataSuccess) {
@@ -57,7 +60,8 @@ class CourseRepositoryImpl extends CourseRepository {
   Future<Either<String, CourseDetailEntity>> getCourseDetail(
       {required String id}) async {
     final dataState = await getStateOf<CourseDetailResponse>(
-      request: () async => courseService.getCourseDetail(id: id),
+      request: () => courseService.getCourseDetail(id: id),
+      parser: (data) => compute(CourseDetailResponse.fromJson, data),
     );
 
     if (dataState is DataSuccess && dataState.data!.data != null) {

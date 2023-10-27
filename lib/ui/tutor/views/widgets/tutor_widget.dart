@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/components/extensions/extensions.dart';
@@ -62,7 +63,7 @@ class _TutorWidgetState extends State<TutorWidget> {
           contentPadding: EdgeInsets.zero,
           leading: CircleAvatar(
               radius: 30,
-              foregroundImage: NetworkImage(url),
+              foregroundImage: CachedNetworkImageProvider(url, cacheKey: url),
               onForegroundImageError: (exception, stackTrace) {
                 setState(() {
                   url = "";

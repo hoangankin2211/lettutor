@@ -7,7 +7,7 @@ class TutorResponse {
   TutorResponse(
       {required this.count, required this.tutors, required this.favTutors});
 
-  factory TutorResponse.fromJson(Map<String, dynamic> data) {
+  static TutorResponse fromJson(Map<String, dynamic> data) {
     final cData = data['tutors'];
     if (cData == null) {
       return TutorResponse(

@@ -13,7 +13,7 @@ class CoursePreviewEntity {
     };
   }
 
-  factory CoursePreviewEntity.fromJson(Map<String, dynamic> map) {
+  static CoursePreviewEntity fromJson(Map<String, dynamic> map) {
     return CoursePreviewEntity(
       id: map['id'] as String,
       name: map['name'] as String,

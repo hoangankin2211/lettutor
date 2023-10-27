@@ -18,6 +18,16 @@ class AuthUseCase {
     );
   }
 
+  Future<Either<User, String>> refreshToken(
+      {required String refreshToken, required int timezone}) async {
+    return (await repository.refreshToken(
+            refreshToken: refreshToken, timezone: timezone))
+        .either(
+      (left) => UserMapper.fromEntity(left),
+      (right) => right,
+    );
+  }
+
   Future<bool> logout() async {
     return (await repository.logout());
   }

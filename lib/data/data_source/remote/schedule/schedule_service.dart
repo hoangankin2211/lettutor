@@ -22,18 +22,18 @@ abstract class ScheduleService {
   factory ScheduleService(Dio dio) = _ScheduleService;
 
   @POST(getTutorSchedule)
-  Future<HttpResponse<ScheduleEntity>> getOwnScheduleList();
+  Future<HttpResponse> getOwnScheduleList();
 
   @GET(
       '$getTutorSchedule?tutorId={tutorId}&startTimestamp={sT}&endTimestamp={eT}')
-  Future<HttpResponse<ScheduleResponse>> getScheduleByTutor(
+  Future<HttpResponse> getScheduleByTutor(
     @Path('tutorId') String tutorId,
     @Path('sT') int st,
     @Path('eT') int et,
   );
 
   @GET(getScheduleListUrl)
-  Future<HttpResponse<BookingResponse>> getScheduleListForStudent(
+  Future<HttpResponse> getScheduleListForStudent(
       {@Queries() required Map<String, dynamic> queries});
 
   @POST(branch)
@@ -48,6 +48,5 @@ abstract class ScheduleService {
       {@Path("bookedId") required String id});
 
   @GET("$getNextAppointmentUrl?dateTime={time}")
-  Future<HttpResponse<UpcomingClassResponse>> getNextAppointment(
-      {@Path("time") required int time});
+  Future<HttpResponse> getNextAppointment({@Path("time") required int time});
 }

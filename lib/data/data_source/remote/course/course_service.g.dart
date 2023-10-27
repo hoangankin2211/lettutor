@@ -19,15 +19,15 @@ class _CourseService implements CourseService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<CourseResponse>> fetchCoursePage(
+  Future<HttpResponse<dynamic>> fetchCoursePage(
       {required Map<String, dynamic> queries}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(queries);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<CourseResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -43,20 +43,19 @@ class _CourseService implements CourseService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = CourseResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<CourseDetailResponse>> getCourseDetail(
-      {required String id}) async {
+  Future<HttpResponse<dynamic>> getCourseDetail({required String id}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<CourseDetailResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -72,19 +71,19 @@ class _CourseService implements CourseService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = CourseDetailResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<ContentCategoryResponse>> getCategoryContent() async {
+  Future<HttpResponse<dynamic>> getCategoryContent() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ContentCategoryResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -100,7 +99,7 @@ class _CourseService implements CourseService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ContentCategoryResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

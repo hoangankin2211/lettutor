@@ -19,13 +19,13 @@ class _ScheduleService implements ScheduleService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<ScheduleEntity>> getOwnScheduleList() async {
+  Future<HttpResponse<dynamic>> getOwnScheduleList() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ScheduleEntity>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -41,13 +41,13 @@ class _ScheduleService implements ScheduleService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ScheduleEntity.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<ScheduleResponse>> getScheduleByTutor(
+  Future<HttpResponse<dynamic>> getScheduleByTutor(
     String tutorId,
     int st,
     int et,
@@ -56,8 +56,8 @@ class _ScheduleService implements ScheduleService {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ScheduleResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -73,21 +73,21 @@ class _ScheduleService implements ScheduleService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ScheduleResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<BookingResponse>> getScheduleListForStudent(
+  Future<HttpResponse<dynamic>> getScheduleListForStudent(
       {required Map<String, dynamic> queries}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.addAll(queries);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<BookingResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -103,7 +103,7 @@ class _ScheduleService implements ScheduleService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = BookingResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -198,14 +198,13 @@ class _ScheduleService implements ScheduleService {
   }
 
   @override
-  Future<HttpResponse<UpcomingClassResponse>> getNextAppointment(
-      {required int time}) async {
+  Future<HttpResponse<dynamic>> getNextAppointment({required int time}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<UpcomingClassResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -221,7 +220,7 @@ class _ScheduleService implements ScheduleService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UpcomingClassResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

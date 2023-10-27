@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
@@ -157,7 +158,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           onTap: () {},
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            foregroundImage: avatar != null ? NetworkImage(avatar!) : null,
+            foregroundImage: avatar != null
+                ? CachedNetworkImageProvider(avatar!, cacheKey: avatar!)
+                : null,
             radius: 80,
           ),
         ),

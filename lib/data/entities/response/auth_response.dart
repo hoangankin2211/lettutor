@@ -21,8 +21,8 @@ class AuthResponse {
 
   factory AuthResponse.fromJson(Map<String, dynamic> map) {
     return AuthResponse(
-      user: UserEntity.fromMap(map['user'] as Map<String, dynamic>),
-      tokens: TokenEntity.fromMap(map['tokens'] as Map<String, dynamic>),
+      user: UserEntity.fromJson(map['user'] as Map<String, dynamic>),
+      tokens: TokenEntity.fromJson(map['tokens'] as Map<String, dynamic>),
     );
   }
 

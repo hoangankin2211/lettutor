@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'auth_bloc.dart';
 
 @immutable
@@ -16,6 +15,12 @@ class EmailLoginRequest extends AuthEvent {
 class LogoutAuthenticationRequest extends AuthEvent {}
 
 class InitAuthenticationStatus extends AuthEvent {}
+
+class RefreshTokenRequest extends AuthEvent {
+  final String refreshToken;
+
+  RefreshTokenRequest(this.refreshToken);
+}
 
 class EmailRegisterRequest extends AuthEvent {
   final String email;

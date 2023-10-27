@@ -6,7 +6,7 @@ class FeedbackResponse {
   final List<FeedbackEntity> reviews;
   FeedbackResponse(this.status, this.count, this.reviews);
 
-  factory FeedbackResponse.fromJson(Map<String, dynamic> data) {
+  static FeedbackResponse fromJson(Map<String, dynamic> data) {
     final cData = data['data'];
     if (cData == null) return FeedbackResponse('Error', 0, List.empty());
     return FeedbackResponse(

@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/data_state.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
@@ -66,7 +67,9 @@ class CourseUseCase {
       queries.addAll({"categoryId": categoryId});
     }
     final response = await getStateOf<EBookResponse>(
-        request: () => ebookService.getEbook(queries: queries));
+      request: () => ebookService.getEbook(queries: queries),
+      parser: (data) => compute(EBookResponse.fromJson, data),
+    );
     if (response is DataSuccess && response.data != null) {
       return Right(response.data!);
     }

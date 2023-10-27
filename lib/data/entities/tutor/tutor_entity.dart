@@ -137,7 +137,7 @@ class TutorEntity {
     };
   }
 
-  factory TutorEntity.fromJson(Map<String, dynamic> map) {
+  static TutorEntity fromJson(Map<String, dynamic> map) {
     return TutorEntity(
       id: map['id'] as String,
       level: map['level'] != null ? map['level'] as String : null,

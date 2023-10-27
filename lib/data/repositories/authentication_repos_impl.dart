@@ -5,6 +5,7 @@ import 'package:lettutor/core/components/networking/interceptor/api_token_interc
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/authentication/authentication.dart';
+import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
 
@@ -29,7 +30,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<UserEntity, String>> login(
       String email, String password) async {
-    final state = await getStateOf(
+    final state = await getStateOf<AuthResponse>(
       request: () async {
         return await _authenticationApi.signIn(body: {
           'email': email,
@@ -39,15 +40,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     );
 
     if (state is DataSuccess) {
-      await _appLocalStorage.saveString(
-        accessTokenKey,
-        state.data!.tokens.access.token,
+      await Future.wait(
+        [
+          _appLocalStorage.saveMap(
+            accessTokenKey,
+            state.data!.tokens.toMap(),
+          )
+        ],
       );
-
       return Left(state.data!.user);
     }
-
-    print(state.dioException?.response?.data);
 
     return Right((state.dioException?.response?.data["message"] ??
         (state.dioException!.message) ??
@@ -62,7 +64,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<UserEntity, String>> register(
       String email, String password) async {
-    final state = await getStateOf(
+    final state = await getStateOf<AuthResponse>(
       request: () async {
         return await _authenticationApi.signUp(body: {
           'email': email,
@@ -82,5 +84,36 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
 
     return Right(state.dioException?.message ?? "Error while sign in");
+  }
+
+  @override
+  Future<Either<UserEntity, String>> refreshToken(
+      {required String refreshToken, required int timezone}) async {
+    final state = await getStateOf<AuthResponse>(
+      request: () async {
+        return await _authenticationApi.refreshToken(
+          body: {
+            "refreshToken": refreshToken,
+            "timezone": refreshToken,
+          },
+        );
+      },
+    );
+
+    if (state is DataSuccess) {
+      await Future.wait(
+        [
+          _appLocalStorage.saveMap(
+            accessTokenKey,
+            state.data!.tokens.toMap(),
+          )
+        ],
+      );
+      return Left(state.data!.user);
+    }
+
+    return Right((state.dioException?.response?.data["message"] ??
+        (state.dioException!.message) ??
+        "Error while refresh token"));
   }
 }

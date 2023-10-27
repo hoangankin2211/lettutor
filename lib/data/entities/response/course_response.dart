@@ -6,7 +6,7 @@ class CourseResponse {
   final List<CourseEntity> courses;
   CourseResponse(this.status, this.count, this.courses);
 
-  factory CourseResponse.fromJson(Map<String, dynamic> data) {
+  static CourseResponse fromJson(Map<String, dynamic> data) {
     final cData = data['data'];
     if (cData == null) return CourseResponse('Error', 0, List.empty());
     return CourseResponse(

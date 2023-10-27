@@ -19,7 +19,7 @@ class _FeedbackService implements FeedbackService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<FeedbackResponse>> getReviews(
+  Future<HttpResponse<dynamic>> getReviews(
     String id, {
     required Map<String, dynamic> body,
   }) async {
@@ -28,8 +28,8 @@ class _FeedbackService implements FeedbackService {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<FeedbackResponse>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -45,7 +45,7 @@ class _FeedbackService implements FeedbackService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = FeedbackResponse.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

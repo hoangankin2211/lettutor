@@ -5,30 +5,65 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
+import 'package:lettutor/data/data_source/local/app_local_storage.dart';
+import 'package:lettutor/data/data_source/remote/user/user_service.dart';
+import 'package:lettutor/data/entities/token_entity.dart';
+import 'package:lettutor/domain/mapper/user_mapper.dart';
 import 'package:lettutor/domain/usecases/auth_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 
-import '../../../data/data_source/local/app_local_storage.dart';
 import '../../../domain/models/user.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-@injectable
+@singleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCase authUseCase;
+  final UserService userService;
+  final AppLocalStorage _appLocalStorage;
 
-  AuthBloc(this.authUseCase) : super(const AuthState.unknown()) {
+  AuthBloc(this.authUseCase, this._appLocalStorage, this.userService)
+      : super(const AuthState.unknown()) {
     on<EmailLoginRequest>(_onEmailLoginRequest);
     on<LogoutAuthenticationRequest>(_onLogoutAuthenticationRequest);
     on<InitAuthenticationStatus>(_onInitAuthenticationStatus);
     on<EmailRegisterRequest>(_onEmailRegisterRequest);
+    on<RefreshTokenRequest>(_onRefreshTokenRequest);
   }
 
   FutureOr<void> _onInitAuthenticationStatus(
       InitAuthenticationStatus event, Emitter<AuthState> emit) async {
-    await Future.delayed(const Duration(seconds: 3));
-    emit(const AuthState.unauthenticated(message: ""));
+    final tokenMap = _appLocalStorage.getMap(accessTokenKey);
+
+    if (tokenMap?.isNotEmpty ?? false) {
+      Map<String, dynamic> data = {};
+
+      tokenMap!.forEach((key, value) {
+        data.addAll({key as String: value});
+      });
+      final TokenEntity tokenEntity = TokenEntity.fromJson(data);
+
+      final accessExpiredTime = DateTime.parse(tokenEntity.access.expires);
+
+      if (accessExpiredTime.isBefore(DateTime.now())) {
+        final refreshExpiredTime = DateTime.parse(tokenEntity.refresh.expires);
+
+        if (refreshExpiredTime.isBefore(DateTime.now())) {
+          emit(const AuthState.unauthenticated(
+              message: "Refresh Token has expired"));
+          return;
+        }
+
+        add(RefreshTokenRequest(tokenEntity.refresh.token));
+      } else {
+        emit(
+          AuthState.authenticated(
+            user: UserMapper.fromEntity((await userService.getUserInfo()).data),
+          ),
+        );
+      }
+    }
   }
 
   FutureOr<void> _onEmailLoginRequest(
@@ -61,5 +96,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return emit(const AuthState.unauthenticated(message: "Logout"));
     }
     return emit(const AuthState.unknown());
+  }
+
+  FutureOr<void> _onRefreshTokenRequest(
+      RefreshTokenRequest event, Emitter<AuthState> emit) async {
+    authUseCase
+        .refreshToken(refreshToken: event.refreshToken, timezone: 7)
+        .then(
+          (value) => value.fold(
+            (left) {
+              emit(AuthState.authenticated(user: left));
+            },
+            (right) => emit(
+              AuthState.unauthenticated(message: right),
+            ),
+          ),
+        );
   }
 }

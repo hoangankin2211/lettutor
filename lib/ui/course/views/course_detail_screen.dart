@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/change_notifier.dart';
@@ -196,8 +197,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           if (state is LoadCourseDetailSuccess &&
               state.course?.imageUrl != null &&
               color.value == null) {
-            final ImageProvider imageProvider =
-                NetworkImage(state.course!.imageUrl!);
+            final ImageProvider imageProvider = CachedNetworkImageProvider(
+              state.course!.imageUrl!,
+              cacheKey: state.course!.imageUrl!,
+            );
 
             PaletteGenerator paletteGenerator =
                 await PaletteGenerator.fromImageProvider(imageProvider);

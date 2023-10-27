@@ -32,13 +32,12 @@ class _CourseScreenState extends State<CourseScreen>
     super.build(context);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: context.height * 0.1,
         elevation: 0,
         centerTitle: true,
         backgroundColor: context.theme.scaffoldBackgroundColor,
         title: Row(
           children: [
-            SvgPicture.asset("assets/images/course_icon.svg", height: 80),
+            SvgPicture.asset("assets/images/course_icon.svg", height: 50),
             const SizedBox(width: 10),
             Text(
               'Course',
@@ -53,7 +52,9 @@ class _CourseScreenState extends State<CourseScreen>
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const SizedBox(height: 0),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: CustomNavigatorBar(
@@ -237,6 +238,7 @@ class _ListEBookPageState extends State<ListEBookPage>
                   itemBuilder: (context, index) {
                     final ebookItem = state.data.eBook.elementAt(index);
                     return CourseWidget(
+                      key: ValueKey("${ebookItem.id}_CourseScreen"),
                       onTap: (id) {
                         _launcherURl(ebookItem.fileUrl);
                       },

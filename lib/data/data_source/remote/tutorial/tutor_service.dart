@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:lettutor/data/entities/tutor/tutor_detail_entity.dart';
-import '../../../entities/response/search_tutor_response.dart';
-import '../../../entities/response/tutor_response.dart';
 
 part 'tutor_service.g.dart';
 
@@ -25,7 +24,7 @@ abstract class TutorService {
   factory TutorService(Dio dio) = _TutorService;
 
   @GET('$fetchTutorial?perPage={size}&page={page}')
-  Future<HttpResponse<TutorResponse>> fetchTutorialPage({
+  Future<HttpResponse> fetchTutorialPage({
     @Path('page') required int page,
     @Path("size") required int size,
   });
@@ -35,12 +34,12 @@ abstract class TutorService {
       {@Body() required Map<String, dynamic> body});
 
   @POST(searchTutorApi)
-  Future<HttpResponse<SearchTutorResponse>> searchTutor(
+  Future<HttpResponse> searchTutor(
       {@Body() required Map<String, dynamic> body});
 
   @GET(getTotalTimeApi)
   Future<HttpResponse> getTotalTime();
 
   @GET('$getTutorByIdApi/{id}')
-  Future<HttpResponse<TutorDetailEntity>> getTutorById(@Path('id') String id);
+  Future<HttpResponse> getTutorById(@Path('id') String id);
 }

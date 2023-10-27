@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:either_dart/src/either.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/schedule/schedule_service.dart';
@@ -44,6 +45,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     final response = await getStateOf<BookingResponse>(
       request: () async =>
           scheduleService.getScheduleListForStudent(queries: queries),
+      parser: (data) => compute(BookingResponse.fromJson, data),
     );
     if (response is DataFailed) {
       return Left("Error: ${response.dioException?.message}");
@@ -62,8 +64,10 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   Future<Either<String, UpcomingClassResponse>> getNextAppointment(
       {required DateTime dateTime}) async {
     final response = await getStateOf(
-        request: () => scheduleService.getNextAppointment(
-            time: dateTime.millisecondsSinceEpoch));
+      request: () => scheduleService.getNextAppointment(
+          time: dateTime.millisecondsSinceEpoch),
+      parser: (data) => compute(UpcomingClassResponse.fromJson, data),
+    );
 
     if (response is DataSuccess) {
       if (response.data != null) {
@@ -100,6 +104,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     final dataState = await getStateOf(
       request: () async =>
           scheduleService.getScheduleByTutor(tutorId, from, to),
+      parser: (data) => compute(ScheduleResponse.fromJson, data),
     );
 
     if (dataState is DataSuccess) {

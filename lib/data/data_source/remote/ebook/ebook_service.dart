@@ -14,6 +14,6 @@ abstract class EbookService {
   factory EbookService(Dio dio) = _EbookService;
 
   @GET(getEbookData)
-  Future<HttpResponse<EBookResponse>> getEbook(
+  Future<HttpResponse> getEbook(
       {@Queries() required Map<String, dynamic> queries});
 }

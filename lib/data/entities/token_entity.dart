@@ -14,17 +14,12 @@ class TokenEntity {
     };
   }
 
-  factory TokenEntity.fromMap(Map<String, dynamic> map) {
+  factory TokenEntity.fromJson(Map<String, dynamic> map) {
     return TokenEntity(
       access: TokenInfo.fromMap(map['access'] as Map<String, dynamic>),
       refresh: TokenInfo.fromMap(map['refresh'] as Map<String, dynamic>),
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory TokenEntity.fromJson(String source) =>
-      TokenEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class TokenInfo {
