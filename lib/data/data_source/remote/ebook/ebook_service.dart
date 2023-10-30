@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/data/entities/response/ebook_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'ebook_service.g.dart';

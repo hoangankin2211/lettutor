@@ -1,11 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/data/entities/response/booking_info_response.dart';
-import 'package:lettutor/data/entities/response/upcoming_class_response.dart';
-import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
 import 'package:retrofit/retrofit.dart';
-
-import '../../../entities/response/schedule_response.dart';
 
 part 'schedule_service.g.dart';
 

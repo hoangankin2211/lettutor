@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'course_topic_entity.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first

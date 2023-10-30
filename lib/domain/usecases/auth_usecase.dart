@@ -23,7 +23,7 @@ class AuthUseCase {
     return (await repository.refreshToken(
             refreshToken: refreshToken, timezone: timezone))
         .either(
-      (left) => UserMapper.fromEntity(left),
+      (left) => UserMapper.fromEntity(left.user),
       (right) => right,
     );
   }

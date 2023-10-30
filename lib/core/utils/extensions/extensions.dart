@@ -59,8 +59,21 @@ extension BuildContextExt on BuildContext {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
+      constraints: BoxConstraints(
+          maxHeight: height * 0.6, minHeight: height * 0.4, minWidth: width),
       clipBehavior: Clip.hardEdge,
       builder: builder,
+    );
+  }
+
+  Future<dynamic> showAppDatePicker() {
+    return showDatePicker(
+      context: this,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
+      confirmText: "Select",
+      cancelText: "Cancel",
     );
   }
 }

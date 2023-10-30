@@ -6,7 +6,7 @@ part of 'chores_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getLearnTopicHash() => r'9c38a10c8d13cdc831e5706c442cd391f353c3e7';
+String _$getLearnTopicHash() => r'05498d0f91402da14db959b199d2972cc2507298';
 
 /// See also [getLearnTopic].
 @ProviderFor(getLearnTopic)
@@ -23,7 +23,7 @@ final getLearnTopicProvider =
 
 typedef GetLearnTopicRef = AutoDisposeFutureProviderRef<List<LearnTopics>>;
 String _$getTestPreparationHash() =>
-    r'95eb2c8a1402a0638573d1c88b95c6606ed47d37';
+    r'84bcafb4ca6caadf02f2c275abc8e532c30de242';
 
 /// See also [getTestPreparation].
 @ProviderFor(getTestPreparation)

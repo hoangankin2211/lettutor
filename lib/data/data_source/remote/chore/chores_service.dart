@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chores_service.g.dart';
 
@@ -10,7 +9,7 @@ part 'chores_service.g.dart';
 @RestApi()
 abstract class ChoresService {
   static const String name = 'ChoresService';
-  static const String testPreparation = '/test_preparation';
+  static const String testPreparation = '/test-preparation';
   static const String learnTopic = '/learn-topic';
 
   @factoryMethod

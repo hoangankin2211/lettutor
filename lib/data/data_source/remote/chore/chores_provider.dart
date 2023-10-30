@@ -1,6 +1,3 @@
-import 'package:either_dart/either.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/chore/chores_service.dart';
@@ -15,10 +12,12 @@ part 'chores_provider.g.dart';
 @riverpod
 Future<List<LearnTopics>> getLearnTopic(GetLearnTopicRef ref) async {
   final response = await getStateOf(
-    request: () async => await injector.get<ChoresService>().getLearnTopic(),
+    request: () async => await injector
+        .get<ChoresService>(instanceName: ChoresService.name)
+        .getLearnTopic(),
   );
 
-  return (response.data! as List<dynamic>)
+  return (response.data as List<dynamic>? ?? [])
       .map<LearnTopics>((e) => LearnTopics.fromMap(e))
       .toList();
 }
@@ -27,10 +26,12 @@ Future<List<LearnTopics>> getLearnTopic(GetLearnTopicRef ref) async {
 Future<List<TestPreparation>> getTestPreparation(
     GetTestPreparationRef ref) async {
   final response = await getStateOf(
-    request: () async => await injector.get<ChoresService>().getLearnTopic(),
+    request: () async => await injector
+        .get<ChoresService>(instanceName: ChoresService.name)
+        .getTestPreparation(),
   );
 
-  return (response.data! as List<dynamic>)
+  return (response.data as List<dynamic>? ?? [])
       .map<TestPreparation>((e) =>
           TestPreparationMapper.fromEntity(TestPreparationEntity.fromJson(e)))
       .toList();

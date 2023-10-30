@@ -95,22 +95,36 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
   Widget buildListReviewComponent(List<FeedbackEntity> feedbacks) {
     return HomeItemComponent(
       isPadding: false,
-      trailing: TextButton(
-        onPressed: () {
-          context.showAppModalBottomSheet(
-              builder: (context) => SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: buildListReview(feedbacks)));
-        },
-        child: Text(
-          'Show More',
-          style: context.textTheme.bodyLarge
-              ?.copyWith(color: context.colorScheme.primary),
-        ),
-      ),
+      trailing: feedbacks.isNotEmpty
+          ? TextButton(
+              onPressed: () {
+                context.showAppModalBottomSheet(
+                  builder: (context) => SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: buildListReview(feedbacks),
+                  ),
+                );
+              },
+              child: Text(
+                'Show More',
+                style: context.textTheme.bodyLarge
+                    ?.copyWith(color: context.colorScheme.primary),
+              ),
+            )
+          : null,
       verticalBodyGap: 0,
       title: "Others Review",
-      body: buildListReview(feedbacks, max: 3),
+      body: feedbacks.isNotEmpty
+          ? buildListReview(feedbacks, max: 3)
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Center(
+                child: Text(
+                  "There is not any comment ! Be the first comment on this tutor",
+                  style: context.textTheme.titleMedium,
+                ),
+              ),
+            ),
     );
   }
 

@@ -1,8 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/data/entities/response/content_category_response.dart';
-import 'package:lettutor/data/entities/response/course_detail_response.dart';
-import 'package:lettutor/data/entities/response/course_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'course_service.g.dart';

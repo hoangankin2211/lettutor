@@ -24,7 +24,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   late final TextEditingController _nameController =
       TextEditingController(text: userName);
-  late final TextEditingController _studySchedule = TextEditingController();
   late final ValueNotifier<String?> _countryCode = ValueNotifier(countryCode);
   late final ValueNotifier<String> _birthday = ValueNotifier(birthday);
   late final ValueNotifier<String> _level = ValueNotifier(level);
@@ -40,18 +39,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   String get phone => authBloc.state.user?.phone ?? "";
   String get amount => authBloc.state.user?.walletInfo?.amount ?? "";
   String get level => authBloc.state.user?.level ?? "";
-  List<LearnTopics> get topic => authBloc.state.user?.learnTopics ?? [];
-  late final AsyncValue<List<TestPreparation>> testPreparation =
-      ref.watch(getTestPreparationProvider);
-  late final AsyncValue<List<LearnTopics>> learnTopics =
-      ref.watch(getLearnTopicProvider);
-  @override
-  void initState() {
-    super.initState();
-  }
+
+  List<LearnTopics> get topic => (authBloc.state.user?.learnTopics ?? [])
+    ..addAll(
+      (authBloc.state.user?.testPreparations ?? []).map(
+        (e) => LearnTopics(
+          id: e.id,
+          key: e.key,
+          name: e.name,
+        ),
+      ),
+    );
 
   @override
   Widget build(BuildContext context) {
+    final AsyncValue<List<TestPreparation>> testPreparation =
+        ref.watch(getTestPreparationProvider);
+
+    final AsyncValue<List<LearnTopics>> learnTopics =
+        ref.watch(getLearnTopicProvider);
+
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
       bottomNavigationBar: Padding(
@@ -86,7 +93,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               color: context.textTheme.titleLarge?.color),
         ),
       ),
-      body: _buildBody(),
+      body: _buildBody((learnTopics.value ?? [])
+        ..addAll((testPreparation.value ?? []).map(
+          (e) => LearnTopics(
+            id: e.id,
+            key: e.key,
+            name: e.name,
+          ),
+        ))),
     );
   }
 
@@ -320,7 +334,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(List<LearnTopics> topics) {
     return SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(
@@ -378,16 +392,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         1 => _selectedCountryField(),
                         2 => _levelField(),
                         _ => _topicsField(
-                            topics: (learnTopics.value ?? [])
-                              ..addAll(
-                                (testPreparation.value ?? []).map(
-                                  (e) => LearnTopics(
-                                    id: e.id,
-                                    key: e.key,
-                                    name: e.name,
-                                  ),
-                                ),
-                              ),
+                            topics: topics,
                             topicsSelected: topic,
                           ),
                       }

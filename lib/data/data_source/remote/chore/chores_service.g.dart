@@ -32,7 +32,7 @@ class _ChoresService implements ChoresService {
     )
             .compose(
               _dio.options,
-              '/test_preparation',
+              '/test-preparation',
               queryParameters: queryParameters,
               data: _data,
             )

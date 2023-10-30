@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../../core/utils/networking/networking.dart';

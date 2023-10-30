@@ -109,12 +109,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _onRefreshTokenRequest(
       RefreshTokenRequest event, Emitter<AuthState> emit) async {
-    authUseCase
+    await authUseCase
         .refreshToken(refreshToken: event.refreshToken, timezone: 7)
         .then(
           (value) => value.fold(
             (left) => emit(AuthState.authenticated(user: left)),
-            (right) => emit(AuthState.unauthenticated(message: right)),
+            (right) => emit(const AuthState.unknown()),
           ),
         );
   }

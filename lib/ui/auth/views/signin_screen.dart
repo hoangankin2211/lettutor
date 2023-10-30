@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,9 +7,7 @@ import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/auth/views/signup_screen.dart';
-import 'package:lettutor/ui/auth/views/widgets/custom_scaffold_body.dart';
 import 'package:lettutor/ui/auth/views/widgets/custom_textfield.dart';
-import 'package:logger/logger.dart';
 
 import 'widgets/custom_scaffold_appbar.dart';
 
@@ -160,9 +156,9 @@ class _SignInScreenState extends State<SignInScreen> {
             textInputAction: TextInputAction.send,
             controller: _passwordController,
             ignoreShadow: true,
-            onFieldSubmitted: (v) {
-              _onLogin();
-            },
+            // onFieldSubmitted: (v) {
+            //   _onLogin();
+            // },
           ),
           const SizedBox(height: 8),
           Align(

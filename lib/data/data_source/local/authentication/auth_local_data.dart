@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
-import 'package:lettutor/data/entities/user_entity.dart';
 
 class AuthLocalData {
   final AppLocalStorage _appLocalStorage;

@@ -3,11 +3,13 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lettutor/core/core.dart';
-import 'package:lettutor/core/dependency_injection/di.dart';
-import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/configuration/configuration.dart';
+import 'package:lettutor/core/utils/networking/networking.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
+import 'package:lettutor/data/data_source/remote/authentication/email/email_auth_api.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
-import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:lettutor/data/repositories/authentication_repos_impl.dart';
+import 'package:lettutor/domain/repositories/authentication_repo.dart';
 
 const keyAuthentication = 'Authorization';
 const keyApiKey = 'XApiKey';
@@ -21,7 +23,8 @@ class ApiTokenInterceptor extends Interceptor {
   ApiTokenInterceptor(this._appLocalStorage);
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     final tokenMap = _appLocalStorage.getMap(accessTokenKey);
 
     if (tokenMap?.isNotEmpty ?? false) {
@@ -33,14 +36,33 @@ class ApiTokenInterceptor extends Interceptor {
       if (accessExpiredTime.isBefore(DateTime.now())) {
         final refreshExpiredTime = DateTime.parse(tokenEntity.refresh.expires);
 
-        final authBloc = injector.get<AuthBloc>();
-
         if (refreshExpiredTime.isBefore(DateTime.now())) {
-          // authBloc.add(LogoutAuthenticationRequest());
           return;
         }
+        try {
+          final response = await EmailAuthApi(
+            NetworkService.initializeDio(
+              baseUrl: Configurations.baseUrl,
+              haveApiInterceptor: false,
+            ),
+          ).refreshToken(body: {
+            "refreshToken": tokenEntity.refresh.token,
+            "timezone": 7,
+          });
 
-        authBloc.add(RefreshTokenRequest(tokenEntity.refresh.token));
+          await _appLocalStorage.saveMap(
+            accessTokenKey,
+            response.data.tokens.toMap(),
+          );
+
+          options.headers[keyAuthentication] =
+              '$keyBear ${response.data.tokens.access.token}';
+        } catch (e) {
+          handler.reject(DioException(
+            requestOptions: options,
+            error: e,
+          ));
+        }
       } else {
         options.headers[keyAuthentication] =
             '$keyBear ${tokenEntity.access.token}';

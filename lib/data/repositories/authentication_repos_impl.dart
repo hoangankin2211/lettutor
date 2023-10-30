@@ -87,7 +87,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<UserEntity, String>> refreshToken({
+  Future<Either<AuthResponse, String>> refreshToken({
     required String refreshToken,
     required int timezone,
   }) async {
@@ -111,7 +111,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           )
         ],
       );
-      return Left(state.data!.user);
+      return Left(state.data!);
     }
 
     return Right((state.dioException?.response?.data["message"] ??
