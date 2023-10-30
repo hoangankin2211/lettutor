@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
@@ -15,7 +15,7 @@ import 'package:lettutor/ui/tutor/views/widgets/tutor_video_player.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../../core/components/widgets/ratting_widget_custom.dart';
+import '../../../core/utils/widgets/ratting_widget_custom.dart';
 import '../blocs/tutor_detail_bloc.dart';
 import 'widgets/tutor_info_header.dart';
 

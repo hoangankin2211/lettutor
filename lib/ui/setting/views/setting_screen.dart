@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
-import 'package:lettutor/core/components/widgets/custom_appbar.dart';
-import 'package:lettutor/core/components/widgets/custom_stack_scroll.dart';
+import 'package:lettutor/core/utils/blocs/app_bloc.dart/application_bloc.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 
 import '../../auth/blocs/auth_bloc.dart';

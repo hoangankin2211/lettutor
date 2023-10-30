@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/dashboard/blocs/dashboard_state.dart';

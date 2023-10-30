@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 
 class CustomDropDownButton<T> extends StatelessWidget {
   final double? width;

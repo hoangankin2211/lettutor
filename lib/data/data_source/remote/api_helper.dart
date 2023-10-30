@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../../core/components/networking/networking.dart';
+import '../../../core/utils/networking/networking.dart';
 
 Future<DataState<T>> getStateOf<T>({
   required Future<HttpResponse> Function() request,

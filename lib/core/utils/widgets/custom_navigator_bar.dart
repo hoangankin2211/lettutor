@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor/core/core.dart';
-import 'package:lettutor/ui/course/views/course_screen.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 
 class CustomNavigatorBar extends StatefulWidget {
   const CustomNavigatorBar({super.key, required this.tabs});

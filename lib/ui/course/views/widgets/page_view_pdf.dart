@@ -4,8 +4,8 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 

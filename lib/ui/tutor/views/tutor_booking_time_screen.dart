@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
-import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
 

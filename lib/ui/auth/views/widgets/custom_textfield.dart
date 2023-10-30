@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/core.dart';
 
-import '../../../../core/components/widgets/app_loading_indicator.dart';
+import '../../../../core/utils/widgets/app_loading_indicator.dart';
 
 class TCInputField extends StatefulWidget {
   final bool ignoreShadow;

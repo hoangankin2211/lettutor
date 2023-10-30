@@ -2,11 +2,11 @@
 // import 'package:collection/collection.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_base_clean_architecture/clean_architectures/domain/entities/user/user.dart';
-// import 'package:flutter_base_clean_architecture/core/components/constant/image_const.dart';
-// import 'package:flutter_base_clean_architecture/core/components/extensions/context_extensions.dart';
-// import 'package:flutter_base_clean_architecture/core/components/layout/setting_layout/controller/setting_bloc.dart';
-// import 'package:flutter_base_clean_architecture/core/components/widgets/button_custom.dart';
-// import 'package:flutter_base_clean_architecture/core/components/widgets/image_custom.dart';
+// import 'package:flutter_base_clean_architecture/core/utils/constant/image_const.dart';
+// import 'package:flutter_base_clean_architecture/core/utils/extensions/context_extensions.dart';
+// import 'package:flutter_base_clean_architecture/core/utils/layout/setting_layout/controller/setting_bloc.dart';
+// import 'package:flutter_base_clean_architecture/core/utils/widgets/button_custom.dart';
+// import 'package:flutter_base_clean_architecture/core/utils/widgets/image_custom.dart';
 // import 'package:flutter_base_clean_architecture/generated/l10n.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';

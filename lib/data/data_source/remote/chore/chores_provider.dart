@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lettutor/core/components/networking/data_state.dart';
+import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/chore/chores_service.dart';

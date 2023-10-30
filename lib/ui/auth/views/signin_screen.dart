@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';

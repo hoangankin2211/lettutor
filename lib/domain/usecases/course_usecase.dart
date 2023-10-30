@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/components/networking/data_state.dart';
+import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/ebook/ebook_service.dart';
 import 'package:lettutor/data/entities/response/ebook_response.dart';

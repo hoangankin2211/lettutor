@@ -1,7 +1,7 @@
 //extension
-export 'components/extensions/extensions.dart';
+export 'utils/extensions/extensions.dart';
 
 //route
-export 'components/navigation/routes_location.dart';
+export 'utils/navigation/routes_location.dart';
 
 export 'dependency_injection/di.dart';

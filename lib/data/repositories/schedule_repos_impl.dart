@@ -9,7 +9,7 @@ import 'package:lettutor/data/entities/response/booking_info_response.dart';
 import 'package:lettutor/data/entities/response/schedule_response.dart';
 import 'package:lettutor/data/entities/response/upcoming_class_response.dart';
 
-import '../../core/components/networking/data_state.dart';
+import '../../core/utils/networking/data_state.dart';
 import '../../domain/repositories/schedule_repo.dart';
 
 @Injectable(as: ScheduleRepository)

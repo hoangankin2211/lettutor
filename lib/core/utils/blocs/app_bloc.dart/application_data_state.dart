@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
 
 class ApplicationDataState {
   final AdaptiveThemeMode themeMode;

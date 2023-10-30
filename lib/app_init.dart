@@ -7,15 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/app.dart';
-import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
+import 'package:lettutor/core/utils/blocs/app_bloc.dart/application_bloc.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
-import 'package:lettutor/core/components/navigation/routes_service.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/navigation/routes_service.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
-import 'core/components/blocs/app_bloc_observer.dart';
-import 'core/components/configuration/configuration.dart';
+import 'core/utils/blocs/app_bloc_observer.dart';
+import 'core/utils/configuration/configuration.dart';
 
 class AppBuilder {
   static final appNavigationKey = GlobalKey<NavigatorState>();

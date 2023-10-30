@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
-import 'core/components/blocs/app_bloc.dart/application_bloc.dart';
+import 'core/utils/blocs/app_bloc.dart/application_bloc.dart';
 import 'generated/l10n.dart';
 import 'ui/auth/blocs/auth_status.dart';
 

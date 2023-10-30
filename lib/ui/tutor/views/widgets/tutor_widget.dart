@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 
 import 'specialties_component.dart';
 

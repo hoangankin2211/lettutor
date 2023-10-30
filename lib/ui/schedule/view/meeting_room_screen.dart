@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
-import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/domain/models/models.dart';

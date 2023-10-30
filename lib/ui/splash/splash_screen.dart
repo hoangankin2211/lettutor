@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 class SplashScreen extends StatelessWidget {

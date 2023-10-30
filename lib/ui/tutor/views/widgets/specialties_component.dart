@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 
 class SpecialtiesComponent extends StatelessWidget {
   const SpecialtiesComponent({

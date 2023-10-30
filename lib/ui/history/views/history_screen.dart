@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/ui/history/views/widgets/history_widget.dart';
 import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
 
-import '../../../core/components/widgets/infinity_scroll_view.dart';
+import '../../../core/utils/widgets/infinity_scroll_view.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});

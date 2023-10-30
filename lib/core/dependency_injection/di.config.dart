@@ -52,8 +52,8 @@ import '../../ui/dashboard/blocs/dashboard_bloc.dart' as _i40;
 import '../../ui/schedule/bloc/schedule_bloc.dart' as _i34;
 import '../../ui/tutor/blocs/tutor_bloc.dart' as _i35;
 import '../../ui/tutor/blocs/tutor_detail_bloc.dart' as _i36;
-import '../components/blocs/app_bloc.dart/application_bloc.dart' as _i3;
-import '../components/navigation/routes_service.dart' as _i8;
+import '../utils/blocs/app_bloc.dart/application_bloc.dart' as _i3;
+import '../utils/navigation/routes_service.dart' as _i8;
 import 'module.dart' as _i41;
 
 // initializes the registration of main-scope dependencies inside of GetIt

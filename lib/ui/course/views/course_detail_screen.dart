@@ -5,15 +5,15 @@ import 'package:flutter/src/foundation/change_notifier.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/domain/models/course/course.dart';
 import 'package:lettutor/ui/course/blocs/course_detail_bloc.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
 import 'package:palette_generator/palette_generator.dart';
 
-import '../../../core/components/widgets/custom_appbar.dart';
-import '../../../core/components/widgets/custom_stack_scroll.dart';
+import '../../../core/utils/widgets/custom_appbar.dart';
+import '../../../core/utils/widgets/custom_stack_scroll.dart';
 
 class CourseDetailScreen extends StatefulWidget {
   const CourseDetailScreen({

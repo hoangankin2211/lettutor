@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
-import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
+import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/domain/models/course/course_detail.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
 import 'package:lettutor/ui/course/blocs/ebook_state.dart';
@@ -13,8 +13,8 @@ import 'package:lettutor/ui/course/views/widgets/course_search_bar.dart';
 import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../core/components/widgets/app_loading_indicator.dart';
-import '../../../core/components/widgets/custom_navigator_bar.dart';
+import '../../../core/utils/widgets/app_loading_indicator.dart';
+import '../../../core/utils/widgets/custom_navigator_bar.dart';
 import '../../../core/core.dart';
 import '../blocs/course_bloc.dart';
 

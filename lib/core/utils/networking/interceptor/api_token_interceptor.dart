@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';

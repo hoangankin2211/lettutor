@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_info_header.dart';
 
 import '../../../../domain/models/tutor/tutor.dart';

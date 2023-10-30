@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/widgets/ratting_widget_custom.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/ratting_widget_custom.dart';
 import 'package:lettutor/ui/tutor/views/tutor_detail_screen.dart';
 
 class TutorInfoHeader extends StatefulWidget {

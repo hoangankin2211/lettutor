@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/data/data_source/remote/chore/chores_provider.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
+import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/authentication/authentication.dart';
@@ -9,7 +9,7 @@ import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
 
-import '../../core/components/networking/data_state.dart';
+import '../../core/utils/networking/data_state.dart';
 import '../../domain/repositories/repositories.dart';
 
 @Injectable(as: AuthenticationRepository)

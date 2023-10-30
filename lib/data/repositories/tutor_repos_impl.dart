@@ -1,7 +1,7 @@
 import 'package:either_dart/src/either.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/components/networking/data_state.dart';
+import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/review/feedback_service.dart';

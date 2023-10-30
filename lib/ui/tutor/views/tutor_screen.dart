@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/extensions/extensions.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
-import 'package:lettutor/core/components/widgets/app_loading_indicator.dart';
-import 'package:lettutor/core/components/widgets/infinity_scroll_view.dart';
+import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/domain/models/tutor/tutor.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';

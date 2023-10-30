@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/components/widgets/elevated_border_button.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:timer_count_down/timer_controller.dart';

@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/app_init.dart';
-import 'package:lettutor/core/components/navigation/error_screen.dart';
-import 'package:lettutor/core/components/navigation/routes.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
+import 'package:lettutor/core/utils/navigation/error_screen.dart';
+import 'package:lettutor/core/utils/navigation/routes.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
 
 @injectable
 class RouteService {
