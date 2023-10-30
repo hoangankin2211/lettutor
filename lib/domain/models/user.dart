@@ -2,48 +2,48 @@
 import 'package:lettutor/data/entities/user_entity.dart';
 
 class User {
-  final String id;
-  final String email;
-  final String name;
-  final String avatar;
-  final String country;
-  final String phone;
-  final List<String> roles;
-  final String language;
-  final String birthday;
-  final bool isActivated;
-  final WalletInfo walletInfo;
-  final List<String> courses;
-  final String requireNote;
-  final String level;
-  final List<LearnTopics> learnTopics;
-  final List<TestPreparation> testPreparations;
-  final bool isPhoneActivated;
-  final int timezone;
-  final String studySchedule;
-  final bool canSendMessage;
+  final String? id;
+  final String? email;
+  final String? name;
+  final String? avatar;
+  final String? country;
+  final String? phone;
+  final List<String>? roles;
+  final String? language;
+  final String? birthday;
+  final bool? isActivated;
+  final WalletInfo? walletInfo;
+  final List<String>? courses;
+  final String? requireNote;
+  final String? level;
+  final List<LearnTopics>? learnTopics;
+  final List<TestPreparation>? testPreparations;
+  final bool? isPhoneActivated;
+  final int? timezone;
+  final String? studySchedule;
+  final bool? canSendMessage;
 
   User({
-    required this.id,
-    required this.email,
-    required this.name,
-    required this.avatar,
-    required this.country,
-    required this.phone,
-    required this.roles,
-    required this.language,
-    required this.birthday,
-    required this.isActivated,
-    required this.walletInfo,
-    required this.courses,
-    required this.requireNote,
-    required this.level,
-    required this.learnTopics,
-    required this.testPreparations,
-    required this.isPhoneActivated,
-    required this.timezone,
-    required this.studySchedule,
-    required this.canSendMessage,
+    this.id,
+    this.email,
+    this.name,
+    this.avatar,
+    this.country,
+    this.phone,
+    this.roles,
+    this.language,
+    this.birthday,
+    this.isActivated,
+    this.walletInfo,
+    this.courses,
+    this.requireNote,
+    this.level,
+    this.learnTopics,
+    this.testPreparations,
+    this.isPhoneActivated,
+    this.timezone,
+    this.studySchedule,
+    this.canSendMessage,
   });
 
   User copyWith({
@@ -130,12 +130,12 @@ class WalletInfo {
   final String updatedAt;
   final int bonus;
   WalletInfo({
-    required this.id,
-    required this.userId,
+    this.id = "",
+    this.userId = "",
     required this.amount,
     required this.isBlocked,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt = "",
+    this.updatedAt = "",
     required this.bonus,
   });
 

@@ -4,7 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/components/extensions/extensions.dart';
 import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/user/user_service.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
@@ -37,32 +39,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final tokenMap = _appLocalStorage.getMap(accessTokenKey);
 
     if (tokenMap?.isNotEmpty ?? false) {
-      Map<String, dynamic> data = {};
+      // Map<String, dynamic> data = {};
 
-      tokenMap!.forEach((key, value) {
-        data.addAll({key as String: value});
-      });
-      final TokenEntity tokenEntity = TokenEntity.fromJson(data);
+      try {
+        final TokenEntity tokenEntity =
+            TokenEntity.fromJson(tokenMap!.convertMapDynamicToString());
 
-      final accessExpiredTime = DateTime.parse(tokenEntity.access.expires);
+        final accessExpiredTime = DateTime.parse(tokenEntity.access.expires);
 
-      if (accessExpiredTime.isBefore(DateTime.now())) {
-        final refreshExpiredTime = DateTime.parse(tokenEntity.refresh.expires);
+        if (accessExpiredTime.isBefore(DateTime.now())) {
+          final refreshExpiredTime =
+              DateTime.parse(tokenEntity.refresh.expires);
 
-        if (refreshExpiredTime.isBefore(DateTime.now())) {
-          emit(const AuthState.unauthenticated(
-              message: "Refresh Token has expired"));
-          return;
+          if (refreshExpiredTime.isBefore(DateTime.now())) {
+            emit(const AuthState.unauthenticated(
+                message: "Refresh Token has expired"));
+            return;
+          }
+
+          add(RefreshTokenRequest(tokenEntity.refresh.token));
+        } else {
+          emit(
+            AuthState.authenticated(
+              user: UserMapper.fromUserInfoEntity(
+                  (await userService.getUserInfo()).data.user),
+            ),
+          );
         }
-
-        add(RefreshTokenRequest(tokenEntity.refresh.token));
-      } else {
-        emit(
-          AuthState.authenticated(
-            user: UserMapper.fromEntity((await userService.getUserInfo()).data),
-          ),
-        );
+      } catch (e) {
+        logger.d(e.toString());
+        emit(AuthState.unauthenticated(message: e.toString()));
       }
+    } else {
+      emit(const AuthState.unauthenticated(message: ""));
     }
   }
 
@@ -104,12 +113,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         .refreshToken(refreshToken: event.refreshToken, timezone: 7)
         .then(
           (value) => value.fold(
-            (left) {
-              emit(AuthState.authenticated(user: left));
-            },
-            (right) => emit(
-              AuthState.unauthenticated(message: right),
-            ),
+            (left) => emit(AuthState.authenticated(user: left)),
+            (right) => emit(AuthState.unauthenticated(message: right)),
           ),
         );
   }

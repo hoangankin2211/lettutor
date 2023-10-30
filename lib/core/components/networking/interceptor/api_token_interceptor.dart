@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
@@ -20,11 +21,11 @@ class ApiTokenInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final tokenMap =
-        _appLocalStorage.getMap(accessTokenKey) as Map<String, dynamic>?;
+    final tokenMap = _appLocalStorage.getMap(accessTokenKey);
 
     if (tokenMap?.isNotEmpty ?? false) {
-      final TokenEntity tokenEntity = TokenEntity.fromJson(tokenMap!);
+      final TokenEntity tokenEntity =
+          TokenEntity.fromJson(tokenMap!.convertMapDynamicToString());
 
       final accessExpiredTime = DateTime.parse(tokenEntity.access.expires);
 
@@ -34,7 +35,7 @@ class ApiTokenInterceptor extends Interceptor {
         final authBloc = injector.get<AuthBloc>();
 
         if (refreshExpiredTime.isBefore(DateTime.now())) {
-          authBloc.add(LogoutAuthenticationRequest());
+          // authBloc.add(LogoutAuthenticationRequest());
           return;
         }
 

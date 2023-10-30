@@ -54,13 +54,13 @@ class WalletInfoEntity {
 
   factory WalletInfoEntity.fromMap(Map<String, dynamic> map) {
     return WalletInfoEntity(
-      id: map['id'] as String,
-      userId: map['userId'] as String,
+      id: map['id'] as String? ?? "",
+      userId: map['userId'] as String? ?? "",
       amount: map['amount'] as String,
       isBlocked: map['isBlocked'] as bool,
-      createdAt: map['createdAt'] as String,
-      updatedAt: map['updatedAt'] as String,
-      bonus: map['bonus'] as int,
+      createdAt: map['createdAt'] as String? ?? "",
+      updatedAt: map['updatedAt'] as String? ?? "",
+      bonus: map['bonus'] as int? ?? 0,
     );
   }
 

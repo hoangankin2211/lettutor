@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +38,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   String? get avatar => authBloc.state.user?.avatar;
   String get countryCode => authBloc.state.user?.country ?? "";
   String get phone => authBloc.state.user?.phone ?? "";
-  String get amount => authBloc.state.user?.walletInfo.amount ?? "";
+  String get amount => authBloc.state.user?.walletInfo?.amount ?? "";
   String get level => authBloc.state.user?.level ?? "";
   List<LearnTopics> get topic => authBloc.state.user?.learnTopics ?? [];
   late final AsyncValue<List<TestPreparation>> testPreparation =

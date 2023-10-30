@@ -68,3 +68,20 @@ extension BuildContextExt on BuildContext {
 extension CustomTextTheme on TextStyle {
   TextStyle get boldTextTheme => copyWith(fontWeight: FontWeight.bold);
 }
+
+extension ConvertMap on Map {
+  Map<String, dynamic> convertMapDynamicToString() {
+    Map<String, dynamic> outputMap = {};
+
+    forEach((key, value) {
+      if (key is String) {
+        outputMap[key] = value;
+      } else {
+        // Convert the key to a string before adding to the output map.
+        outputMap[key.toString()] = value;
+      }
+    });
+
+    return outputMap;
+  }
+}

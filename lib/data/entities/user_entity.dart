@@ -138,7 +138,7 @@ class UserEntity {
       walletInfo:
           WalletInfoEntity.fromMap(map['walletInfo'] as Map<String, dynamic>),
       courses: List<String>.from(
-          (map['courses'] as List<dynamic>).map((e) => e as String)),
+          (map['courses'] as List<dynamic>? ?? []).map((e) => e as String)),
       requireNote: map['requireNote'] as String,
       level: map['level'] as String,
       learnTopics: List<LearnTopics>.from(

@@ -75,9 +75,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     );
 
     if (state is DataSuccess) {
-      await _appLocalStorage.saveString(
+      await _appLocalStorage.saveMap(
         accessTokenKey,
-        state.data!.tokens.access.token,
+        state.data!.tokens.toMap(),
       );
 
       return Left(state.data!.user);
@@ -87,8 +87,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<UserEntity, String>> refreshToken(
-      {required String refreshToken, required int timezone}) async {
+  Future<Either<UserEntity, String>> refreshToken({
+    required String refreshToken,
+    required int timezone,
+  }) async {
     final state = await getStateOf<AuthResponse>(
       request: () async {
         return await _authenticationApi.refreshToken(
