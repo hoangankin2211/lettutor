@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/app_init.dart';
+import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/navigation/error_screen.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
@@ -35,7 +36,7 @@ final routes = [
           return TutorDetailScreen(tutorId: tutorId);
         }
       }
-      return const ErrorScreen(text: "Can not open this tutor profile detail");
+      return ErrorScreen(text: context.l10n.notOpenTutorProfile);
     },
   ),
   GoRoute(
@@ -67,7 +68,7 @@ final routes = [
               return PdfViewerPage(pdfUrl: pdfUrl);
             }
           }
-          return const ErrorScreen(text: "No pdf found");
+          return ErrorScreen(text: context.l10n.noPdfFound);
         },
       ),
     ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lettutor/core/core.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -169,12 +170,12 @@ class _LetTutorVideoPlayerState extends State<LetTutorVideoPlayer> {
         ? const SizedBox.shrink()
         : Container(
             color: Colors.black26,
-            child: const Center(
+            child: Center(
               child: Icon(
                 Icons.play_arrow,
                 color: Colors.white,
                 size: 100.0,
-                semanticLabel: 'Play',
+                semanticLabel: context.l10n.play,
               ),
             ),
           );

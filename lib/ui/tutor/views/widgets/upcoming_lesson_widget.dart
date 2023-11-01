@@ -51,10 +51,13 @@ class _UpComingWidgetState extends State<UpComingWidget>
           ...[
             header,
             hours.toString(),
-            ' hour and ',
+            ' ${context.l10n.hours} ${context.l10n.and} ',
             minutes.toString(),
-            ' minute ',
-            if (seconds != null) ...[seconds.toString(), ' seconds.'],
+            ' ${context.l10n.minutes} ',
+            if (seconds != null) ...[
+              seconds.toString(),
+              ' ${context.l10n.minutes}.'
+            ],
           ].asMap().entries.map((entry) {
             final textStyle = TextStyle(
               fontWeight:
@@ -111,7 +114,7 @@ class _UpComingWidgetState extends State<UpComingWidget>
             if (widget.nextClass == null)
               Flexible(
                 child: Text(
-                  "You have no upcoming lesson",
+                  context.l10n.noUpcomingLesson,
                   style: context.textTheme.titleMedium?.copyWith(
                     color: context.colorScheme.onPrimary,
                   ),
@@ -123,7 +126,7 @@ class _UpComingWidgetState extends State<UpComingWidget>
                   children: [
                     const Spacer(flex: 3),
                     Text(
-                      "Upcoming Lesson",
+                      context.l10n.upcomingLesson,
                       style: context.textTheme.titleMedium
                           ?.copyWith(
                             color: context.colorScheme.onPrimary,
@@ -165,7 +168,7 @@ class _UpComingWidgetState extends State<UpComingWidget>
                       },
                       backgroundColor: context.theme.cardColor,
                       child: Text(
-                        "Go to meeting",
+                        context.l10n.goToMeeting,
                         style: context.textTheme.titleMedium?.boldTextTheme
                             .copyWith(color: context.theme.primaryColor),
                       ),
@@ -190,7 +193,7 @@ class _UpComingWidgetState extends State<UpComingWidget>
                             hours,
                             minutes,
                             seconds,
-                            header: 'Your next class will begin in \n',
+                            header: '${context.l10n.nextClassWillBeginIn} \n',
                           );
                         },
                         interval: const Duration(milliseconds: 100),
@@ -202,7 +205,7 @@ class _UpComingWidgetState extends State<UpComingWidget>
                           hours,
                           minutes,
                           null,
-                          header: "Your total lesson time is ",
+                          header: "${context.l10n.yourTotalLessonTime} ",
                         ),
                       ),
                     ],

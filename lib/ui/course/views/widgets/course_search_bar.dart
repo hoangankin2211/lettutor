@@ -73,7 +73,7 @@ class _CourseSearchBarState extends State<CourseSearchBar> {
             },
             decoration: InputDecoration(
               isDense: true,
-              hintText: "Search",
+              hintText: context.l10n.search,
               filled: true,
               iconColor: context.theme.hintColor,
               prefixIcon: const Icon(CupertinoIcons.search),

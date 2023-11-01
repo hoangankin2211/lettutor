@@ -56,8 +56,7 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
 
   Widget _buildEmptyAlert() {
     return Center(
-      child: Text("Don't have any schedule booking in this date range",
-          style: context.textTheme.bodyLarge),
+      child: Text(context.l10n.emptyAlert, style: context.textTheme.bodyLarge),
     );
   }
 
@@ -84,7 +83,7 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
               onPressed: context.pop,
             ),
             title: Text(
-              "Tutor Free Booking Time",
+              context.l10n.tutorFreeBookingTime,
               style: context.textTheme.titleLarge?.boldTextTheme
                   .copyWith(color: context.colorScheme.onPrimary),
             ),
@@ -191,7 +190,7 @@ class BookingItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Date:  ",
+                      "${context.l10n.Date}:  ",
                       style: titleMedium?.boldTextTheme,
                     ),
                     Text(
@@ -202,7 +201,8 @@ class BookingItem extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("From:", style: titleMedium?.boldTextTheme),
+                    Text("${context.l10n.from}:",
+                        style: titleMedium?.boldTextTheme),
                     const SizedBox(width: 5),
                     Text(from, style: bodyLarge),
                     const SizedBox(width: 10),
@@ -212,7 +212,8 @@ class BookingItem extends StatelessWidget {
                       size: 30,
                     ),
                     const SizedBox(width: 10),
-                    Text("To:", style: titleMedium?.boldTextTheme),
+                    Text("${context.l10n.to}:",
+                        style: titleMedium?.boldTextTheme),
                     const SizedBox(width: 5),
                     Text(to, style: bodyLarge),
                   ],
@@ -228,7 +229,7 @@ class BookingItem extends StatelessWidget {
               child: isLoading
                   ? const AppLoadingIndicator(radius: 15)
                   : Text(
-                      "Book",
+                      context.l10n.bookTutor,
                       style:
                           context.textTheme.bodyLarge?.boldTextTheme.copyWith(
                         color: context.colorScheme.primary,

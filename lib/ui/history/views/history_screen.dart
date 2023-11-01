@@ -128,7 +128,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                           Row(
                             children: [
                               Text(
-                                'History',
+                                context.l10n.history,
                                 style: context
                                     .textTheme.headlineMedium?.boldTextTheme
                                     .copyWith(
@@ -146,7 +146,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                                 },
                                 constraints: const BoxConstraints(),
                                 splashRadius: 20,
-                                icon: Icon(Icons.arrow_drop_down),
+                                icon: const Icon(Icons.arrow_drop_down),
                               ),
                             ],
                           ),
@@ -165,7 +165,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                                 ),
                                 Expanded(
                                   child: Text(
-                                    "The following is a list of lessons you have attended\nYou can review the details of the lessons you have attended",
+                                    context.l10n.historyScreen,
                                     style: context.textTheme.bodyLarge,
                                   ),
                                 ),

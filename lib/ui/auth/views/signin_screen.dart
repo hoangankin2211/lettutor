@@ -46,19 +46,19 @@ class _SignInScreenState extends State<SignInScreen> {
 
   String? validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Email is required';
+      return context.l10n.emailRequired;
     } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
         .hasMatch(value)) {
-      return 'Please enter a valid email address';
+      return context.l10n.pleaseEnterAddress;
     }
     return null;
   }
 
   String? validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Password is required';
+      return context.l10n.passwordRequired;
     } else if (value.length < 6) {
-      return 'Password must be at least 8 characters long';
+      return context.l10n.passwordCharactersLong;
     }
     return null;
   }
@@ -81,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
               fontWeight: FontWeight.normal,
             ),
             children: [
-              const TextSpan(text: 'Welcome to '),
+              TextSpan(text: context.l10n.welcomeTo),
               TextSpan(
                 text: 'LetTutor'.toUpperCase(),
                 style: context.textTheme.titleMedium?.copyWith(
@@ -94,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         const SizedBox(height: 15),
         Text(
-          'Sign In',
+          context.l10n.signIn,
           style: context.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -113,7 +113,7 @@ class _SignInScreenState extends State<SignInScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Enter your username or email address',
+            context.l10n.entUsernameEmail,
             style: context.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -125,7 +125,7 @@ class _SignInScreenState extends State<SignInScreen> {
             autocorrect: false,
             controller: _emailController,
             enableSuggestions: false,
-            hintText: 'Username or email address',
+            hintText: context.l10n.usernameEmail,
             clearTextIcon: Icon(Icons.close),
             focusNode: _focusUsernameEmail,
             borderRadius: 5,
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Enter your Password',
+            context.l10n.enterPassword,
             style: context.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -166,7 +166,7 @@ class _SignInScreenState extends State<SignInScreen> {
             child: GestureDetector(
               onTap: () {},
               child: Text(
-                'Forgot Password',
+                context.l10n.forgotPassword,
                 style: context.textTheme.bodyMedium?.copyWith(
                   color: context.theme.primaryColor,
                 ),
@@ -187,7 +187,7 @@ class _SignInScreenState extends State<SignInScreen> {
         children: [
           buildSignInOptionButton(
             "assets/images/ic_google.svg",
-            'Sign in with Google',
+            context.l10n.signInGoogle,
           ),
           const SizedBox(
             height: 16,
@@ -195,14 +195,14 @@ class _SignInScreenState extends State<SignInScreen> {
           if (Platform.isIOS)
             buildSignInOptionButton(
               "assets/images/ic_apple.svg",
-              'Sign in with Apple',
+              context.l10n.signInApple,
             ),
           SizedBox(
             height: Platform.isIOS ? 16 : 0,
           ),
           buildSignInOptionButton(
             "assets/images/ic_facebook.svg",
-            'Sign in with Facebook',
+            context.l10n.signInFace,
           ),
           const SizedBox(
             height: 16,
@@ -219,9 +219,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   color: context.theme.hintColor,
                 ),
                 children: [
-                  const TextSpan(text: 'No Account ? '),
+                  TextSpan(text: context.l10n.noAccount),
                   TextSpan(
-                    text: 'Sign up',
+                    text: context.l10n.signUp,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: context.colorScheme.primary,
                     ),
@@ -241,7 +241,7 @@ class _SignInScreenState extends State<SignInScreen> {
       child: TCBottomButton(
         isLoading: authState.isLoading,
         color: context.colorScheme.primary,
-        title: 'Sign In',
+        title: context.l10n.signIn,
         onPressed: _onLogin,
       ),
     );

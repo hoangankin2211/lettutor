@@ -62,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fontWeight: FontWeight.normal,
                 ),
                 children: [
-                  TextSpan(text: 'Welcome to '),
+                  TextSpan(text: context.l10n.welcomeTo),
                   TextSpan(
                     text: 'LeTutor'.toUpperCase(),
                     style: context.textTheme.titleMedium?.copyWith(
@@ -75,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Create Account',
+              context.l10n.createAccount,
               style: context.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -97,7 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           const SizedBox(height: 16),
           Text(
-            'Email address',
+            context.l10n.emailAddress,
             style: context.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -109,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             autocorrect: false,
             controller: _emailController,
             enableSuggestions: false,
-            hintText: 'Email address',
+            hintText: context.l10n.emailAddress,
             focusNode: _focusEmail,
             borderRadius: 5,
             textInputAction: TextInputAction.next,
@@ -121,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Your password',
+            context.l10n.yourPassword,
             style: context.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w500,
             ),
@@ -133,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             autocorrect: false,
             controller: _passwordController,
             enableSuggestions: false,
-            hintText: 'Password',
+            hintText: context.l10n.password,
             focusNode: _focusPassword,
             borderRadius: 5,
             textInputAction: TextInputAction.next,
@@ -156,7 +156,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Flexible(
       child: TCBottomButton(
         color: context.colorScheme.primary,
-        title: 'Create account',
+        title: context.l10n.createAccount,
         onPressed: () {
           BlocProvider.of<AuthBloc>(context).add(EmailRegisterRequest(
             email: _emailController.text,
@@ -215,10 +215,10 @@ class TCBottomButton extends StatelessWidget {
               )
             : Text(
                 title.toUpperCase(),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
       ),
     );

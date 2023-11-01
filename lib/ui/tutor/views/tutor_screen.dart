@@ -76,7 +76,7 @@ class _TutorScreenState extends State<TutorScreen>
                     tutorBloc.loadTutor();
                   },
                   child: Text(
-                    'Find A Tutor',
+                    context.l10n.findATutor,
                     style: context.textTheme.headlineSmall?.boldTextTheme,
                   ),
                 ),

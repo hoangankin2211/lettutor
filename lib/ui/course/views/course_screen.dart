@@ -40,13 +40,13 @@ class _CourseScreenState extends State<CourseScreen>
             SvgPicture.asset("assets/images/course_icon.svg", height: 50),
             const SizedBox(width: 10),
             Text(
-              'Course',
+              context.l10n.courses,
               style: context.textTheme.headlineMedium?.boldTextTheme
                   .copyWith(color: context.textTheme.bodyLarge?.color),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.arrow_drop_down),
+              icon: const Icon(Icons.arrow_drop_down),
             ),
           ],
         ),
@@ -55,13 +55,12 @@ class _CourseScreenState extends State<CourseScreen>
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(height: 0),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CustomNavigatorBar(
               tabs: [
-                "Course",
+                context.l10n.courses,
                 "E-Book",
-                "Interactive",
               ],
             ),
           ),
@@ -210,7 +209,8 @@ class _ListEBookPageState extends State<ListEBookPage>
     if (ebookUrl?.isNotEmpty ?? false) {
       final Uri url = Uri.parse(ebookUrl!);
       if (!await launchUrl(url)) {
-        throw Exception("Could not launch url $url");
+        // ignore: use_build_context_synchronously
+        throw Exception("${context.l10n.couldNotLaunchUrl} $url");
       }
     }
   }
@@ -309,8 +309,8 @@ class _FilterSheetState extends State<FilterSheet> {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 30)),
-      confirmText: "Select",
-      cancelText: "Cancel",
+      confirmText: context.l10n.select,
+      cancelText: context.l10n.cancel,
     ).then((value) {
       setState(() {
         selectedDate = value ?? selectedDate;
@@ -335,7 +335,7 @@ class _FilterSheetState extends State<FilterSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Select your tutor's national",
+              context.l10n.selectTutorNational,
               style: context.textTheme.titleMedium?.boldTextTheme,
             ),
             DropdownMenu<National>(
@@ -354,14 +354,14 @@ class _FilterSheetState extends State<FilterSheet> {
                   });
                 }
               },
-              dropdownMenuEntries: const [
+              dropdownMenuEntries: [
                 DropdownMenuEntry(
                   value: National.vietnam,
-                  label: "Vietnamese Tutor",
+                  label: context.l10n.vietnameseTutor,
                 ),
                 DropdownMenuEntry(
                   value: National.england,
-                  label: "Native English Tutor",
+                  label: context.l10n.nativeEnglishTutor,
                 ),
               ],
               label: Text(
@@ -371,7 +371,7 @@ class _FilterSheetState extends State<FilterSheet> {
               leadingIcon: Icon(Icons.location_pin),
             ),
             Text(
-              "Select Available tutoring time",
+              context.l10n.selectAvailableTutoringTime,
               style: context.textTheme.titleMedium?.boldTextTheme,
             ),
             ElevatedButton.icon(
@@ -390,7 +390,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
               label: Text(
                 selectedDate == null
-                    ? "Select Date"
+                    ? context.l10n.selectDate
                     : DateFormat().add_yMd().format(selectedDate!),
                 style: context.textTheme.bodyLarge,
               ),
@@ -420,7 +420,7 @@ class _FilterSheetState extends State<FilterSheet> {
                   ),
                   label: Text(
                     startTime == null
-                        ? "Select Start Time"
+                        ? context.l10n.selectStartTime
                         : "${startTime!.hour}:${startTime!.minute}",
                     style: context.textTheme.bodyLarge,
                   ),
@@ -452,7 +452,7 @@ class _FilterSheetState extends State<FilterSheet> {
                   ),
                   label: Text(
                     endTime == null
-                        ? "Select End Time"
+                        ? context.l10n.selectEndTime
                         : "${endTime!.hour}:${endTime!.minute}",
                     style: context.textTheme.bodyLarge,
                   ),
@@ -460,7 +460,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ],
             ),
             Text(
-              "Select Tutor Tags",
+              context.l10n.selectTutorTag,
               style: context.textTheme.titleMedium?.boldTextTheme,
             ),
             Wrap(

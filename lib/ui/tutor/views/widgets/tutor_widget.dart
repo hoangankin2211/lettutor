@@ -119,7 +119,7 @@ class _TutorWidgetState extends State<TutorWidget> {
                 )
               else
                 Text(
-                  "No review yet",
+                  context.l10n.noReviewYet,
                   style: context.textTheme.bodyLarge?.copyWith(
                     color: context.theme.disabledColor,
                     fontWeight: FontWeight.w500,
@@ -176,7 +176,7 @@ class _TutorWidgetState extends State<TutorWidget> {
               ),
               const SizedBox(width: 5),
               Text(
-                "Book",
+                context.l10n.book,
                 style: context.textTheme.bodyMedium
                     ?.copyWith(color: context.theme.primaryColor),
               ),

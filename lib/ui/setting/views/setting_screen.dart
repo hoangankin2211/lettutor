@@ -33,11 +33,22 @@ class _SettingScreenState extends State<SettingScreen> {
       : Icons.light_mode;
 
   int selectedLanguage = 0;
-  List<String> language = ["English", "Vietnamese"];
+
+  List<String> get language => [
+        context.l10n.english,
+        context.l10n.vietnamese,
+      ];
+
   String languageSelection() => language.elementAt(selectedLanguage);
 
   int selectedTheme = 0;
-  List<String> theme = ["System", "Light", "Dark"];
+
+  List<String> get theme => [
+        context.l10n.system,
+        context.l10n.light,
+        context.l10n.dark,
+      ];
+
   String themeSelection() => theme.elementAt(selectedTheme);
 
   List<Map<String, dynamic>> get displayInformation => [
@@ -56,13 +67,13 @@ class _SettingScreenState extends State<SettingScreen> {
         {
           'title': 'displaySettingChoice',
           'icon': Icons.history,
-          'content': "History",
+          'content': context.l10n.history,
           'onTap': openHistoryPage,
         },
         {
           'title': 'displaySettingChoice',
           'icon': CupertinoIcons.person_2_alt,
-          'content': "Become a tutor",
+          'content': context.l10n.becomeTutor,
         },
         {
           'title': 'displaySettingChoice',
@@ -76,7 +87,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 },
               ),
           'selection': languageSelection,
-          'content': "Language",
+          'content': context.l10n.languages,
         },
         {
           'title': 'displaySettingChoice',
@@ -87,7 +98,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   setState(() => selectedTheme = value),
               initialItem: selectedTheme),
           'selection': themeSelection,
-          'content': "Appearance",
+          'content': context.l10n.appearance,
         },
       ];
 
@@ -234,7 +245,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       ..insert(
                           2,
                           Text(
-                            "Other Settings",
+                            context.l10n.otherSetting,
                             style: context.textTheme.titleLarge,
                           ))
                       ..insert(
@@ -291,7 +302,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       ..insert(
                         0,
                         Text(
-                          "Profile Settings",
+                          context.l10n.profileSetting,
                           style: context.textTheme.titleLarge,
                         ),
                       )
@@ -327,7 +338,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     return state.isLoading
                                         ? const AppLoadingIndicator(radius: 15)
                                         : Text(
-                                            "Logout",
+                                            context.l10n.logOut,
                                             style: context.textTheme.bodyLarge
                                                 ?.copyWith(
                                               color: context.colorScheme.error,

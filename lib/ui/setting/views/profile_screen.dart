@@ -74,7 +74,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
           onPressed: () {},
           child: Text(
-            "Update",
+            context.l10n.update,
             style: context.textTheme.titleMedium?.boldTextTheme
                 .copyWith(color: context.colorScheme.onPrimary),
           ),
@@ -84,7 +84,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: Text(
-          "Profile Information",
+          context.l10n.profilePreview,
           style: context.textTheme.titleLarge?.boldTextTheme,
         ),
         leading: IconButton(
@@ -344,24 +344,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             _informationTextField(
               iconData: CupertinoIcons.person_fill,
               controller: _nameController,
-              labelText: "Name",
-              hintText: "Name",
+              labelText: context.l10n.name,
+              hintText: context.l10n.name,
             ),
             ...[
               {
-                "label": "Birthday",
+                "label": context.l10n.birthDay,
                 "icon": Icons.calendar_month,
               },
               {
-                "label": "Country",
+                "label": context.l10n.country,
                 "icon": Icons.pin_drop,
               },
               {
-                "label": "Levels",
+                "label": context.l10n.level,
                 "icon": Icons.bookmark_outlined,
               },
               {
-                "label": "Topics And Preparations",
+                "label": context.l10n.topicsAndPreparations,
                 "icon": Icons.topic,
               },
             ].asMap().entries.map<Widget>(
@@ -431,8 +431,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   initialDate: DateTime.now(),
                   firstDate: DateTime.now(),
                   lastDate: DateTime.now().add(const Duration(days: 30)),
-                  confirmText: "Select",
-                  cancelText: "Cancel",
+                  confirmText: context.l10n.select,
+                  cancelText: context.l10n.cancel,
                 ),
                 child: Icon(Icons.calendar_month,
                     color: context.theme.primaryColor),

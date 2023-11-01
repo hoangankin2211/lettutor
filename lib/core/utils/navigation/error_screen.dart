@@ -16,7 +16,7 @@ class ErrorScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          text ?? l10n.somethingWentWrong,
+          text ?? "l10n.somethingWentWrong",
           style: textTheme.headlineMedium,
         ),
       ),
@@ -24,7 +24,7 @@ class ErrorScreen extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () => context.go(RouteLocation.auth),
           child: Text(
-            l10n.goToHome,
+            "l10n.goToHome",
             style: textTheme.bodyMedium,
           ),
         ),

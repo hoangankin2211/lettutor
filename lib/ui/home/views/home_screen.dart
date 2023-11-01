@@ -9,6 +9,7 @@ import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
 import 'package:lettutor/ui/tutor/views/widgets/upcoming_lesson_widget.dart';
 
+import '../../../domain/models/user.dart';
 import '../../auth/blocs/auth_bloc.dart';
 import '../../course/blocs/course_bloc.dart';
 import '../../tutor/blocs/tutor_bloc.dart';
@@ -21,9 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final authBloc = BlocProvider.of<AuthBloc>(context);
-  late final dashboardBloc = BlocProvider.of<DashboardBloc>(context);
-
+  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+  DashboardBloc get dashboardBloc => BlocProvider.of<DashboardBloc>(context);
+  User? get user => authBloc.state.user;
   _buildHeader() {
     return Container(
       padding: const EdgeInsets.only(left: 25),
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Text(
-                "Hello, Hoang !",
+                "${context.l10n.Hello}, ${user?.name} !",
                 style: context.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: context.colorScheme.onPrimary,
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 10),
               Text.rich(
                 TextSpan(
-                    text: "Welcome to ",
+                    text: context.l10n.welcomeTo,
                     style: context.textTheme.titleLarge?.copyWith(
                       color: context.colorScheme.onPrimary,
                       fontWeight: FontWeight.w500,
@@ -85,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildUpComingCourse() {
     return HomeItemComponent(
-      title: "Upcoming course",
+      title: context.l10n.upcomingCourse,
       leading: Icon(Icons.schedule, color: context.theme.primaryColor),
       body: BlocBuilder<TutorBloc, TutorState>(
         bloc: dashboardBloc.tutorBloc,
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildRecommendCourse() {
     return HomeItemComponent(
-      title: "Recommend Course",
+      title: context.l10n.recommendCourse,
       leading: Icon(Icons.schedule, color: context.theme.primaryColor),
       body: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: context.height * 0.22),
@@ -147,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildRecommendTutor() {
     return HomeItemComponent(
-      title: "Recommend Tutor",
+      title: context.l10n.recommendTutor,
       leading: Icon(Icons.schedule, color: context.theme.primaryColor),
       body: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: context.height * 0.39 + 5),
@@ -209,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 authBloc.add(LogoutAuthenticationRequest());
               },
-              child: const Text("Logout"))
+              child: Text(context.l10n.logOut))
         ],
       ),
       body: SingleChildScrollView(

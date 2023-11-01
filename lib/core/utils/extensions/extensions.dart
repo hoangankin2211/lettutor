@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor/generated/l10n.dart';
+import 'package:path/path.dart';
 
 extension BuildContextExt on BuildContext {
   MediaQueryData get query {
@@ -50,7 +51,9 @@ extension BuildContextExt on BuildContext {
   void showSnackBarAlert(String content) {
     ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(content)));
   }
+}
 
+extension FastShowSheet on BuildContext {
   void showAppModalBottomSheet(
       {required Widget Function(BuildContext) builder}) {
     showModalBottomSheet(

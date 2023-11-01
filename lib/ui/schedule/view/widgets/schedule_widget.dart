@@ -82,7 +82,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                 color: context.colorScheme.primary,
               ),
               label: Text(
-                "Go to meeting",
+                context.l10n.goToMeeting,
                 style: context.textTheme.bodyLarge
                     ?.copyWith(color: context.colorScheme.primary),
               ),
@@ -107,7 +107,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
       name: widget.tutor.name,
       numOfFeedback: 100,
       country: widget.tutor.country,
-      profession: "English Teacher",
+      profession: context.l10n.englishTeacher,
     );
   }
 
@@ -149,7 +149,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                         color: context.colorScheme.error,
                       ),
                 label: Text(
-                  "Cancel",
+                  context.l10n.cancel,
                   style: context.textTheme.bodyLarge
                       ?.copyWith(color: context.colorScheme.error),
                 ),
@@ -175,7 +175,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                   ),
                 ),
                 Text(
-                  "Request For Lesson",
+                  context.l10n.requestForLesson,
                   style: context.textTheme.bodyLarge?.boldTextTheme,
                 ),
                 const Spacer(),
@@ -197,7 +197,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
             child: Padding(
               padding: const EdgeInsets.only(left: 25),
               child: Text(widget.studentRequest.isEmpty
-                  ? "Currently there are no requests for this class. Please write down any requests for the teacher."
+                  ? context.l10n.historyScreen
                   : widget.studentRequest),
             ),
           ),

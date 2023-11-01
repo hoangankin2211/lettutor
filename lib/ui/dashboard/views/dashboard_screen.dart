@@ -32,12 +32,12 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   late final List<Map<String, dynamic>> _tabs = [
     {
-      'title': 'Home',
+      'title': context.l10n.Home,
       'icon': CupertinoIcons.house_alt_fill,
       "widget": HomeScreen(),
     },
     {
-      'title': 'Teachers',
+      'title': context.l10n.Teachers,
       'icon': CupertinoIcons.person_2_fill,
       "widget": BlocProvider(
         create: (context) => dashboardBloc.tutorBloc,
@@ -45,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       ),
     },
     {
-      'title': 'Schedule',
+      'title': context.l10n.schedule,
       'icon': CupertinoIcons.calendar,
       "widget": BlocProvider(
         create: (context) => dashboardBloc.scheduleBloc,
@@ -53,7 +53,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       ),
     },
     {
-      'title': 'Courses',
+      'title': context.l10n.courses,
       'icon': CupertinoIcons.book_fill,
       "widget": MultiBlocProvider(
         providers: [
@@ -68,7 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       ),
     },
     {
-      'title': 'Setting',
+      'title': context.l10n.setting,
       'icon': CupertinoIcons.settings_solid,
       "widget": SettingScreen(),
     },

@@ -33,9 +33,9 @@ class _OTPScreenState extends State<OTPScreen> {
               fontWeight: FontWeight.normal,
             ),
             children: [
-              const TextSpan(text: 'Welcome to '),
+              TextSpan(text: context.l10n.welcomeTo),
               TextSpan(
-                text: 'TeamChannel'.toUpperCase(),
+                text: 'LetTutor'.toUpperCase(),
                 style: context.textTheme.titleMedium?.copyWith(
                   color: context.colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -48,7 +48,7 @@ class _OTPScreenState extends State<OTPScreen> {
           height: 15,
         ),
         Text(
-          'OTP Verification',
+          context.l10n.otpVerification,
           style: context.textTheme.headlineSmall,
         ),
       ],

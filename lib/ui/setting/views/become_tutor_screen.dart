@@ -2,8 +2,11 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
+import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
+import 'package:lettutor/generated/l10n.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 class BecomeTutorView extends StatefulWidget {
@@ -14,7 +17,7 @@ class BecomeTutorView extends StatefulWidget {
 }
 
 class _BecomeTutorViewState extends State<BecomeTutorView> {
-  late final authBloc = BlocProvider.of<AuthBloc>(context);
+  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
 
   User? get _currentUser => authBloc.state.user;
 
@@ -71,13 +74,12 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
     return Stack(
       children: [
         _body(context),
-        // if (false)
-        // Container(
-        //   color: Colors.black45,
-        //   width: MediaQuery.of(context).size.width,
-        //   height: MediaQuery.of(context).size.height,
-        //   child: _loading(),
-        // )
+        if (false)
+          Container(
+              color: Colors.black45,
+              width: context.width,
+              height: context.height,
+              child: AppLoadingIndicator())
       ],
     );
   }
@@ -99,7 +101,7 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
             // });
           },
           child: Text(
-            "Register",
+            context.l10n.registerAccount,
             style: context.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold, color: context.theme.primaryColor),
           ),
@@ -109,7 +111,7 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          "Tutor Register",
+          context.l10n.tutorRegister,
           style: context.textTheme.titleLarge
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
@@ -177,33 +179,22 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
         ),
         const SizedBox(height: 20.0),
         Text(
-          S.of(context).mySpecialtiesAre,
-          style: context.titleSmall.copyWith(
-            color: Theme.of(context).hintColor,
+          "My Specialties Are",
+          style: context.textTheme.titleSmall?.copyWith(
+            color: context.theme.hintColor,
           ),
         ),
-        StreamBuilder<List<Topic>>(
-          stream: _bloc.topics$,
-          builder: (ctx2, sS2) {
-            final topics = sS2.data ?? <Topic>[];
-            return StreamBuilder<List<Topic>>(
-              stream: _bloc.topicSelected$,
-              builder: (ctx3, sS3) {
-                final topicSelected = sS3.data ?? <Topic>[];
-                return _topicsField(
-                  topics: topics,
-                  topicsSelected: topicSelected,
-                );
-              },
-            );
-          },
+        _topicsField(
+          topics: [],
+          topicsSelected: [],
         )
       ],
     );
   }
 
   Widget _topicsField(
-      {required List<Topic> topics, required List<Topic> topicsSelected}) {
+      {required List<LearnTopics> topics,
+      required List<LearnTopics> topicsSelected}) {
     return Wrap(
       spacing: 6.0,
       runSpacing: -8,
@@ -216,8 +207,8 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
                   -1;
           return ChoiceChip(
             label: Text(
-              e.name ?? '',
-              style: context.titleSmall.copyWith(
+              e.name,
+              style: context.textTheme.titleSmall?.copyWith(
                 fontSize: 14,
                 color: isSelected ? _primaryColor : null,
                 fontWeight: FontWeight.w400,
@@ -230,7 +221,7 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
                 ? Icon(Icons.check, color: _primaryColor, size: 15.0)
                 : null,
             selected: isSelected,
-            onSelected: (_) => _bloc.selectedTopic(e),
+            onSelected: (_) {},
             backgroundColor: Theme.of(context).dividerColor.withOpacity(0.07),
             selectedColor: _primaryColor.withOpacity(0.1),
           );
@@ -243,10 +234,10 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _dividerText(text: S.of(context).language),
+        _dividerText(text: "Language"),
         _informationTextField(
           controller: _languageController,
-          labelText: S.of(context).languages,
+          labelText: "Languages",
           hintText: "lang 1, lang 2, ....",
         ),
       ].expand((e) => [e, const SizedBox(height: 10.0)]).toList(),
@@ -259,35 +250,35 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
       children: [
         _dividerText(text: 'CV'),
         Text(
-          S.of(context).studentsWillViewThisInformation,
+          "Students Will View This Information",
           style: _hintColorText,
         ),
         const SizedBox(),
-        _informationTextField(
-          controller: _interestsController,
-          labelText: S.of(context).interests,
-          hintText: S.of(context).EnterYourInterests,
-        ),
-        const SizedBox(),
-        _informationTextField(
-          controller: _eductionController,
-          labelText: S.of(context).education,
-          hintText: S.of(context).enterEducation,
-        ),
-        const SizedBox(),
-        _informationTextField(
-          controller: _experienceController,
-          labelText: S.of(context).experiences,
-          hintText: S.of(context).EnterYourExperiences,
-          lines: 1,
-        ),
-        const SizedBox(),
-        _informationTextField(
-          controller: _professionController,
-          labelText: S.of(context).professions,
-          hintText: S.of(context).EnterYourProfessions,
-          lines: 2,
-        ),
+        // _informationTextField(
+        //   controller: _interestsController,
+        //   labelText: S.of(context).interests,
+        //   hintText: S.of(context).EnterYourInterests,
+        // ),
+        // const SizedBox(),
+        // _informationTextField(
+        //   controller: _eductionController,
+        //   labelText: S.of(context).education,
+        //   hintText: S.of(context).enterEducation,
+        // ),
+        // const SizedBox(),
+        // _informationTextField(
+        //   controller: _experienceController,
+        //   labelText: S.of(context).experiences,
+        //   hintText: S.of(context).EnterYourExperiences,
+        //   lines: 1,
+        // ),
+        // const SizedBox(),
+        // _informationTextField(
+        //   controller: _professionController,
+        //   labelText: S.of(context).professions,
+        //   hintText: S.of(context).EnterYourProfessions,
+        //   lines: 2,
+        // ),
       ].expand((e) => [e, const SizedBox(height: 10.0)]).toList(),
     );
   }
@@ -297,15 +288,15 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).yourTutorProfile,
+          "your Tutor Profile",
           style: _hintColorText,
         ),
-        _dividerText(text: S.of(context).basicInfo),
+        _dividerText(text: "basicInfo"),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => _bloc.changeAvatar(),
+              onTap: () {},
               child: _renderSelectedAvatar(),
             ),
             const SizedBox(width: 15.0),
@@ -324,91 +315,83 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
         const SizedBox(height: 10.0),
         _informationTextField(
           controller: _bioController,
-          labelText: S.of(context).bio,
-          hintText: S.of(context).enterYourBio,
+          labelText: "Bio",
+          hintText: "Enter your Bio",
         ),
       ].expand((e) => [e, const SizedBox(height: 10.0)]).toList(),
     );
   }
 
   Widget _dateBornField() {
-    return StreamBuilder(
-      stream: _bloc.dateBorn$,
-      builder: (ctx, sS) {
-        final data = sS.data ?? DateTime.now();
-        return Row(
-          children: [
-            Expanded(
-                child: Text(getYmdFormat(data), style: context.titleSmall)),
-            InkWell(
-                // padding: const EdgeInsets.all(0.0),
-                onTap: _onSelectedTime,
-                child: Icon(Icons.calendar_month_rounded, color: _primaryColor))
-          ],
-        );
-      },
+    return Row(
+      children: [
+        Expanded(
+            child: Text(
+          "getYmdFormat(data)",
+          style: context.textTheme.titleSmall,
+        )),
+        InkWell(
+            // padding: const EdgeInsets.all(0.0),
+            onTap: _onSelectedTime,
+            child: Icon(Icons.calendar_month_rounded, color: _primaryColor))
+      ],
     );
   }
 
   Row _countryCodeField() {
     return Row(
       children: [
-        Text('I\' from ', style: context.titleSmall),
-        StreamBuilder(
-            stream: _bloc.countryCode$,
-            builder: (ctx, sS) {
-              final data = sS.data;
-              return Expanded(
-                child: CountryCodePicker(
-                  padding: const EdgeInsets.all(0),
-                  initialSelection: data?.code ?? "VN",
-                  showCountryOnly: false,
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  dialogBackgroundColor:
-                      Theme.of(context).scaffoldBackgroundColor,
-                  showFlagMain: true,
-                  showFlag: true,
-                  hideSearch: false,
-                  showFlagDialog: true,
-                  onChanged: _bloc.changeCountryCode,
-                ),
-              );
-            })
+        Text('I\' from ', style: context.textTheme.titleSmall),
+        Expanded(
+          child: CountryCodePicker(
+            padding: const EdgeInsets.all(0),
+            initialSelection: "VN",
+            showCountryOnly: false,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            dialogBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            showFlagMain: true,
+            showFlag: true,
+            hideSearch: false,
+            showFlagDialog: true,
+            onChanged: (value) {},
+          ),
+        )
       ],
     );
   }
 
-  Widget _renderSelectedAvatar() => StreamBuilder(
-      stream: _bloc.bothImageData$,
-      builder: (ctx, sS) {
-        final data = sS.data;
-        if (data?.image.isNotNull ?? false) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(5.0),
-            child: Image.memory(
-              data!.image!,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          );
-        }
-        return Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            border: Border.all(width: 1, color: _primaryColor),
-            borderRadius: BorderRadius.circular(5.0),
-            color: Theme.of(context).cardColor,
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            S.of(context).tapToSelectedAvatar,
-            style: context.titleSmall.copyWith(fontSize: 11.0),
-            textAlign: TextAlign.center,
-          ),
-        );
-      });
+  Widget _renderSelectedAvatar() => const Placeholder();
+  // => StreamBuilder(
+  //     stream: _bloc.bothImageData$,
+  //     builder: (ctx, sS) {
+  //       final data = sS.data;
+  //       if (data?.image.isNotNull ?? false) {
+  //         return ClipRRect(
+  //           borderRadius: BorderRadius.circular(5.0),
+  //           child: Image.memory(
+  //             data!.image!,
+  //             width: 100,
+  //             height: 100,
+  //             fit: BoxFit.cover,
+  //           ),
+  //         );
+  //       }
+  //       return Container(
+  //         width: 100,
+  //         height: 100,
+  //         decoration: BoxDecoration(
+  //           border: Border.all(width: 1, color: _primaryColor),
+  //           borderRadius: BorderRadius.circular(5.0),
+  //           color: Theme.of(context).cardColor,
+  //         ),
+  //         alignment: Alignment.center,
+  //         child: Text(
+  //           S.of(context).tapToSelectedAvatar,
+  //           style: context.titleSmall.copyWith(fontSize: 11.0),
+  //           textAlign: TextAlign.center,
+  //         ),
+  //       );
+  //     });
 
   TextFormField _informationTextField({
     required TextEditingController controller,

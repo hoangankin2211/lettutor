@@ -78,11 +78,11 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     required String purpose,
   }) {
     Map<String, dynamic> data = {
-      "What take this course ?": reason,
-      "What will you able to do ?": purpose,
+      context.l10n.whyChooseThisCourse: reason,
+      context.l10n.whatWillYouAchieve: purpose,
     };
     return HomeItemComponent(
-      title: "OverView",
+      title: context.l10n.OverView,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,15 +102,15 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
   _buildExperienceLevel() {
     return HomeItemComponent(
-      title: "Experience Level",
+      title: context.l10n.expertiseLevel,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Icon(CupertinoIcons.person_2_square_stack_fill),
+          const Icon(CupertinoIcons.person_2_square_stack_fill),
           const SizedBox(width: 5),
           Text(
-            "Intermediate",
+            context.l10n.Intermediate,
             style: context.textTheme.titleMedium
                 ?.copyWith(fontWeight: FontWeight.w500),
           )
@@ -121,7 +121,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
   _buildCourseLength(int length) {
     return HomeItemComponent(
-      title: "Course Length",
+      title: context.l10n.courseLength,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -158,7 +158,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         subtitleTextStyle: context.textTheme.titleSmall?.boldTextTheme,
         subtitle: Text(description),
         trailing: Text(
-          "Learn Now",
+          context.l10n.learnNow,
           style: context.textTheme.bodyLarge
               ?.copyWith(color: context.theme.primaryColor),
         ),
@@ -168,7 +168,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
   _buildListTopic(List<CourseTopic> topics) {
     return HomeItemComponent(
-      title: "List Topics",
+      title: context.l10n.listTopic,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -263,7 +263,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                             icon: const Icon(
                                 CupertinoIcons.arrowtriangle_right_circle_fill),
                             label: Text(
-                              "Discover",
+                              context.l10n.discoverMore,
                               style: context.textTheme.titleLarge?.copyWith(
                                 color: context.colorScheme.onPrimary,
                               ),

@@ -82,7 +82,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                           Row(
                             children: [
                               Text(
-                                'Schedule',
+                                context.l10n.schedule,
                                 style: context
                                     .textTheme.headlineMedium?.boldTextTheme
                                     .copyWith(
@@ -112,7 +112,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               sizeFactor: animation,
                               axis: Axis.vertical,
                               child: Text(
-                                "Here is a list of the sessions you have booked\nYou can track when the meeting starts, join the meeting with one click or can cancel the meeting before 2 hours",
+                                context.l10n.scheduleScreenTitle,
                                 style: context.textTheme.titleMedium,
                               ),
                             ),

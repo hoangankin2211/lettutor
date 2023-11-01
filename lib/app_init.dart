@@ -51,7 +51,7 @@ class AppBuilder {
       ],
       child: Application(
         initialRoute: RouteLocation.splash,
-        title: "Lettutor",
+        title: "LetTutor",
         // providers: [
         //   BlocProvider<ApplicationBloc>(
         //     create: (context) => injector.get<ApplicationBloc>(),

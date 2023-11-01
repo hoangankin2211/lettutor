@@ -77,7 +77,7 @@ class _HistoryWidgetState extends State<HistoryWidget>
       name: widget.tutorName,
       numOfFeedback: 100,
       country: widget.country,
-      profession: "English Teacher",
+      profession: context.l10n.nativeEnglishTutor,
     );
   }
 
@@ -121,7 +121,7 @@ class _HistoryWidgetState extends State<HistoryWidget>
                   ),
                 ),
                 Text(
-                  "Request For Lesson",
+                  context.l10n.requestForLesson,
                   style: context.textTheme.bodyLarge?.boldTextTheme,
                 ),
               ],
@@ -133,7 +133,7 @@ class _HistoryWidgetState extends State<HistoryWidget>
             child: Padding(
               padding: const EdgeInsets.only(left: 25),
               child: Text(widget.studentRequest.isEmpty
-                  ? "Currently there are no requests for this class. Please write down any requests for the teacher."
+                  ? context.l10n.noRequest
                   : widget.studentRequest),
             ),
           ),
@@ -150,14 +150,14 @@ class _HistoryWidgetState extends State<HistoryWidget>
             const Icon(Icons.fact_check),
             const SizedBox(width: 5),
             Text(
-              "Rating",
+              context.l10n.rateStar,
               style: context.textTheme.titleLarge?.boldTextTheme,
             ),
             const Spacer(),
             ElevatedBorderButton(
               onPressed: widget.onTapEdit,
               child: Text(
-                "Edit",
+                context.l10n.edit,
                 style: context.textTheme.bodyLarge?.copyWith(
                   color: context.theme.primaryColor.withOpacity(0.8),
                 ),
@@ -176,7 +176,7 @@ class _HistoryWidgetState extends State<HistoryWidget>
               onPressed: widget.onTapReport,
               borderColor: context.colorScheme.error,
               child: Text(
-                "Report",
+                context.l10n.report,
                 style: context.textTheme.bodyLarge
                     ?.copyWith(color: context.colorScheme.error),
               ),
@@ -192,7 +192,7 @@ class _HistoryWidgetState extends State<HistoryWidget>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Lesson Time",
+          context.l10n.lessonTime,
           style: context.textTheme.titleMedium?.boldTextTheme,
         ),
         Text(
@@ -228,13 +228,13 @@ class _HistoryWidgetState extends State<HistoryWidget>
                   TextButton.icon(
                     onPressed: widget.onTapComment,
                     icon: const Icon(Icons.add_comment),
-                    label: const Text("Add a Rating"),
+                    label: Text(context.l10n.addRating),
                   ),
                   ElevatedBorderButton(
                     onPressed: widget.onTapReport,
                     borderColor: context.colorScheme.error,
                     child: Text(
-                      "Report",
+                      context.l10n.report,
                       style: context.textTheme.bodyLarge
                           ?.copyWith(color: context.colorScheme.error),
                     ),

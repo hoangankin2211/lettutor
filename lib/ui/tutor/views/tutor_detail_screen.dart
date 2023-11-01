@@ -106,21 +106,21 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                 );
               },
               child: Text(
-                'Show More',
+                context.l10n.showMore,
                 style: context.textTheme.bodyLarge
                     ?.copyWith(color: context.colorScheme.primary),
               ),
             )
           : null,
       verticalBodyGap: 0,
-      title: "Others Review",
+      title: context.l10n.otherReview,
       body: feedbacks.isNotEmpty
           ? buildListReview(feedbacks, max: 3)
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Center(
                 child: Text(
-                  "There is not any comment ! Be the first comment on this tutor",
+                  context.l10n.noComment,
                   style: context.textTheme.titleMedium,
                 ),
               ),
@@ -143,7 +143,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                 color: context.colorScheme.primary,
               ),
               Text(
-                "Book this tutor",
+                context.l10n.bookTutor,
                 style: context.textTheme.bodyLarge
                     ?.copyWith(color: context.colorScheme.primary),
               )
@@ -161,7 +161,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                 color: Colors.pink.shade600,
               ),
               Text(
-                "Favorite",
+                context.l10n.favorite,
                 style: context.textTheme.bodyLarge
                     ?.copyWith(color: Colors.pink.shade600),
               )
@@ -179,7 +179,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                 color: Colors.blue.shade600,
               ),
               Text(
-                "Report",
+                context.l10n.report,
                 style: context.textTheme.bodyLarge?.copyWith(
                   color: Colors.blue.shade600,
                 ),
@@ -197,8 +197,8 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
       trimLines: 4,
       colorClickableText: context.theme.primaryColor,
       trimMode: TrimMode.Line,
-      trimCollapsedText: 'Show more',
-      trimExpandedText: 'Show less',
+      trimCollapsedText: context.l10n.showMore,
+      trimExpandedText: context.l10n.showLess,
       moreStyle: context.textTheme.titleSmall,
       lessStyle: context.textTheme.titleSmall,
     );
@@ -220,7 +220,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
         final feedbacks = tutorDetailState.data.feedbacks;
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Tutor Detail'),
+            title: Text(context.l10n.tutorDetail),
           ),
           body: tutorDetailState is TutorDetailLoading ||
                   tutorDetailState is TutorDetailInitial
@@ -253,7 +253,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         buildDescription(tutorDetail.bio ?? ""),
                         HomeItemComponent(
                           isPadding: false,
-                          title: "Education ",
+                          title: context.l10n.education,
                           body: Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
@@ -265,7 +265,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         ),
                         HomeItemComponent(
                           isPadding: false,
-                          title: "Languages",
+                          title: context.l10n.language,
                           body: Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Wrap(
@@ -280,7 +280,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         ),
                         HomeItemComponent(
                           isPadding: false,
-                          title: "Specialties",
+                          title: context.l10n.specialties,
                           body: Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Wrap(
@@ -299,7 +299,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           HomeItemComponent(
                             verticalBodyGap: 0,
                             isPadding: false,
-                            title: "Suggested Courses",
+                            title: context.l10n.suggestedCourses,
                             body: Column(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -327,7 +327,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                           ),
                         HomeItemComponent(
                           isPadding: false,
-                          title: "Interests",
+                          title: context.l10n.interests,
                           body: Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
@@ -338,7 +338,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                         ),
                         HomeItemComponent(
                           isPadding: false,
-                          title: "Teaching Experience",
+                          title: context.l10n.experiences,
                           body: Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(

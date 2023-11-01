@@ -59,7 +59,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
         ),
         backgroundColor: widget.appBarColor,
         title: Text(
-          "PDF Viewer",
+          context.l10n.pdfViewer,
           style: context.textTheme.titleMedium?.copyWith(
               color: context.colorScheme.onPrimary,
               fontWeight: FontWeight.bold),
