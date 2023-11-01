@@ -3,12 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/domain/mapper/tutor_mapper.dart';
+import 'package:lettutor/domain/models/user.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
 import 'package:lettutor/ui/schedule/view/widgets/schedule_widget.dart';
 
@@ -24,6 +28,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   late final scheduleBloc = BlocProvider.of<ScheduleBloc>(context);
   final ValueNotifier<bool> isExtend = ValueNotifier(false);
   final TextEditingController searchController = TextEditingController();
+
+  User? get user => BlocProvider.of<AuthBloc>(context).state.user;
 
   late final Animation<double> animation;
   late final AnimationController animationController;
@@ -44,6 +50,34 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     super.initState();
   }
 
+  void _joinMeeting({
+    required String meetingUrl,
+  }) async {
+    final meetingToken = meetingUrl.split('token=')[1];
+    if (meetingToken.isNotEmpty) {
+      Map<String, Object> featureFlags = {};
+      try {
+        var options = JitsiMeetingOptions(
+          roomNameOrUrl: "learningRoom",
+          serverUrl: "https://meet.lettutor.com",
+          // subject: subjectText.text,
+          token: meetingToken,
+          isAudioMuted: false,
+          isAudioOnly: false,
+          isVideoMuted: false,
+          userDisplayName: user?.name ?? '',
+          userEmail: user?.email ?? '',
+          userAvatarUrl: user?.avatar ?? "",
+          featureFlags: featureFlags,
+        );
+
+        await JitsiMeetWrapper.joinMeeting(options: options);
+      } catch (e) {
+        logger.d(e.toString());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -60,13 +94,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       builder: (context, scheduleState) {
         return Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
-          // appBar: AppBar(
-          //   toolbarHeight: context.height * 0.1,
-          //   elevation: 0,
-          //   centerTitle: true,
-          //   backgroundColor: context.theme.scaffoldBackgroundColor,
-          //   title:
-          // ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(
@@ -138,9 +165,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                                   scheduleState.data.schedules[index];
                               return ScheduleWidget(
                                 openMeeting: () {
-                                  context.push(RouteLocation.meeting, extra: {
-                                    "meetingUrl": schedule.studentMeetingLink
-                                  });
+                                  if (schedule.studentMeetingLink != null) {
+                                    _joinMeeting(
+                                        meetingUrl:
+                                            schedule.studentMeetingLink!);
+                                  }
                                 },
                                 isCanceling:
                                     scheduleState is CancelingSchedule &&

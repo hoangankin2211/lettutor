@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Image.asset(
             "assets/images/home_v4.png",
             filterQuality: FilterQuality.high,
-            cacheHeight: 200,
+            height: 200,
           )
         ],
       ),
@@ -191,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: kToolbarHeight + 10,
         elevation: 0,
         leading: Image.asset(
           "assets/images/splash.png",
@@ -202,15 +203,21 @@ class _HomeScreenState extends State<HomeScreen> {
           "LetTutor",
           style: context.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: context.theme.primaryColor,
+            color: Colors.blue,
           ),
         ),
         actions: [
-          TextButton(
-              onPressed: () {
-                authBloc.add(LogoutAuthenticationRequest());
-              },
-              child: Text(context.l10n.logOut))
+          InkWell(
+            onTap: () {
+              context.push("${RouteLocation.setting}/${RouteLocation.profile}");
+            },
+            child: CircleAvatar(
+              radius: 25,
+              foregroundImage:
+                  user?.avatar != null ? NetworkImage(user!.avatar!) : null,
+              backgroundImage: const AssetImage("assets/images/user.png"),
+            ),
+          )
         ],
       ),
       body: SingleChildScrollView(

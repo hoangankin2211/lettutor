@@ -74,7 +74,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset("assets/images/splash.png", cacheHeight: 70),
+        Image.asset("assets/images/splash.png", height: 70),
         RichText(
           text: TextSpan(
             style: context.textTheme.titleMedium?.copyWith(
@@ -106,7 +106,6 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget buildSignInForm() {
     var fillColor = context.colorScheme.onBackground;
     return Container(
-      height: MediaQuery.sizeOf(context).height * 0.3,
       padding: const EdgeInsets.only(top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,21 +118,32 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          TCInputField(
-            validator: (value) => validateEmail(value ?? ""),
-            fillColor: fillColor,
-            autocorrect: false,
+          TextFormField(
             controller: _emailController,
-            enableSuggestions: false,
-            hintText: context.l10n.usernameEmail,
-            clearTextIcon: Icon(Icons.close),
-            focusNode: _focusUsernameEmail,
-            borderRadius: 5,
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.text,
-            maxLines: 1,
-            ignoreShadow: true,
-            onFieldSubmitted: (text) {},
+            decoration: InputDecoration(
+              labelStyle:
+                  TextStyle(decorationColor: context.colorScheme.primary),
+              // labelText: labelText,
+              hintText: context.l10n.usernameEmail,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 20,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                    color: Theme.of(context).dividerColor, width: 1.5),
+                gapPadding: 10,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide:
+                    BorderSide(color: context.colorScheme.primary, width: 1.5),
+                gapPadding: 10,
+              ),
+            ),
+            validator: (value) => validateEmail(value ?? ""),
           ),
           const SizedBox(height: 16),
           Text(
@@ -143,22 +153,34 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          TCInputField(
-            autocorrect: false,
-            enableSuggestions: false,
-            fillColor: fillColor,
-            validator: (value) => validatePassword(value ?? ""),
-            onChanged: (value) => {},
-            focusNode: _focusPassword,
-            obscureText: true,
-            maxLines: 1,
-            borderRadius: 5,
-            textInputAction: TextInputAction.send,
+          TextFormField(
             controller: _passwordController,
-            ignoreShadow: true,
-            // onFieldSubmitted: (v) {
-            //   _onLogin();
-            // },
+            decoration: InputDecoration(
+              labelStyle:
+                  TextStyle(decorationColor: context.colorScheme.primary),
+              // labelText: labelText,
+              hintText: context.l10n.usernameEmail,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 30,
+                vertical: 20,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                    color: Theme.of(context).dividerColor, width: 1.5),
+                gapPadding: 10,
+              ),
+
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide:
+                    BorderSide(color: context.colorScheme.primary, width: 1.5),
+                gapPadding: 10,
+              ),
+            ),
+            textInputAction: TextInputAction.send,
+            validator: (value) => validatePassword(value ?? ""),
           ),
           const SizedBox(height: 8),
           Align(
@@ -180,10 +202,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Widget buildAnotherSignInOption() {
     return SizedBox(
-      height: Platform.isIOS
-          ? MediaQuery.sizeOf(context).height * 0.35
-          : MediaQuery.sizeOf(context).height * 0.25,
+      // height: Platform.isIOS
+      //     ? MediaQuery.sizeOf(context).height * 0.35
+      //     : MediaQuery.sizeOf(context).height * 0.25,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           buildSignInOptionButton(
             "assets/images/ic_google.svg",
@@ -283,17 +306,10 @@ class _SignInScreenState extends State<SignInScreen> {
   void _onLogin() {
     if (formKey.currentState?.validate() ?? false) {
       authBloc.add(EmailLoginRequest(
-        // email: "phhai@ymail.com",
-        // password: "123456",
         email: _emailController.text,
         password: _passwordController.text,
       ));
     }
-    // if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-    // } else {
-
-    //   _passwordController.clear();
-    // }
 
     FocusManager.instance.primaryFocus?.unfocus();
   }
@@ -315,7 +331,7 @@ class _SignInScreenState extends State<SignInScreen> {
         return Form(
           key: formKey,
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               buildHeader(),
               buildSignInForm(),

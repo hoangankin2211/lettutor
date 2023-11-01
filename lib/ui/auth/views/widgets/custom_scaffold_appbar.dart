@@ -48,8 +48,6 @@ class CustomScaffoldAppBar extends StatelessWidget
       child: AppBar(
         backgroundColor: backgroundColor ?? defaultColor,
         elevation: elevation,
-        systemOverlayStyle:
-            commonOverlayStyleWithColorAndBrigtness(context, defaultColor),
       ),
     );
   }

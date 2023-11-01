@@ -119,6 +119,7 @@ Future<_i1.GetIt> init(
         gh<_i25.TutorRepository>(),
         gh<_i13.FeedbackService>(),
         gh<_i15.TutorService>(),
+        gh<_i16.UserService>(),
       ));
   gh.factory<_i28.AuthUseCase>(
       () => _i28.AuthUseCase(gh<_i29.AuthenticationRepository>()));

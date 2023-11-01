@@ -47,10 +47,6 @@ extension BuildContextExt on BuildContext {
       );
   TextStyle? get hintBoldText => textTheme.bodyLarge
       ?.copyWith(fontWeight: FontWeight.w500, color: theme.hintColor);
-
-  void showSnackBarAlert(String content) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(content: Text(content)));
-  }
 }
 
 extension FastShowSheet on BuildContext {
@@ -66,6 +62,18 @@ extension FastShowSheet on BuildContext {
           maxHeight: height * 0.6, minHeight: height * 0.4, minWidth: width),
       clipBehavior: Clip.hardEdge,
       builder: builder,
+    );
+  }
+
+  void showSnackBarAlert(String content) {
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        backgroundColor: theme.cardColor,
+        content: Text(
+          content,
+          style: textTheme.bodyLarge,
+        ),
+      ),
     );
   }
 

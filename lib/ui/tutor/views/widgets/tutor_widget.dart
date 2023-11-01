@@ -61,29 +61,32 @@ class _TutorWidgetState extends State<TutorWidget> {
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: CircleAvatar(
-              radius: 30,
-              foregroundImage: CachedNetworkImageProvider(url, cacheKey: url),
-              onForegroundImageError: (exception, stackTrace) {
-                setState(() {
-                  url = "";
-                });
-              },
-              backgroundColor: Colors.blue.shade600,
-              child: widget.imageUrl.isEmpty
-                  ? Text(
-                      widget.name
-                          .splitMapJoin(
-                            RegExp(r'\b\w'),
-                            onMatch: (p0) => p0.group(0)!,
-                            onNonMatch: (p0) => "",
-                          )
-                          .toUpperCase(),
-                      style: context.textTheme.titleLarge?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ))
-                  : null),
+          leading: Uri.tryParse(url)?.hasAbsolutePath ?? false
+              ? CircleAvatar(
+                  radius: 30,
+                  foregroundImage:
+                      CachedNetworkImageProvider(url, cacheKey: url),
+                  onForegroundImageError: (exception, stackTrace) {
+                    setState(() {
+                      url = "";
+                    });
+                  },
+                  backgroundColor: Colors.blue.shade600,
+                  child: widget.imageUrl.isEmpty
+                      ? Text(
+                          widget.name
+                              .splitMapJoin(
+                                RegExp(r'\b\w'),
+                                onMatch: (p0) => p0.group(0)!,
+                                onNonMatch: (p0) => "",
+                              )
+                              .toUpperCase(),
+                          style: context.textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ))
+                      : null)
+              : null,
           title: Text(
             widget.name,
             style: context.myTitleLarge(),

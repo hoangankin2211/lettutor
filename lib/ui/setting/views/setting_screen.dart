@@ -86,6 +86,7 @@ class _SettingScreenState extends State<SettingScreen> {
           'title': 'displaySettingChoice',
           'icon': CupertinoIcons.person_2_alt,
           'content': context.l10n.becomeTutor,
+          'onTap': () => context.push(RouteLocation.becomeTutor),
         },
         {
           'title': 'displaySettingChoice',
@@ -299,7 +300,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       : Image.asset(
                                           "assets/images/user.png",
                                           fit: BoxFit.contain,
-                                          cacheHeight: 60,
+                                          height: 60,
                                         ),
                                 ),
                                 Expanded(

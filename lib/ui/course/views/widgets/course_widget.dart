@@ -11,8 +11,10 @@ class CourseWidget extends StatelessWidget {
     required this.subTitle,
     required this.level,
     this.onTap,
+    this.marginTop = 0,
   }) : super(key: key);
 
+  final double marginTop;
   final String courseId;
   final String? imageUrl;
   final String? title;

@@ -8,13 +8,6 @@ class CustomScaffoldBody extends StatelessWidget {
     required this.child,
   });
 
-  static Widget buildBackgroundView(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: context.colorScheme.primary,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -76,13 +69,13 @@ class TCRoundContainer extends StatelessWidget {
       width: MediaQuery.sizeOf(context).width,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onBackground,
-        borderRadius: BorderRadius.vertical(
+        borderRadius: const BorderRadius.vertical(
           top: Radius.circular(20),
         ),
       ),
       padding: padding,
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(10),
           topRight: Radius.circular(10),
         ),

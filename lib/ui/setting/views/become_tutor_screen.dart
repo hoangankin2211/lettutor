@@ -1,25 +1,32 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
-import 'package:lettutor/generated/l10n.dart';
+import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
-class BecomeTutorView extends StatefulWidget {
+class BecomeTutorView extends ConsumerStatefulWidget {
   const BecomeTutorView({super.key});
 
   @override
-  State<BecomeTutorView> createState() => _BecomeTutorViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _BecomeTutorViewState();
 }
 
-class _BecomeTutorViewState extends State<BecomeTutorView> {
+class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
   AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
 
   User? get _currentUser => authBloc.state.user;
+
+  DateTime selectedDateTime = DateTime.now();
 
   Color get _primaryColor => context.theme.primaryColor;
 
@@ -29,7 +36,9 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
   TextStyle? get _smallText =>
       context.textTheme.titleSmall?.copyWith(fontSize: 12.0);
 
-  DateTime selectedDate = DateTime.now();
+  bool isLoading = false;
+
+  CountryCode country = CountryCode(code: "VN");
 
   Object? listen;
 
@@ -45,6 +54,15 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
 
   final _languageController = TextEditingController();
 
+  RegisterBecomeTutorProvider get register => registerBecomeTutorProvider(
+        interest: _interestsController.text,
+        education: _eductionController.text,
+        experience: _experienceController.text,
+        profession: _professionController.text,
+        bio: _bioController.text,
+        language: _languageController.text,
+      );
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +71,7 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
   void _onSelectedTime() async {
     await context.showAppDatePicker().then((value) {
       setState(() {
-        selectedDate = value ?? selectedDate;
+        selectedDateTime = value ?? selectedDateTime;
       });
     });
   }
@@ -69,36 +87,26 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
     super.dispose();
   }
 
+  bool isInitState = true;
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _body(context),
-        if (false)
-          Container(
-              color: Colors.black45,
-              width: context.width,
-              height: context.height,
-              child: AppLoadingIndicator())
-      ],
-    );
-  }
-
-  Scaffold _body(BuildContext context) {
+    ref.listen(register, (previous, next) {
+      if (isInitState) {
+        isInitState = false;
+        return;
+      }
+      final value = next.value!;
+      context.showSnackBarAlert(value.isRight ? value.right : value.left);
+    });
+    final request = ref.watch(register);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15.0),
         child: ElevatedBorderButton(
           onPressed: () {
-            // _bloc.registeringTutor({
-            //   'interest': _interestsController.text,
-            //   'education': _eductionController.text,
-            //   'experience': _experienceController.text,
-            //   'profession': _professionController.text,
-            //   'bio': _bioController.text,
-            //   'language': _languageController.text,
-            // });
+            ref.refresh(register);
           },
           child: Text(
             context.l10n.registerAccount,
@@ -116,36 +124,19 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
               ?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Stepper(
-        currentStep: 0,
-        onStepContinue: () {
-          // if (currentIndex < 3) {
-          //   _bloc.changeStep(currentIndex + 1);
-          // }
-        },
-        onStepCancel: () {},
-        onStepTapped: (index) {
-          // _bloc.changeStep(index);
-        },
-        steps: <Step>[
-          Step(
-            title: Text("Introduction", style: context.textTheme.titleMedium),
-            content: _renderIntroduction(),
-          ),
-          Step(
-            title: Text('CV', style: context.textTheme.titleMedium),
-            content: _renderCV(),
-          ),
-          Step(
-            title: Text("Language", style: context.textTheme.titleMedium),
-            content: _languageRender(),
-          ),
-          Step(
-            title: Text("Who I Tech", style: context.textTheme.titleMedium),
-            content: _renderTypeStudent(),
-          )
-        ],
-      ),
+      body: request.isLoading
+          ? const Center(child: AppLoadingIndicator(radius: 30))
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  _renderIntroduction(),
+                  _renderCV(),
+                  _languageRender(),
+                  _renderTypeStudent(),
+                ],
+              ),
+            ),
     );
   }
 
@@ -160,18 +151,9 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
           ),
         ),
         const SizedBox(height: 10.0),
-        const SizedBox(height: 10.0),
         SizedBox(
           width: double.infinity,
           child: DropdownButton<String?>(
-            // items: Constant.userLevels.entries
-            //     .mapIndexed(
-            //       (index, element) => DropdownMenuItem(
-            //         value: element.key,
-            //         child: Text(element.value),
-            //       ),
-            //     )
-            //     .toList(),
             items: [],
             // value: data.toUpperCase(),
             onChanged: (String? value) {},
@@ -192,9 +174,10 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
     );
   }
 
-  Widget _topicsField(
-      {required List<LearnTopics> topics,
-      required List<LearnTopics> topicsSelected}) {
+  Widget _topicsField({
+    required List<LearnTopics> topics,
+    required List<LearnTopics> topicsSelected,
+  }) {
     return Wrap(
       spacing: 6.0,
       runSpacing: -8,
@@ -254,31 +237,31 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
           style: _hintColorText,
         ),
         const SizedBox(),
-        // _informationTextField(
-        //   controller: _interestsController,
-        //   labelText: S.of(context).interests,
-        //   hintText: S.of(context).EnterYourInterests,
-        // ),
-        // const SizedBox(),
-        // _informationTextField(
-        //   controller: _eductionController,
-        //   labelText: S.of(context).education,
-        //   hintText: S.of(context).enterEducation,
-        // ),
-        // const SizedBox(),
-        // _informationTextField(
-        //   controller: _experienceController,
-        //   labelText: S.of(context).experiences,
-        //   hintText: S.of(context).EnterYourExperiences,
-        //   lines: 1,
-        // ),
-        // const SizedBox(),
-        // _informationTextField(
-        //   controller: _professionController,
-        //   labelText: S.of(context).professions,
-        //   hintText: S.of(context).EnterYourProfessions,
-        //   lines: 2,
-        // ),
+        _informationTextField(
+          controller: _interestsController,
+          labelText: context.l10n.interests,
+          hintText: context.l10n.interests,
+        ),
+        const SizedBox(),
+        _informationTextField(
+          controller: _eductionController,
+          labelText: context.l10n.education,
+          hintText: context.l10n.enterEducation,
+        ),
+        const SizedBox(),
+        _informationTextField(
+          controller: _experienceController,
+          labelText: context.l10n.experiences,
+          hintText: context.l10n.enterYourExperiences,
+          lines: 1,
+        ),
+        const SizedBox(),
+        _informationTextField(
+          controller: _professionController,
+          labelText: context.l10n.professions,
+          hintText: context.l10n.EnterYourProfessions,
+          lines: 2,
+        ),
       ].expand((e) => [e, const SizedBox(height: 10.0)]).toList(),
     );
   }
@@ -288,31 +271,71 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "your Tutor Profile",
+          context.l10n.yourTutorProfile,
           style: _hintColorText,
         ),
-        _dividerText(text: "basicInfo"),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: _renderSelectedAvatar(),
-            ),
-            const SizedBox(width: 15.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _countryCodeField(),
-                  _dateBornField(),
-                ],
-              ),
-            )
-          ],
+        _dividerText(text: context.l10n.basicInfo),
+        Center(
+          child: GestureDetector(
+            onTap: () {},
+            child: _renderSelectedAvatar(),
+          ),
         ),
-        const SizedBox(height: 10.0),
+        // _countryCodeField(),
+        InkWell(
+          onTap: () {},
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                decoration: BoxDecoration(
+                  border: Border.fromBorderSide(
+                    BorderSide(color: context.theme.dividerColor, width: 1.5),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: CountryCodePicker(
+                  padding: const EdgeInsets.all(0),
+                  initialSelection: "VN",
+                  showCountryOnly: true,
+                  backgroundColor: context.theme.scaffoldBackgroundColor,
+                  dialogBackgroundColor: context.theme.scaffoldBackgroundColor,
+                  showFlagMain: true,
+                  showFlag: true,
+                  hideSearch: false,
+                  showFlagDialog: true,
+                  onChanged: (value) {
+                    setState(() {
+                      country = value;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: _informationTextField(
+                  controller: TextEditingController(),
+                  labelText: "Country",
+                  hintText: "Select your Country",
+                ),
+              ),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: _onSelectedTime,
+          child: _informationTextField(
+            controller: TextEditingController(
+                text: DateFormat().add_yMMMEd().format(selectedDateTime)),
+            labelText: "Date of Birth",
+            hintText: "Enter your DOB",
+          ),
+        ),
+        _informationTextField(
+          controller: _bioController,
+          labelText: "Bio",
+          hintText: "Enter your Bio",
+        ),
         _informationTextField(
           controller: _bioController,
           labelText: "Bio",
@@ -322,81 +345,17 @@ class _BecomeTutorViewState extends State<BecomeTutorView> {
     );
   }
 
-  Widget _dateBornField() {
-    return Row(
-      children: [
-        Expanded(
-            child: Text(
-          "getYmdFormat(data)",
-          style: context.textTheme.titleSmall,
-        )),
-        InkWell(
-            // padding: const EdgeInsets.all(0.0),
-            onTap: _onSelectedTime,
-            child: Icon(Icons.calendar_month_rounded, color: _primaryColor))
-      ],
-    );
-  }
-
-  Row _countryCodeField() {
-    return Row(
-      children: [
-        Text('I\' from ', style: context.textTheme.titleSmall),
-        Expanded(
-          child: CountryCodePicker(
-            padding: const EdgeInsets.all(0),
-            initialSelection: "VN",
-            showCountryOnly: false,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            dialogBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            showFlagMain: true,
-            showFlag: true,
-            hideSearch: false,
-            showFlagDialog: true,
-            onChanged: (value) {},
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _renderSelectedAvatar() => const Placeholder();
-  // => StreamBuilder(
-  //     stream: _bloc.bothImageData$,
-  //     builder: (ctx, sS) {
-  //       final data = sS.data;
-  //       if (data?.image.isNotNull ?? false) {
-  //         return ClipRRect(
-  //           borderRadius: BorderRadius.circular(5.0),
-  //           child: Image.memory(
-  //             data!.image!,
-  //             width: 100,
-  //             height: 100,
-  //             fit: BoxFit.cover,
-  //           ),
-  //         );
-  //       }
-  //       return Container(
-  //         width: 100,
-  //         height: 100,
-  //         decoration: BoxDecoration(
-  //           border: Border.all(width: 1, color: _primaryColor),
-  //           borderRadius: BorderRadius.circular(5.0),
-  //           color: Theme.of(context).cardColor,
-  //         ),
-  //         alignment: Alignment.center,
-  //         child: Text(
-  //           S.of(context).tapToSelectedAvatar,
-  //           style: context.titleSmall.copyWith(fontSize: 11.0),
-  //           textAlign: TextAlign.center,
-  //         ),
-  //       );
-  //     });
+  Widget _renderSelectedAvatar() => CircleAvatar(
+        radius: context.width * 0.3,
+        backgroundColor: Colors.white30,
+        foregroundImage: const AssetImage("assets/images/user.png"),
+      );
 
   TextFormField _informationTextField({
-    required TextEditingController controller,
-    required String labelText,
-    required String hintText,
+    TextEditingController? controller,
+    String? labelText,
+    Widget? prefix,
+    String? hintText,
     int lines = 3,
   }) {
     return TextFormField(

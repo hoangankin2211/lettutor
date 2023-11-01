@@ -82,15 +82,15 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   void _onTap(int index) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // if ((index - currentIndex.value).abs() > 1) {
-      //   controller.jumpToPage(index);
-      // } else {
-      controller.animateToPage(
-        index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      // }
+      if ((index - currentIndex.value).abs() > 1) {
+        controller.jumpToPage(index);
+      } else {
+        controller.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
       currentIndex.value = index;
     });
   }

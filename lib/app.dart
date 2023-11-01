@@ -111,8 +111,6 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
       builder: (light, dark) => BlocConsumer<ApplicationBloc, ApplicationState>(
         listener: _applicationStateListener,
         builder: (context, appState) {
-          logger.d(
-              "${appState.data.themeMode} ${appState.data.adaptiveThemeMode}");
           return BlocListener<AuthBloc, AuthState>(
             listener: _authStateListener,
             child: _buildMaterialApp(

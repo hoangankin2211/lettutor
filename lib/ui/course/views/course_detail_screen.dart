@@ -145,7 +145,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   }) {
     return Material(
       borderRadius: BorderRadius.circular(10),
-      color: context.theme.primaryColor.withOpacity(0.12),
+      color: context.theme.cardColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: ListTile(
         onTap: () {
@@ -159,8 +159,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         subtitle: Text(description),
         trailing: Text(
           context.l10n.learnNow,
-          style: context.textTheme.bodyLarge
-              ?.copyWith(color: context.theme.primaryColor),
+          style: context.textTheme.bodyLarge?.copyWith(color: Colors.blue),
         ),
       ),
     );
@@ -281,7 +280,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 20),
                               decoration: BoxDecoration(
-                                color: context.colorScheme.onPrimary,
+                                color: context.theme.scaffoldBackgroundColor,
                                 borderRadius: const BorderRadius.vertical(
                                     top: Radius.circular(25)),
                               ),

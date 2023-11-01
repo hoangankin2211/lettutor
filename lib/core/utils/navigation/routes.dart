@@ -10,14 +10,13 @@ import 'package:lettutor/ui/course/views/widgets/page_view_pdf.dart';
 import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
 import 'package:lettutor/ui/history/views/history_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
+import 'package:lettutor/ui/setting/views/become_tutor_screen.dart';
 import 'package:lettutor/ui/setting/views/profile_screen.dart';
 import 'package:lettutor/ui/setting/views/setting_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_bloc.dart';
 import 'package:lettutor/ui/tutor/views/tutor_booking_time_screen.dart';
 import 'package:lettutor/ui/tutor/views/tutor_detail_screen.dart';
-
-import '../../../ui/schedule/view/meeting_room_screen.dart';
 
 final routes = [
   GoRoute(
@@ -89,22 +88,13 @@ final routes = [
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
-    path: RouteLocation.dashboard,
-    builder: (context, state) => const DashboardScreen(),
+    path: RouteLocation.becomeTutor,
+    builder: (context, state) => const BecomeTutorView(),
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
-    path: RouteLocation.meeting,
-    builder: (context, state) {
-      if (state.extra != null && state.extra is Map) {
-        final Map<String, dynamic> data = state.extra as Map<String, dynamic>;
-        final String? meetingUrl = data["meetingUrl"];
-        if (meetingUrl != null) {
-          return MeetingRoomScreen(meetingUrl: meetingUrl);
-        }
-      }
-      return const ErrorScreen();
-    },
+    path: RouteLocation.dashboard,
+    builder: (context, state) => const DashboardScreen(),
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,

@@ -60,6 +60,7 @@ class _CourseScreenState extends State<CourseScreen>
           Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
+              color: context.theme.cardColor,
               borderRadius: BorderRadius.circular(25),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -76,7 +77,7 @@ class _CourseScreenState extends State<CourseScreen>
                 });
               },
               elevation: 0,
-              backgroundColor: context.colorScheme.onBackground,
+              backgroundColor: context.theme.cardColor,
               height: 55,
               destinations: [
                 NavigationDestination(
@@ -261,6 +262,7 @@ class _ListEBookPageState extends State<ListEBookPage>
                   itemBuilder: (context, index) {
                     final ebookItem = state.data.eBook.elementAt(index);
                     return CourseWidget(
+                      marginTop: index == 0 ? 15 : 0,
                       key: ValueKey("${ebookItem.id}_CourseScreen"),
                       onTap: (id) {
                         _launcherURl(ebookItem.fileUrl);

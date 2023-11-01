@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/ui/auth/views/signin_screen.dart';
 import 'package:lettutor/ui/auth/views/signup_screen.dart';
-import 'package:lettutor/ui/auth/views/widgets/custom_scaffold_body.dart';
-import 'package:riverpod/riverpod.dart';
-
-import 'widgets/custom_scaffold_appbar.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -17,31 +15,46 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final appBar = const CustomScaffoldAppBar();
-
   final pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: context.colorScheme.primary,
-      appBar: appBar,
-      body: CustomScaffoldBody(
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.9 -
-              appBar.preferredSize.height,
-          child: BlocProvider(
-            create: (context) => PageNotifier(pageController),
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: pageController,
-              children: [
-                SignInScreen(),
-                SignUpScreen(),
-              ],
-            ),
+    return BlocProvider(
+      create: (context) => PageNotifier(pageController),
+      child: Scaffold(
+        // extendBody: true,
+        // appBar: appBar,
+        body: CustomTemplateScreenStackScroll(
+          color: context.colorScheme.primary,
+          paddingAll: const EdgeInsets.all(5),
+          appBar: AppBarCustom(
+            expandedHeight: context.height * 0.2,
+            backgroundColor: context.colorScheme.primary,
+            paddingLeft: 20,
+            title: const [],
           ),
+          children: [
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                height: context.height * 0.8 - context.query.viewPadding.top,
+                decoration: BoxDecoration(
+                  color: context.theme.scaffoldBackgroundColor,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: PageView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: const [
+                    SignInScreen(),
+                    SignUpScreen(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

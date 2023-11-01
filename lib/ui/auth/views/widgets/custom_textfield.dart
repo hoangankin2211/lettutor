@@ -177,8 +177,7 @@ class _TCInputFieldState extends State<TCInputField> {
       ),
       borderSide: const BorderSide(
         color: Color(0XFFADADAD),
-        width: 1.0,
-        style: BorderStyle.solid,
+        width: 0.2,
       ),
     );
   }
