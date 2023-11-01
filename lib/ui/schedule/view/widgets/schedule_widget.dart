@@ -56,7 +56,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 1, color: context.theme.dividerColor),
-        color: context.colorScheme.onPrimary,
+        color: context.theme.cardColor,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

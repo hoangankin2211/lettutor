@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
@@ -32,7 +33,9 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> with WidgetsBindingObserver {
-  late final authBloc = BlocProvider.of<AuthBloc>(context);
+  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+  ApplicationBloc get applicationBloc =>
+      BlocProvider.of<ApplicationBloc>(context);
 
   @override
   void initState() {
@@ -48,18 +51,20 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
   }
 
   Widget _buildMaterialApp({
-    required Locale locale,
+    Locale? locale,
     ThemeData? light,
     ThemeData? dark,
+    ThemeMode? themeMode,
   }) {
     return ProviderScope(
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: widget.title,
-        theme: dark,
+        themeMode: themeMode,
+        theme: light,
         darkTheme: dark,
         locale: locale,
-        supportedLocales: S.delegate.supportedLocales,
+        supportedLocales: AppLocalizationDelegate.supportedLocales,
         localizationsDelegates: const [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -74,7 +79,12 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
   }
 
   void _applicationStateListener(BuildContext context, ApplicationState state) {
-    switch (state) {
+    switch (state.runtimeType) {
+      case ChangeThemeModeState:
+        AdaptiveTheme.of(context).setThemeMode(state.data.adaptiveThemeMode);
+        break;
+      case ChangeLanguageModeState:
+        break;
       default:
     }
   }
@@ -94,23 +104,26 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ApplicationBloc, ApplicationState>(
-      listener: _applicationStateListener,
-      builder: (context, appState) {
-        return AdaptiveTheme(
-          initial: widget.savedThemeMode ?? AdaptiveThemeMode.dark,
-          light: ThemeData.light(),
-          dark: ThemeData.dark(),
-          builder: (light, dark) => BlocListener<AuthBloc, AuthState>(
+    return AdaptiveTheme(
+      initial: widget.savedThemeMode ?? AdaptiveThemeMode.light,
+      light: ThemeData.light(),
+      dark: ThemeData.dark(),
+      builder: (light, dark) => BlocConsumer<ApplicationBloc, ApplicationState>(
+        listener: _applicationStateListener,
+        builder: (context, appState) {
+          logger.d(
+              "${appState.data.themeMode} ${appState.data.adaptiveThemeMode}");
+          return BlocListener<AuthBloc, AuthState>(
             listener: _authStateListener,
             child: _buildMaterialApp(
-              locale: const Locale("en", ""),
-              dark: dark,
+              locale: Locale(appState.data.language),
               light: light,
+              dark: dark,
+              themeMode: appState.data.themeMode,
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

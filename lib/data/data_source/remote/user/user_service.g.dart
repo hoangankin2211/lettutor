@@ -75,7 +75,7 @@ class _UserService implements UserService {
   }
 
   @override
-  Future<HttpResponse<UserEntity>> becomeTutor({
+  Future<HttpResponse<dynamic>> becomeTutor({
     required Map<String, dynamic> body,
     dynamic contentType = "multipart/form-data",
   }) async {
@@ -85,8 +85,8 @@ class _UserService implements UserService {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<UserEntity>>(Options(
+    final _result =
+        await _dio.fetch(_setStreamType<HttpResponse<dynamic>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -102,7 +102,7 @@ class _UserService implements UserService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserEntity.fromJson(_result.data!);
+    final value = _result.data;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

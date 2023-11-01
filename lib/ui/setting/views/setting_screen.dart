@@ -10,6 +10,7 @@ import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
 import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
+import 'package:lettutor/generated/l10n.dart';
 
 import '../../auth/blocs/auth_bloc.dart';
 
@@ -21,8 +22,8 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  late final authBloc = BlocProvider.of<AuthBloc>(context);
-  late final appBloc = BlocProvider.of<ApplicationBloc>(context);
+  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+  ApplicationBloc get appBloc => BlocProvider.of<ApplicationBloc>(context);
 
   String get userEmail => authBloc.state.user?.email ?? "";
   String get userName => authBloc.state.user?.name ?? "";
@@ -32,24 +33,35 @@ class _SettingScreenState extends State<SettingScreen> {
       ? Icons.dark_mode
       : Icons.light_mode;
 
-  int selectedLanguage = 0;
+  int get selectedLanguage => language
+      .indexWhere((element) => element.keys.first == languageSelection());
 
-  List<String> get language => [
-        context.l10n.english,
-        context.l10n.vietnamese,
+  List<Map<String, String>> get language => [
+        {
+          AppLocalizationDelegate.supportedLocales[0].languageCode:
+              context.l10n.english
+        },
+        {
+          AppLocalizationDelegate.supportedLocales[1].languageCode:
+              context.l10n.vietnamese
+        },
       ];
 
-  String languageSelection() => language.elementAt(selectedLanguage);
+  String languageSelection() => language
+      .firstWhere((element) => element.containsKey(appBloc.state.data.language))
+      .values
+      .first;
 
-  int selectedTheme = 0;
-
-  List<String> get theme => [
-        context.l10n.system,
-        context.l10n.light,
-        context.l10n.dark,
+  List<Map<String, String>> get theme => [
+        {"system": context.l10n.system},
+        {"light": context.l10n.light},
+        {"dark": context.l10n.dark},
       ];
 
-  String themeSelection() => theme.elementAt(selectedTheme);
+  int get selectedTheme => theme.indexWhere(
+      (element) => element.keys.first == appBloc.state.data.themeMode.name);
+
+  String themeSelection() => theme.elementAt(selectedTheme).values.first;
 
   List<Map<String, dynamic>> get displayInformation => [
         {
@@ -80,10 +92,16 @@ class _SettingScreenState extends State<SettingScreen> {
           'icon': CupertinoIcons.globe,
           'onTap': () => showCupertinoChoiceBottomSheet(
                 initialItem: selectedLanguage,
-                data: language,
+                data: language
+                    .map((e) => e.values)
+                    .expand<String>((element) => element)
+                    .toList(),
                 onSelectedItemChanged: (value) {
                   logger.d(value);
-                  setState(() => selectedLanguage = value);
+                  appBloc.add(
+                    LanguageChangedEvent(
+                        language: language.elementAt(value).keys.first),
+                  );
                 },
               ),
           'selection': languageSelection,
@@ -93,9 +111,18 @@ class _SettingScreenState extends State<SettingScreen> {
           'title': 'displaySettingChoice',
           'icon': themeIcon,
           'onTap': () => showCupertinoChoiceBottomSheet(
-              data: theme,
+              data: theme
+                  .map((e) => e.values)
+                  .expand<String>((element) => element)
+                  .toList(),
               onSelectedItemChanged: (value) =>
-                  setState(() => selectedTheme = value),
+                  appBloc.add(ChangeThemeModeEvent(
+                      themeMode: switch (theme.elementAt(value).keys.first) {
+                    "light" => ThemeMode.light,
+                    "dark" => ThemeMode.dark,
+                    "system" => ThemeMode.system,
+                    _ => ThemeMode.system,
+                  })),
               initialItem: selectedTheme),
           'selection': themeSelection,
           'content': context.l10n.appearance,
@@ -143,7 +170,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: context.colorScheme.onPrimary,
+                        backgroundColor: context.theme.cardColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(
@@ -199,7 +226,7 @@ class _SettingScreenState extends State<SettingScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               decoration: BoxDecoration(
-                color: context.colorScheme.onPrimary,
+                color: context.theme.scaffoldBackgroundColor,
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(25)),
               ),
@@ -215,9 +242,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: e['title'] == "displaySettingChoice"
-                                      ? context.theme.hintColor
-                                          .withOpacity(0.05)
+                                      ? context.theme.cardColor
                                       : null,
+                                  border: Border.all(width: 0.1),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Row(
@@ -317,7 +344,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             horizontal: 20,
                           ),
                           decoration: BoxDecoration(
-                            color: context.theme.hintColor.withOpacity(0.05),
+                            color: context.theme.cardColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(

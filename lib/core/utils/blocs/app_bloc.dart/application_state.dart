@@ -14,3 +14,11 @@ class ApplicationInitialState extends ApplicationState {
     required ApplicationDataState data,
   }) : super(data: data);
 }
+
+class ChangeThemeModeState extends ApplicationState {
+  ChangeThemeModeState({required super.data});
+}
+
+class ChangeLanguageModeState extends ApplicationState {
+  ChangeLanguageModeState({required super.data});
+}

@@ -5,7 +5,7 @@ abstract class ApplicationEvent {}
 class ApplicationInitialEvent extends ApplicationEvent {}
 
 class ChangeThemeModeEvent extends ApplicationEvent {
-  final AdaptiveThemeMode themeMode;
+  final ThemeMode themeMode;
 
   ChangeThemeModeEvent({
     required this.themeMode,
@@ -13,9 +13,9 @@ class ChangeThemeModeEvent extends ApplicationEvent {
 }
 
 class LanguageChangedEvent extends ApplicationEvent {
-  final Locale locale;
+  final String language;
 
   LanguageChangedEvent({
-    required this.locale,
+    required this.language,
   });
 }

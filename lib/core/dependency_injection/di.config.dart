@@ -11,19 +11,19 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:dio/dio.dart' as _i11;
 import 'package:get_it/get_it.dart' as _i1;
-import 'package:hive/hive.dart' as _i7;
+import 'package:hive/hive.dart' as _i6;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../../data/data_source/local/app_local_storage.dart' as _i9;
-import '../../data/data_source/local/hive_storage_impl.dart' as _i10;
+import '../../data/data_source/local/app_local_storage.dart' as _i8;
+import '../../data/data_source/local/hive_storage_impl.dart' as _i9;
 import '../../data/data_source/remote/authentication/authentication.dart'
-    as _i4;
+    as _i3;
 import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
     as _i17;
 import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
-    as _i5;
+    as _i4;
 import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
-    as _i6;
+    as _i5;
 import '../../data/data_source/remote/chore/chores_service.dart' as _i20;
 import '../../data/data_source/remote/course/course_service.dart' as _i21;
 import '../../data/data_source/remote/ebook/ebook_service.dart' as _i12;
@@ -52,8 +52,8 @@ import '../../ui/dashboard/blocs/dashboard_bloc.dart' as _i40;
 import '../../ui/schedule/bloc/schedule_bloc.dart' as _i34;
 import '../../ui/tutor/blocs/tutor_bloc.dart' as _i35;
 import '../../ui/tutor/blocs/tutor_detail_bloc.dart' as _i36;
-import '../utils/blocs/app_bloc.dart/application_bloc.dart' as _i3;
-import '../utils/navigation/routes_service.dart' as _i8;
+import '../utils/blocs/app_bloc.dart/application_bloc.dart' as _i10;
+import '../utils/navigation/routes_service.dart' as _i7;
 import 'module.dart' as _i41;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -69,37 +69,38 @@ Future<_i1.GetIt> init(
   );
   final hiveModule = _$HiveModule();
   final dioModule = _$DioModule();
-  gh.factory<_i3.ApplicationBloc>(() => _i3.ApplicationBloc());
-  gh.factory<_i4.AuthenticationApi>(
-    () => _i5.FacebookAuthImpl(),
+  gh.factory<_i3.AuthenticationApi>(
+    () => _i4.FacebookAuthImpl(),
     instanceName: 'FacebookAuthImpl',
   );
-  gh.factory<_i4.AuthenticationApi>(
-    () => _i6.GoogleAuthImpl(),
+  gh.factory<_i3.AuthenticationApi>(
+    () => _i5.GoogleAuthImpl(),
     instanceName: 'GoogleAuthImpl',
   );
-  await gh.singletonAsync<_i7.HiveInterface>(
+  await gh.singletonAsync<_i6.HiveInterface>(
     () => hiveModule.initHive(),
     preResolve: true,
   );
-  gh.factory<_i8.RouteService>(() => _i8.RouteService());
-  gh.singleton<_i7.Box<dynamic>>(hiveModule.create(gh<_i7.HiveInterface>()));
-  gh.singleton<_i9.AppLocalStorage>(
-      _i10.HiveStorageImpl(gh<_i7.Box<dynamic>>()));
-  gh.singleton<_i11.Dio>(dioModule.create(gh<_i9.AppLocalStorage>()));
+  gh.factory<_i7.RouteService>(() => _i7.RouteService());
+  gh.singleton<_i6.Box<dynamic>>(hiveModule.create(gh<_i6.HiveInterface>()));
+  gh.singleton<_i8.AppLocalStorage>(
+      _i9.HiveStorageImpl(gh<_i6.Box<dynamic>>()));
+  gh.factory<_i10.ApplicationBloc>(
+      () => _i10.ApplicationBloc(gh<_i8.AppLocalStorage>()));
+  gh.singleton<_i11.Dio>(dioModule.create(gh<_i8.AppLocalStorage>()));
   gh.factory<_i12.EbookService>(() => _i12.EbookService(gh<_i11.Dio>()));
   gh.factory<_i13.FeedbackService>(() => _i13.FeedbackService(gh<_i11.Dio>()));
   gh.factory<_i14.ScheduleService>(() => _i14.ScheduleService(gh<_i11.Dio>()));
   gh.factory<_i15.TutorService>(() => _i15.TutorService(gh<_i11.Dio>()));
   gh.factory<_i16.UserService>(() => _i16.UserService(gh<_i11.Dio>()));
-  gh.factory<_i4.AuthenticationApi>(
+  gh.factory<_i3.AuthenticationApi>(
     () => _i17.EmailAuthApi(gh<_i11.Dio>()),
     instanceName: 'EmailAuthApi',
   );
   gh.factory<_i18.AuthenticationRepository>(
       () => _i19.AuthenticationRepositoryImpl(
-            gh<_i4.AuthenticationApi>(instanceName: 'EmailAuthApi'),
-            gh<_i9.AppLocalStorage>(),
+            gh<_i3.AuthenticationApi>(instanceName: 'EmailAuthApi'),
+            gh<_i8.AppLocalStorage>(),
           ));
   gh.factory<_i20.ChoresService>(
     () => _i20.ChoresService(gh<_i11.Dio>()),
@@ -140,7 +141,7 @@ Future<_i1.GetIt> init(
       ));
   gh.singleton<_i37.AuthBloc>(_i37.AuthBloc(
     gh<_i28.AuthUseCase>(),
-    gh<_i9.AppLocalStorage>(),
+    gh<_i8.AppLocalStorage>(),
     gh<_i16.UserService>(),
   ));
   gh.factory<_i38.CourseBloc>(() => _i38.CourseBloc(gh<_i32.CourseUseCase>()));

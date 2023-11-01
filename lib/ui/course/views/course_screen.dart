@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +13,6 @@ import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/widgets/app_loading_indicator.dart';
-import '../../../core/utils/widgets/custom_navigator_bar.dart';
 import '../../../core/core.dart';
 import '../blocs/course_bloc.dart';
 
@@ -27,6 +25,10 @@ class CourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<CourseScreen>
     with AutomaticKeepAliveClientMixin {
+  late final PageController _pageController =
+      PageController(initialPage: currentPage, keepPage: true);
+  int currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -55,12 +57,32 @@ class _CourseScreenState extends State<CourseScreen>
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(height: 0),
-          Padding(
+          Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: CustomNavigatorBar(
-              tabs: [
-                context.l10n.courses,
-                "E-Book",
+            child: NavigationBar(
+              selectedIndex: currentPage,
+              onDestinationSelected: (value) {
+                setState(() {
+                  currentPage = value;
+                  _pageController.animateToPage(
+                    value,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.bounceIn,
+                  );
+                });
+              },
+              elevation: 0,
+              backgroundColor: context.colorScheme.onBackground,
+              height: 55,
+              destinations: [
+                NavigationDestination(
+                    icon: Icon(Icons.laptop), label: context.l10n.courses),
+                const NavigationDestination(
+                    icon: Icon(Icons.book), label: "E-Book")
               ],
             ),
           ),
@@ -68,6 +90,7 @@ class _CourseScreenState extends State<CourseScreen>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: PageView(
+                controller: _pageController,
                 children: const [
                   ListCoursePage(),
                   ListEBookPage(),
