@@ -1,16 +1,28 @@
-# lettutor
+# LetTutor
 
-A new Flutter project.
+### Advanced Mobile Final Project 
 
-## Getting Started
+## Introduction
 
-This project is a starting point for a Flutter application.
+This is an mobile Flutter Application that develop base on [LetTutor web app](https://sandbox.app.lettutor.com/)
 
-A few resources to get you started if this is your first Flutter project:
+This app have some main functional:
+- **Offering English courses**: Offers various courses in English for different levels and purposes, such as conversation, business, academic, IELTS, TOEFL, etc.
+- **Connecting learners and tutors**: Connects learners with tutors who can help them improve their English skills through live lessons and interactive e-books.
+- **Providing course details**: Provides information about the course categories, subcategories, levels, lessons, objectives, videos, transcripts, etc.
+- **Multiple language, theme**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
+## UI and API Reference 
+
+[LetTutor Web App](https://sandbox.app.lettutor.com/)
+
+## Screenshot
+
+
+
+
+<!-- For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+samples, guidance on mobile development, and a full API reference. -->
+

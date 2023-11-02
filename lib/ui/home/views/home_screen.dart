@@ -208,14 +208,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           InkWell(
+            borderRadius: BorderRadius.circular(20),
             onTap: () {
               context.push("${RouteLocation.setting}/${RouteLocation.profile}");
             },
-            child: CircleAvatar(
-              radius: 25,
-              foregroundImage:
-                  user?.avatar != null ? NetworkImage(user!.avatar!) : null,
-              backgroundImage: const AssetImage("assets/images/user.png"),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  foregroundImage:
+                      user?.avatar != null ? NetworkImage(user!.avatar!) : null,
+                  backgroundImage: const AssetImage("assets/images/user.png"),
+                ),
+                const SizedBox(width: 5),
+                Text(user?.name ?? "", style: context.textTheme.bodyLarge),
+                const SizedBox(width: 10),
+              ],
             ),
           )
         ],
