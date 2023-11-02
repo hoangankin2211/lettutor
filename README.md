@@ -1,5 +1,5 @@
 # [Widget Tree](https://drive.google.com/file/d/18-0tqeANERNgXDqyr8QztDWfNhCkhoo0/view?usp=sharing)
-![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/widget_tree-Login Screen.drawio.png)
+![Alt text](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/widget_tree-Login Screen.drawio.png)
 # LetTutor
 
 ### Advanced Mobile Final Project 
