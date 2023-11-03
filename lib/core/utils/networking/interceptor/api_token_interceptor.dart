@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lettutor/core/core.dart';
-import 'package:lettutor/core/utils/configuration/configuration.dart';
+import 'package:lettutor/core/configuration/configuration.dart';
 import 'package:lettutor/core/utils/networking/networking.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/authentication/email/email_auth_api.dart';
