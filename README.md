@@ -1,6 +1,7 @@
 # [Widget Tree](https://drive.google.com/file/d/18-0tqeANERNgXDqyr8QztDWfNhCkhoo0/view?usp=sharing)
-![Alt text](https://github.com/hoangankin2211/lettutor/blob/milestone-1-mockup-ui/screenshot/widget_tree.drawio.png)
-# LetTutor
+<img src="screenshot/widget_tree.drawio.png" height="500em" width="800em" />
+
+### LetTutor
 
 ### Advanced Mobile Final Project 
 
@@ -13,6 +14,11 @@ This app have some main functional:
 - **Connecting learners and tutors**: Connects learners with tutors who can help them improve their English skills through live lessons and interactive e-books.
 - **Providing course details**: Provides information about the course categories, subcategories, levels, lessons, objectives, videos, transcripts, etc.
 - **Multiple language, theme**
+
+## Some Screenshots
+<img src="screenshot/home_screen.jpg" height="250em" /><img src="screenshot/tutor_screen.jpg" height="250em" /><img src="screenshot/course_screen.jpg" height="250em" />
+<img src="screenshot/course_screen_dark.jpg" height="250em" /><img src="screenshot/setting_screen.jpg" height="250em" /> <img src="screenshot/profile_screen.jpg" height="250em"/>
+<img src="screenshot/history_screen_dark.jpg" height="250em" /><img src="screenshot/tutor_detail_screen.jpg" height="250em" /><img src="screenshot/tutor_filter.jpg" height="250em"/><img src="screenshot/tutor_register.jpg" height="250em"/><img src="screenshot/schedule_screen.jpg" height="250em" margin-left="5px" />
 
 <!-- For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
