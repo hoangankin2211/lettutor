@@ -6,7 +6,7 @@ import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../utils/configuration/configuration.dart';
+import '../configuration/configuration.dart';
 
 const String _hiveBoxName = 'lettuorBox';
 

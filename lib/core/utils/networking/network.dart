@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
-import 'package:lettutor/domain/repositories/authentication_repo.dart';
 
 import 'interceptor/logger_interceptor.dart';
 
@@ -22,6 +21,7 @@ class NetworkService {
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Site': 'same-site',
   };
+
   static Dio initializeDio({
     required String baseUrl,
     bool haveApiInterceptor = true,

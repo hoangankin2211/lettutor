@@ -71,8 +71,6 @@ class TutorBloc extends Cubit<TutorState> {
       return;
     }
 
-    logger.d("loadMoreTutor");
-
     final response = await tutorUseCase.fetchTutorPage(
       page: page,
       perPage: perPage,

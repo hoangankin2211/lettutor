@@ -15,7 +15,7 @@ import 'package:lettutor/core/utils/navigation/routes_service.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 import 'core/utils/blocs/app_bloc_observer.dart';
-import 'core/utils/configuration/configuration.dart';
+import 'core/configuration/configuration.dart';
 
 class AppBuilder {
   static final appNavigationKey = GlobalKey<NavigatorState>();
