@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/app.dart';
+import 'package:lettutor/core/configuration/configuration_service.dart';
 import 'package:lettutor/core/utils/blocs/app_bloc.dart/application_bloc.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
@@ -20,10 +21,10 @@ import 'core/configuration/configuration.dart';
 class AppBuilder {
   static final appNavigationKey = GlobalKey<NavigatorState>();
 
-  static Future<Widget> build(Map<String, dynamic> environment) async {
+  static Future<Widget> build(String configUrl) async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    Configurations.setConfigurationValues(environment);
+    Configurations.setConfigurationValues(await getConfigFromJson(configUrl));
 
     //Get old theme
     final savedThemeMode = await AdaptiveTheme.getThemeMode();
@@ -52,14 +53,6 @@ class AppBuilder {
       child: Application(
         initialRoute: RouteLocation.splash,
         title: "LetTutor",
-        // providers: [
-        //   BlocProvider<ApplicationBloc>(
-        //     create: (context) => injector.get<ApplicationBloc>(),
-        //   ),
-        //   BlocProvider<AuthBloc>(
-        //     create: (context) => injector.get<AuthBloc>(),
-        //   ),
-        // ],
         navigationKey: appNavigationKey,
         savedThemeMode: savedThemeMode,
         routeService: routeService,
@@ -67,9 +60,9 @@ class AppBuilder {
     );
   }
 
-  static void run(Map<String, dynamic> env) {
+  static void run(String configUrl) {
     runZonedGuarded(
-      () async => runApp(await build(env)),
+      () async => runApp(await build(configUrl)),
       (error, stack) {
         logger.d(error, stackTrace: stack);
       },

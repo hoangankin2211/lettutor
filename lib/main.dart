@@ -1,4 +1,4 @@
-import 'package:lettutor/core/configuration/prod_environment.dart';
+import 'package:lettutor/core/configuration/configuration_service.dart';
 import 'app_init.dart';
 
-void main() => AppBuilder.run(prodEnvironment);
+void main() => AppBuilder.run(prodConfigUrl);

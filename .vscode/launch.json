@@ -5,28 +5,72 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "dev",
+            "name": "devDefault",
             "request": "launch",
+            "noDebug": true,
             "type": "dart",
-            "program": "lib/main_dev.dart"
+            "program": "lib/main_dev.dart",
         },
         {
-            "name": "prod",
+            "name": "prodDefault",
+            "noDebug": true,
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart"
+            "program": "lib/main.dart",
         },
         {
-            "name": "lettutor (profile mode)",
+            "name": "devDebug",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_dev.dart",
+            "flutterMode": "debug"
+        },
+        {
+            "name": "prodDebug",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "debug"
+        },
+        {
+            "name": "devProfile",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev.dart",
             "flutterMode": "profile"
         },
         {
-            "name": "lettutor (release mode)",
+            "name": "prodProfile",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "devRelease",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev.dart",
             "flutterMode": "release"
-        }
+        },
+        {
+            "name": "prodRelease",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "release"
+        },
+        // {
+        //     "name": "lettutor (profile mode)",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "flutterMode": "profile"
+        // },
+        // {
+        //     "name": "lettutor (release mode)",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "flutterMode": "release"
+        // }
     ]
 }
