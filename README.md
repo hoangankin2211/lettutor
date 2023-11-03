@@ -1,4 +1,4 @@
-# LetTutor
+### LetTutor
 
 ### Advanced Mobile Final Project 
 
@@ -12,16 +12,10 @@ This app have some main functional:
 - **Providing course details**: Provides information about the course categories, subcategories, levels, lessons, objectives, videos, transcripts, etc.
 - **Multiple language, theme**
 
-
-## UI and API Reference 
-
-[LetTutor Web App](https://sandbox.app.lettutor.com/)
-
-## Screenshot
-|:--:|:--:|
-|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/0cf1875d5011864fdf00.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/14d4136ac42612784b37.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/19d5346ce320357e6c31.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/25c80371d43d02635b2c.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/481be8b93ff5e9abb0e4.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/5d7059f28ebe58e001af.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/afd1d17e0632d06c8923.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/asf.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/b1995d348a785c260569.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/c47a21fff6b320ed79a2.jpg)|![image](https://github.com/hoangankin2211/lettutor/blob/main/screenshot/fdca6866bf2a6974303b.jpg)|
-
-
+## Some Screenshots
+<img src="screenshot/home_screen.jpg" height="250em" /><img src="screenshot/tutor_screen.jpg" height="250em" /><img src="screenshot/course_screen.jpg" height="250em" />
+<img src="screenshot/course_screen_dark.jpg" height="250em" /><img src="screenshot/setting_screen.jpg" height="250em" /> <img src="screenshot/profile_screen.jpg" height="250em"/>
+<img src="screenshot/history_screen_dark.jpg" height="250em" /><img src="screenshot/tutor_detail_screen.jpg" height="250em" /><img src="screenshot/tutor_filter.jpg" height="250em"/><img src="screenshot/tutor_register.jpg" height="250em"/><img src="screenshot/schedule_screen.jpg" height="250em" margin-left="5px" />
 
 <!-- For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
