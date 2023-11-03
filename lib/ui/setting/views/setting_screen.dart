@@ -37,14 +37,8 @@ class _SettingScreenState extends State<SettingScreen> {
       .indexWhere((element) => element.keys.first == languageSelection());
 
   List<Map<String, String>> get language => [
-        {
-          AppLocalizationDelegate.supportedLocales[0].languageCode:
-              context.l10n.english
-        },
-        {
-          AppLocalizationDelegate.supportedLocales[1].languageCode:
-              context.l10n.vietnamese
-        },
+        {S.delegate.supportedLocales[0].languageCode: context.l10n.english},
+        {S.delegate.supportedLocales[1].languageCode: context.l10n.vietnamese},
       ];
 
   String languageSelection() => language
