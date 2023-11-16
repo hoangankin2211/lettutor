@@ -1,6 +1,6 @@
 {
     "name": "LetTutor",
-    "environment": "dev",
+    "environment": "prod",
     "baseUrl": "https://sandbox.api.lettutor.com",
     "header": {
         "Accept": "application/json, text/plain, */*",
