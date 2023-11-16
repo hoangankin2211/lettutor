@@ -34,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     {
       'title': context.l10n.Home,
       'icon': CupertinoIcons.house_alt_fill,
-      "widget": HomeScreen(),
+      "widget": const HomeScreen(),
     },
     {
       'title': context.l10n.Teachers,
@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       'icon': CupertinoIcons.calendar,
       "widget": BlocProvider(
         create: (context) => dashboardBloc.scheduleBloc,
-        child: ScheduleScreen(),
+        child: const ScheduleScreen(),
       ),
     },
     {
@@ -64,13 +64,13 @@ class _DashboardScreenState extends State<DashboardScreen>
             create: (context) => dashboardBloc.eBookBloc,
           ),
         ],
-        child: CourseScreen(),
+        child: const CourseScreen(),
       ),
     },
     {
       'title': context.l10n.setting,
       'icon': CupertinoIcons.settings_solid,
-      "widget": SettingScreen(),
+      "widget": const SettingScreen(),
     },
   ];
 

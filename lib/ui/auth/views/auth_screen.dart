@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/core.dart';
@@ -22,16 +21,12 @@ class _AuthScreenState extends State<AuthScreen> {
     return BlocProvider(
       create: (context) => PageNotifier(pageController),
       child: Scaffold(
-        // extendBody: true,
-        // appBar: appBar,
+        resizeToAvoidBottomInset:true,
         body: CustomTemplateScreenStackScroll(
           color: context.colorScheme.primary,
-          paddingAll: const EdgeInsets.all(5),
           appBar: AppBarCustom(
             expandedHeight: context.height * 0.2,
             backgroundColor: context.colorScheme.primary,
-            paddingLeft: 20,
-            title: const [],
           ),
           children: [
             SliverToBoxAdapter(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
-import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
 
 import '../blocs/tutor_detail_bloc.dart';
@@ -91,8 +89,6 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
           body: switch (tutorState) {
             (TutorDetailState state) when state is LoadingFreeBooking =>
               const AppLoadingIndicator(),
-            (TutorDetailState state) when state.data.bookingTime.isEmpty =>
-              _buildEmptyAlert(),
             _ => Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(
@@ -111,7 +107,9 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
                         ),
                       ),
                     ),
-                    Expanded(
+                    if (tutorState.data.bookingTime.isEmpty) _buildEmptyAlert()
+                    else
+                      Expanded(
                       child: ListView.separated(
                         controller: scrollController,
                         physics: const BouncingScrollPhysics(),

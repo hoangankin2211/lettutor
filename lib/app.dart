@@ -1,10 +1,11 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/logger/custom_logger.dart';
+import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
@@ -34,6 +35,7 @@ class Application extends StatefulWidget {
 
 class _ApplicationState extends State<Application> with WidgetsBindingObserver {
   AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+
   ApplicationBloc get applicationBloc =>
       BlocProvider.of<ApplicationBloc>(context);
 
@@ -41,6 +43,8 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
   void initState() {
     authBloc.add(InitAuthenticationStatus());
     WidgetsBinding.instance.addObserver(this);
+    // //Turn off default status bar for application
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     super.initState();
   }
 
@@ -111,6 +115,12 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
       builder: (light, dark) => BlocConsumer<ApplicationBloc, ApplicationState>(
         listener: _applicationStateListener,
         builder: (context, appState) {
+          // SystemChrome.setSystemUIOverlayStyle(
+          //   SystemUiOverlayStyle(
+          //       statusBarColor: AdaptiveTheme.of(context).theme.scaffoldBackgroundColor,
+          //       statusBarIconBrightness: AdaptiveTheme.of(context).brightness == Brightness.light ? Brightness.dark : Brightness.light
+          //   ),
+          // );
           return BlocListener<AuthBloc, AuthState>(
             listener: _authStateListener,
             child: _buildMaterialApp(

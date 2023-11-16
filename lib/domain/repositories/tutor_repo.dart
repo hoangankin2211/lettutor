@@ -1,5 +1,4 @@
 import 'package:either_dart/either.dart';
-import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/data/entities/response/feedback_response.dart';
 import 'package:lettutor/data/entities/response/search_tutor_response.dart';

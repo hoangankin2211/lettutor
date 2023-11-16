@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/domain/usecases/schedule_usecase.dart';
-import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 part 'schedule_state.dart';
 
 @injectable

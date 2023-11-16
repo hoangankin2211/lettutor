@@ -93,7 +93,7 @@ class _TutorWidgetState extends State<TutorWidget> {
           ),
           subtitle: Row(
             children: [
-              Icon(Icons.flag),
+              const Icon(Icons.flag),
               Expanded(
                 child: Text(
                   widget.country,

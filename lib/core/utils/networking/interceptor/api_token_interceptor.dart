@@ -8,8 +8,6 @@ import 'package:lettutor/core/utils/networking/networking.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/authentication/email/email_auth_api.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
-import 'package:lettutor/data/repositories/authentication_repos_impl.dart';
-import 'package:lettutor/domain/repositories/authentication_repo.dart';
 
 const keyAuthentication = 'Authorization';
 const keyApiKey = 'XApiKey';

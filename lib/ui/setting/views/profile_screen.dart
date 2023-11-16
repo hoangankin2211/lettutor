@@ -67,7 +67,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           style: ElevatedButton.styleFrom(
             backgroundColor: context.colorScheme.primary,
             elevation: 0,
-            minimumSize: Size.fromHeight(40),
+            minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),

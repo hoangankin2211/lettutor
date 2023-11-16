@@ -1,15 +1,12 @@
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
-import 'package:lettutor/domain/models/user.dart';
 import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
@@ -24,7 +21,6 @@ class BecomeTutorView extends ConsumerStatefulWidget {
 class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
   AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
 
-  User? get _currentUser => authBloc.state.user;
 
   DateTime selectedDateTime = DateTime.now();
 
@@ -154,7 +150,7 @@ class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
         SizedBox(
           width: double.infinity,
           child: DropdownButton<String?>(
-            items: [],
+            items: const [],
             // value: data.toUpperCase(),
             onChanged: (String? value) {},
           ),
@@ -354,7 +350,6 @@ class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
   TextFormField _informationTextField({
     TextEditingController? controller,
     String? labelText,
-    Widget? prefix,
     String? hintText,
     int lines = 3,
   }) {

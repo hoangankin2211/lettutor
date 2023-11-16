@@ -130,7 +130,7 @@ class _LetTutorVideoPlayerState extends State<LetTutorVideoPlayer> {
       );
     }
     return Container(
-      decoration: BoxDecoration(color: Colors.black),
+      decoration: const BoxDecoration(color: Colors.black),
       height: widget.height,
       child: Center(
         child: AspectRatio(

@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
+import 'package:lettutor/data/entities/course/course_entity.dart';
 
 import 'test_preparation.dart';
 import 'wallet_info_entity.dart';
@@ -18,7 +17,7 @@ class UserEntity {
   final String birthday;
   final bool isActivated;
   final WalletInfoEntity walletInfo;
-  final List<String> courses;
+  final List<CourseEntity> courses;
   final String requireNote;
   final String level;
   final List<LearnTopics> learnTopics;
@@ -63,7 +62,7 @@ class UserEntity {
     String? birthday,
     bool? isActivated,
     WalletInfoEntity? walletInfo,
-    List<String>? courses,
+    List<CourseEntity>? courses,
     String? requireNote,
     String? level,
     List<LearnTopics>? learnTopics,
@@ -137,8 +136,8 @@ class UserEntity {
       isActivated: map['isActivated'] as bool,
       walletInfo:
           WalletInfoEntity.fromMap(map['walletInfo'] as Map<String, dynamic>),
-      courses: List<String>.from(
-          (map['courses'] as List<dynamic>? ?? []).map((e) => e as String)),
+      courses: List<CourseEntity>.from(
+          (map['courses'] as List<dynamic>? ?? []).map<CourseEntity>((e) => CourseEntity.fromJson(e))),
       requireNote: map['requireNote'] as String,
       level: map['level'] as String,
       learnTopics: List<LearnTopics>.from(

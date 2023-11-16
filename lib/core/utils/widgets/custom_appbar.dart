@@ -17,11 +17,11 @@ class AppBarCustom extends StatelessWidget {
   final double paddingRight;
   final double paddingTop;
   final double paddingBottom;
-  final List<Widget> title;
+  final List<Widget>? title;
   final List<Widget>? actions;
-  final String? aftarImage;
+  final String? afterImage;
   final Widget? leading;
-  final Widget? widgeExpanded;
+  final Widget? widgetExpanded;
   final Widget? titleExpand;
 
   const AppBarCustom({
@@ -37,15 +37,15 @@ class AppBarCustom extends StatelessWidget {
     this.isCenterTitle = false,
     this.paddingLeft = 4.0,
     this.paddingRight = 4.0,
-    this.paddingTop = 4.0,
+    this.paddingTop =0.0,
     this.paddingBottom = 4.0,
     this.floating,
-    this.aftarImage,
+    this.afterImage,
     this.expandedHeight,
     this.radius,
-    required this.title,
+    this.title,
     this.leading,
-    this.widgeExpanded,
+    this.widgetExpanded,
     this.titleExpand,
   });
 
@@ -67,14 +67,14 @@ class AppBarCustom extends StatelessWidget {
       backgroundColor:
           backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
       foregroundColor: Theme.of(context).scaffoldBackgroundColor,
-      flexibleSpace: widgeExpanded != null || titleExpand != null
+      flexibleSpace: widgetExpanded != null || titleExpand != null
           ? FlexibleSpaceBar(
               centerTitle: true,
               titlePadding: const EdgeInsets.all(0.0),
-              background: widgeExpanded,
+              background: widgetExpanded,
               title: titleExpand,
             )
-          : aftarImage != null
+          : afterImage != null
               ? FlexibleSpaceBar(
                   centerTitle: true,
                   titlePadding: const EdgeInsets.all(0.0),
@@ -85,7 +85,7 @@ class AppBarCustom extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Image.asset(
-                            aftarImage!,
+                            afterImage!,
                             width: double.maxFinite,
                             fit: BoxFit.cover,
                           ),
@@ -134,12 +134,12 @@ class AppBarCustom extends StatelessWidget {
             mainAxisAlignment: isCenterTitle
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.start,
-            children: title.map((e) => e).toList(),
+            children: title?.map((e) => e).toList() ?? [],
           ),
         ),
       ),
       toolbarHeight: height ?? 60.0,
-      actions: getActions.map((e) => e).toList(),
+      actions: null,
     );
   }
 }

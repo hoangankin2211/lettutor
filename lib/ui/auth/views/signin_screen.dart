@@ -7,7 +7,6 @@ import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/auth/views/signup_screen.dart';
-import 'package:lettutor/ui/auth/views/widgets/custom_textfield.dart';
 
 import 'widgets/custom_scaffold_appbar.dart';
 
@@ -104,7 +103,6 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget buildSignInForm() {
-    var fillColor = context.colorScheme.onBackground;
     return Container(
       padding: const EdgeInsets.only(top: 20),
       child: Column(

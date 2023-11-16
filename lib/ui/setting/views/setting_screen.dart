@@ -23,12 +23,17 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+
   ApplicationBloc get appBloc => BlocProvider.of<ApplicationBloc>(context);
 
   String get userEmail => authBloc.state.user?.email ?? "";
+
   String get userName => authBloc.state.user?.name ?? "";
+
   String get location => authBloc.state.user?.country ?? "";
+
   String? get avatar => authBloc.state.user?.avatar;
+
   IconData get themeIcon => context.theme.brightness == Brightness.light
       ? Icons.dark_mode
       : Icons.light_mode;
@@ -69,6 +74,7 @@ class _SettingScreenState extends State<SettingScreen> {
           'content': Country.parse(location).name,
         },
       ];
+
   List<Map<String, dynamic>> get displaySettingChoice => [
         {
           'title': 'displaySettingChoice',
@@ -207,14 +213,12 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomTemplateScreenStackScroll(
-        color: Colors.transparent,
+        color: context.theme.scaffoldBackgroundColor,
         paddingAll: const EdgeInsets.all(5),
         afterMainScreen: Image.asset("assets/images/home_v2.png"),
         appBar: AppBarCustom(
           expandedHeight: context.height * 0.32,
           backgroundColor: Colors.transparent,
-          paddingLeft: 20,
-          title: const [],
         ),
         children: [
           SliverToBoxAdapter(
@@ -340,6 +344,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           ),
                           decoration: BoxDecoration(
                             color: context.theme.cardColor,
+                            border: Border.all(width: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -358,7 +363,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                   bloc: authBloc,
                                   builder: (context, state) {
                                     return state.isLoading
-                                        ? const AppLoadingIndicator(radius: 15)
+                                        ? AppLoadingIndicator(
+                                            radius: 15,
+                                            color: context.colorScheme.error,
+                                          )
                                         : Text(
                                             context.l10n.logOut,
                                             style: context.textTheme.bodyLarge

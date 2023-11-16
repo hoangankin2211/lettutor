@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/domain/models/course/course.dart';
 import 'package:lettutor/domain/usecases/course_usecase.dart';
 part 'course_detail_state.dart';

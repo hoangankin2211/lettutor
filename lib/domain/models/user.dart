@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:lettutor/data/entities/course/course_entity.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 
 class User {
@@ -13,7 +14,7 @@ class User {
   final String? birthday;
   final bool? isActivated;
   final WalletInfo? walletInfo;
-  final List<String>? courses;
+  final List<CourseEntity>? courses;
   final String? requireNote;
   final String? level;
   final List<LearnTopics>? learnTopics;
@@ -58,7 +59,7 @@ class User {
     String? birthday,
     bool? isActivated,
     WalletInfo? walletInfo,
-    List<String>? courses,
+    List<CourseEntity>? courses,
     String? requireNote,
     String? level,
     List<LearnTopics>? learnTopics,

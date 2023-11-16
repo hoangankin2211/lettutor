@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

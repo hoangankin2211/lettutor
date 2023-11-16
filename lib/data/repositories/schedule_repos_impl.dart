@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';

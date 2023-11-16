@@ -10,7 +10,6 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     final textTheme = context.textTheme;
     return Scaffold(
       appBar: AppBar(

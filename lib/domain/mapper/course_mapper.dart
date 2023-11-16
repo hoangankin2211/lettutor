@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:lettutor/data/entities/course/course_category_entity.dart';
 import 'package:lettutor/data/entities/course/course_detail_entity.dart';

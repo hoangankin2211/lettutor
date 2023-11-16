@@ -25,9 +25,18 @@ class CourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<CourseScreen>
     with AutomaticKeepAliveClientMixin {
-  late final PageController _pageController =
-      PageController(initialPage: currentPage, keepPage: true);
-  int currentPage = 0;
+  late final PageController _pageController = PageController(initialPage: currentPage.value, keepPage: true);
+  final ValueNotifier<int> currentPage = ValueNotifier(0);
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      if (_pageController.page!=null) {
+        currentPage.value = _pageController.page!.ceil();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +65,6 @@ class _CourseScreenState extends State<CourseScreen>
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(height: 0),
           Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
@@ -64,33 +72,38 @@ class _CourseScreenState extends State<CourseScreen>
               borderRadius: BorderRadius.circular(25),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: NavigationBar(
-              selectedIndex: currentPage,
-              onDestinationSelected: (value) {
-                setState(() {
-                  currentPage = value;
-                  _pageController.animateToPage(
-                    value,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.bounceIn,
-                  );
-                });
-              },
-              elevation: 0,
-              backgroundColor: context.theme.cardColor,
-              height: 55,
-              destinations: [
-                NavigationDestination(
-                    icon: Icon(Icons.laptop), label: context.l10n.courses),
-                const NavigationDestination(
-                    icon: Icon(Icons.book), label: "E-Book")
-              ],
+            child: ValueListenableBuilder<int>(
+              valueListenable: currentPage,
+              builder: (context, value, child) =>  NavigationBar(
+                selectedIndex: value,
+                onDestinationSelected: (value) {
+                  setState(() {
+                    currentPage.value = value;
+                    _pageController.animateToPage(
+                      value,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.bounceIn,
+                    );
+                  });
+                },
+                elevation: 0,
+                backgroundColor: context.theme.cardColor,
+                height: 55,
+                destinations: [
+                  NavigationDestination(
+                      icon: const Icon(Icons.laptop),
+                      label: context.l10n.courses),
+                  const NavigationDestination(
+                      icon: Icon(Icons.book), label: "E-Book")
+                ],
+              ),
             ),
           ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: PageView(
+                allowImplicitScrolling: true,
                 controller: _pageController,
                 children: const [
                   ListCoursePage(),
@@ -102,7 +115,7 @@ class _CourseScreenState extends State<CourseScreen>
         ]
             .expand<Widget>((element) => [
                   element,
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 5),
                 ])
             .toList(),
       ),
@@ -126,13 +139,6 @@ class _ListCoursePageState extends State<ListCoursePage>
   final TextEditingController searchController = TextEditingController();
 
   @override
-  void initState() {
-    // courseBloc.fetchCourseList();
-
-    super.initState();
-  }
-
-  @override
   void dispose() {
     searchController.dispose();
     super.dispose();
@@ -150,15 +156,18 @@ class _ListCoursePageState extends State<ListCoursePage>
         } else {
           return Column(
             children: [
-              CourseSearchBar(
-                controller: searchController,
-                onTapFilter: () {},
-                onSearch: (text) {
-                  courseBloc.searchCourse(
-                    q: text.isEmpty ? null : text,
-                    isFilter: true,
-                  );
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: CourseSearchBar(
+                  controller: searchController,
+                  onTapFilter: () {},
+                  onSearch: (text) {
+                    courseBloc.searchCourse(
+                      q: text.isEmpty ? null : text,
+                      isFilter: true,
+                    );
+                  },
+                ),
               ),
               const SizedBox(height: 20),
               Expanded(
@@ -249,7 +258,11 @@ class _ListEBookPageState extends State<ListEBookPage>
         } else if (state is LoadListEBookSuccess) {
           return Column(
             children: [
-              CourseSearchBar(controller: TextEditingController()),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CourseSearchBar(controller: TextEditingController())),
+              const SizedBox(height: 20),
+
               Expanded(
                 child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
@@ -309,6 +322,7 @@ enum TutorTag {
   TOEIC("TOEIC");
 
   final String name;
+
   const TutorTag(this.name);
 }
 
@@ -393,7 +407,7 @@ class _FilterSheetState extends State<FilterSheet> {
                 "National",
                 style: context.textTheme.bodyLarge,
               ),
-              leadingIcon: Icon(Icons.location_pin),
+              leadingIcon: const Icon(Icons.location_pin),
             ),
             Text(
               context.l10n.selectAvailableTutoringTime,

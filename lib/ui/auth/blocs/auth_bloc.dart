@@ -39,8 +39,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final tokenMap = _appLocalStorage.getMap(accessTokenKey);
 
     if (tokenMap?.isNotEmpty ?? false) {
-      // Map<String, dynamic> data = {};
-
       try {
         final TokenEntity tokenEntity =
             TokenEntity.fromJson(tokenMap!.convertMapDynamicToString());

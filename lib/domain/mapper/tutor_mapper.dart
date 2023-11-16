@@ -1,4 +1,3 @@
-import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/data/entities/tutor/tutor_detail_entity.dart';
 import 'package:lettutor/data/entities/tutor/tutor_entity.dart';
 import 'package:lettutor/data/entities/tutor/tutor_user_detail_entity.dart';

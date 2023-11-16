@@ -6,9 +6,6 @@ import 'package:lettutor/core/core.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
 import 'package:lettutor/ui/auth/views/signin_screen.dart';
-
-import 'widgets/custom_scaffold_appbar.dart';
-import 'widgets/custom_scaffold_body.dart';
 import 'widgets/custom_textfield.dart';
 
 class SignUpScreen extends StatefulWidget {

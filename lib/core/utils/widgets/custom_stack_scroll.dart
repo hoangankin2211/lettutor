@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lettutor/core/core.dart';
 
 import 'custom_appbar.dart';
 
@@ -55,11 +56,12 @@ class _CustomTemplateScreenStackScrollState
         return false;
       },
       child: Scaffold(
+        appBar: AppBar(toolbarHeight: 0),
         extendBody: true,
         floatingActionButton: widget.floatingButton,
         bottomNavigationBar: widget.bottomSheet,
         backgroundColor:
-            widget.color ?? Theme.of(context).scaffoldBackgroundColor,
+            widget.color ?? context.theme.scaffoldBackgroundColor,
         body: Stack(
           children: [
             if (widget.afterMainScreen != null) widget.afterMainScreen!,

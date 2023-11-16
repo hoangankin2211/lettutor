@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +37,7 @@ class AppBuilder {
     //Get routeService
     final routeService = injector.get<RouteService>().getRouter();
 
-    // //Turn off default status bar for application
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+
 
     return MultiBlocProvider(
       providers: [

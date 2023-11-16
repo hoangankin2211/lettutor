@@ -113,7 +113,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                       onPressed: context.pop,
                       constraints: const BoxConstraints(),
                       splashRadius: 20,
-                      icon: Icon(Icons.arrow_back_ios),
+                      icon: const Icon(Icons.arrow_back_ios),
                     ),
                     SvgPicture.asset(
                       "assets/images/history_icon.svg",

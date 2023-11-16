@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
-import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';

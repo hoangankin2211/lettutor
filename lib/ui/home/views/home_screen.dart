@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildRecommendCourse() {
     return HomeItemComponent(
       title: context.l10n.recommendCourse,
-      leading: Icon(Icons.schedule, color: context.theme.primaryColor),
+      leading: Icon(Icons.book_outlined, color: context.theme.primaryColor),
       body: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: context.height * 0.22),
         child: BlocBuilder<CourseBloc, CourseState>(
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
   _buildRecommendTutor() {
     return HomeItemComponent(
       title: context.l10n.recommendTutor,
-      leading: Icon(Icons.schedule, color: context.theme.primaryColor),
+      leading: Icon(Icons.person_2, color: context.theme.primaryColor),
       body: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: context.height * 0.39 + 5),
         child: BlocBuilder<TutorBloc, TutorState>(

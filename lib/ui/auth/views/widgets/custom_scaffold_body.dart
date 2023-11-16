@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor/core/core.dart';
-
 class CustomScaffoldBody extends StatelessWidget {
   final Widget child;
   const CustomScaffoldBody({
