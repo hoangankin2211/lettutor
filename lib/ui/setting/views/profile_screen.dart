@@ -28,7 +28,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   late final ValueNotifier<String> _birthday = ValueNotifier(birthday);
   late final ValueNotifier<String> _level = ValueNotifier(level);
 
-  late final authBloc = BlocProvider.of<AuthBloc>(context);
+  late final authBloc = BlocProvider.of<AuthenticationBloc>(context);
 
   String get userEmail => authBloc.state.user?.email ?? "";
   String get userName => authBloc.state.user?.name ?? "";

@@ -33,6 +33,7 @@ class TutorDetailScreen extends StatefulWidget {
 
 class _TutorDetailScreenState extends State<TutorDetailScreen> {
   late final TutorDetailBloc tutorDetailBloc;
+
   @override
   void initState() {
     initBloc();
@@ -128,7 +129,194 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
     );
   }
 
-  Widget buildListButton(VoidCallback openBooking) {
+  Widget buildDescription(String description) {
+    return ReadMoreText(
+      description,
+      trimLines: 4,
+      colorClickableText: context.theme.primaryColor,
+      trimMode: TrimMode.Line,
+      trimCollapsedText: context.l10n.showMore,
+      trimExpandedText: context.l10n.showLess,
+      moreStyle: context.textTheme.titleSmall,
+      lessStyle: context.textTheme.titleSmall,
+    );
+  }
+
+  void _openBooking() {
+    context.push(RouteLocation.booking, extra: {
+      "tutorDetailBloc": tutorDetailBloc,
+    });
+  }
+
+  void _openCourseDetail(String id) {
+    context.push(
+      RouteLocation.courseDetail,
+      extra: {"courseId": id},
+    );
+  }
+
+  @override
+  void dispose() {
+    tutorDetailBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TutorDetailBloc, TutorDetailState>(
+      bloc: tutorDetailBloc,
+      buildWhen: (previous, current) => current.isMainState,
+      builder: (context, tutorDetailState) {
+        final tutorDetail = tutorDetailState.data.tutorDetail;
+        final feedbacks = tutorDetailState.data.feedbacks;
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(context.l10n.tutorDetail),
+          ),
+          body: tutorDetailState is TutorDetailLoading ||
+                  tutorDetailState is TutorDetailInitial
+              ? const Center(child: AppLoadingIndicator())
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        if (tutorDetail.video != null)
+                          LetTutorVideoPlayer(
+                            height: context.height * 0.3,
+                            url: tutorDetail.video!,
+                            width: context.width * 0.9,
+                            autoPlay: false,
+                          ),
+                        if (tutorDetail.user != null)
+                          TutorInfoHeader(
+                            profession: tutorDetail.profession ?? "",
+                            avatar: tutorDetail.user!.avatar ?? "",
+                            country: tutorDetail.user!.country ?? "en",
+                            name: tutorDetail.user!.name ?? "",
+                            numOfFeedback: tutorDetail.totalFeedback ?? 0,
+                          ),
+                        TutorListButton(openBooking: _openBooking),
+                        buildDescription(tutorDetail.bio ?? ""),
+                        HomeItemComponent(
+                          isPadding: false,
+                          title: context.l10n.education,
+                          body: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              tutorDetail.education ?? "",
+                              style: context.textTheme.titleMedium
+                                  ?.copyWith(fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                        ),
+                        HomeItemComponent(
+                          isPadding: false,
+                          title: context.l10n.language,
+                          body: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Wrap(
+                              direction: Axis.horizontal,
+                              children: (tutorDetail.languages ?? "")
+                                  .split(RegExp(r'[,]'))
+                                  .map(
+                                      (e) => SpecialtiesComponent(specialty: e))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                        HomeItemComponent(
+                          isPadding: false,
+                          title: context.l10n.specialties,
+                          body: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Wrap(
+                              runSpacing: 5,
+                              spacing: 5,
+                              direction: Axis.horizontal,
+                              children: (tutorDetail.specialties ?? "")
+                                  .split(RegExp(r'[,]'))
+                                  .map(
+                                      (e) => SpecialtiesComponent(specialty: e))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                        if (tutorDetail.user != null)
+                          HomeItemComponent(
+                            verticalBodyGap: 0,
+                            isPadding: false,
+                            title: context.l10n.suggestedCourses,
+                            body: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: (tutorDetail.user!.courses ?? [])
+                                  .map(
+                                    (course) => TextButton(
+                                      onPressed: () =>
+                                          _openCourseDetail(course.id),
+                                      child: Text(
+                                        course.name,
+                                        style: context.textTheme.titleMedium
+                                            ?.copyWith(
+                                          color: context.colorScheme.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        HomeItemComponent(
+                          isPadding: false,
+                          title: context.l10n.interests,
+                          body: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              tutorDetail.interests ?? "",
+                              style: context.textTheme.titleMedium,
+                            ),
+                          ),
+                        ),
+                        HomeItemComponent(
+                          isPadding: false,
+                          title: context.l10n.experiences,
+                          body: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              tutorDetail.experience ?? "",
+                              style: context.textTheme.titleMedium,
+                            ),
+                          ),
+                        ),
+                        buildListReviewComponent(feedbacks),
+                      ]
+                          .expand<Widget>((element) => [
+                                element,
+                                const SizedBox(height: 15),
+                              ])
+                          .toList(),
+                    ),
+                  ),
+                ),
+        );
+      },
+    );
+  }
+}
+
+class TutorListButton extends StatelessWidget {
+  const TutorListButton({
+    super.key,
+    required this.openBooking,
+  });
+
+  final VoidCallback openBooking;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -188,177 +376,6 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget buildDescription(String description) {
-    return ReadMoreText(
-      description,
-      trimLines: 4,
-      colorClickableText: context.theme.primaryColor,
-      trimMode: TrimMode.Line,
-      trimCollapsedText: context.l10n.showMore,
-      trimExpandedText: context.l10n.showLess,
-      moreStyle: context.textTheme.titleSmall,
-      lessStyle: context.textTheme.titleSmall,
-    );
-  }
-
-  @override
-  void dispose() {
-    tutorDetailBloc.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TutorDetailBloc, TutorDetailState>(
-      bloc: tutorDetailBloc,
-      buildWhen: (previous, current) => current.isMainState,
-      builder: (context, tutorDetailState) {
-        final tutorDetail = tutorDetailState.data.tutorDetail;
-        final feedbacks = tutorDetailState.data.feedbacks;
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(context.l10n.tutorDetail),
-          ),
-          body: tutorDetailState is TutorDetailLoading ||
-                  tutorDetailState is TutorDetailInitial
-              ? const Center(child: AppLoadingIndicator())
-              : SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        if (tutorDetail.video != null)
-                          LetTutorVideoPlayer(
-                            height: context.height * 0.3,
-                            url: tutorDetail.video!,
-                            width: context.width * 0.9,
-                            autoPlay: false,
-                          ),
-                        if (tutorDetail.user != null)
-                          TutorInfoHeader(
-                            profession: tutorDetail.profession ?? "",
-                            avatar: tutorDetail.user!.avatar ?? "",
-                            country: tutorDetail.user!.country ?? "en",
-                            name: tutorDetail.user!.name ?? "",
-                            numOfFeedback: tutorDetail.totalFeedback ?? 0,
-                          ),
-                        buildListButton(() {
-                          context.push(RouteLocation.booking,
-                              extra: {"tutorDetailBloc": tutorDetailBloc});
-                        }),
-                        buildDescription(tutorDetail.bio ?? ""),
-                        HomeItemComponent(
-                          isPadding: false,
-                          title: context.l10n.education,
-                          body: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              tutorDetail.education ?? "",
-                              style: context.textTheme.titleMedium
-                                  ?.copyWith(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                        HomeItemComponent(
-                          isPadding: false,
-                          title: context.l10n.language,
-                          body: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Wrap(
-                              direction: Axis.horizontal,
-                              children: (tutorDetail.languages ?? "")
-                                  .split(RegExp(r'[,]'))
-                                  .map(
-                                      (e) => SpecialtiesComponent(specialty: e))
-                                  .toList(),
-                            ),
-                          ),
-                        ),
-                        HomeItemComponent(
-                          isPadding: false,
-                          title: context.l10n.specialties,
-                          body: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Wrap(
-                              runSpacing: 5,
-                              spacing: 5,
-                              direction: Axis.horizontal,
-                              children: (tutorDetail.specialties ?? "")
-                                  .split(RegExp(r'[,]'))
-                                  .map(
-                                      (e) => SpecialtiesComponent(specialty: e))
-                                  .toList(),
-                            ),
-                          ),
-                        ),
-                        if (tutorDetail.user != null)
-                          HomeItemComponent(
-                            verticalBodyGap: 0,
-                            isPadding: false,
-                            title: context.l10n.suggestedCourses,
-                            body: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: (tutorDetail.user!.courses ?? [])
-                                  .map(
-                                    (e) => TextButton(
-                                      onPressed: () {
-                                        context.push(
-                                          RouteLocation.courseDetail,
-                                          extra: {"courseId": e.id},
-                                        );
-                                      },
-                                      child: Text(
-                                        e.name,
-                                        style: context.textTheme.titleMedium
-                                            ?.copyWith(
-                                          color: context.colorScheme.primary,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          ),
-                        HomeItemComponent(
-                          isPadding: false,
-                          title: context.l10n.interests,
-                          body: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              tutorDetail.interests ?? "",
-                              style: context.textTheme.titleMedium,
-                            ),
-                          ),
-                        ),
-                        HomeItemComponent(
-                          isPadding: false,
-                          title: context.l10n.experiences,
-                          body: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              tutorDetail.experience ?? "",
-                              style: context.textTheme.titleMedium,
-                            ),
-                          ),
-                        ),
-                        buildListReviewComponent(feedbacks),
-                      ]
-                          .expand<Widget>((element) => [
-                                element,
-                                const SizedBox(height: 15),
-                              ])
-                          .toList(),
-                    ),
-                  ),
-                ),
-        );
-      },
     );
   }
 }

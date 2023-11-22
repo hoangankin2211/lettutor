@@ -19,11 +19,7 @@ class TutorBloc extends Cubit<TutorState> {
   final ScheduleUseCase scheduleUseCase;
 
   TutorBloc(this.tutorUseCase, this.scheduleUseCase)
-      : super(
-          const TutorInitial(
-            data: TutorDataState(),
-          ),
-        );
+      : super(const TutorInitial(data: TutorDataState()));
 
   final List<Tutor> cacheListTutor = [];
   int cacheCount = 0;

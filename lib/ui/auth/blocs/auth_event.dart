@@ -1,9 +1,9 @@
 part of 'auth_bloc.dart';
 
 @immutable
-abstract class AuthEvent {}
+abstract class AuthenticationEvent {}
 
-class EmailLoginRequest extends AuthEvent {
+class EmailLoginRequest extends AuthenticationEvent {
   final String email;
   final String password;
   EmailLoginRequest({
@@ -12,17 +12,17 @@ class EmailLoginRequest extends AuthEvent {
   });
 }
 
-class LogoutAuthenticationRequest extends AuthEvent {}
+class LogoutAuthenticationRequest extends AuthenticationEvent {}
 
-class InitAuthenticationStatus extends AuthEvent {}
+class InitAuthenticationStatus extends AuthenticationEvent {}
 
-class RefreshTokenRequest extends AuthEvent {
+class RefreshTokenRequest extends AuthenticationEvent {
   final String refreshToken;
 
   RefreshTokenRequest(this.refreshToken);
 }
 
-class EmailRegisterRequest extends AuthEvent {
+class EmailRegisterRequest extends AuthenticationEvent {
   final String email;
   final String password;
   EmailRegisterRequest({

@@ -37,15 +37,13 @@ class AppBuilder {
     //Get routeService
     final routeService = injector.get<RouteService>().getRouter();
 
-
-
     return MultiBlocProvider(
       providers: [
         BlocProvider<ApplicationBloc>(
           create: (context) => injector.get<ApplicationBloc>(),
         ),
-        BlocProvider<AuthBloc>(
-          create: (context) => injector.get<AuthBloc>(),
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => injector.get<AuthenticationBloc>(),
         ),
       ],
       child: Application(

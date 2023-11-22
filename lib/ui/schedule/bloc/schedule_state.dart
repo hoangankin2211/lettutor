@@ -4,6 +4,8 @@ part of 'schedule_bloc.dart';
 abstract class ScheduleState {
   final ScheduleData data;
 
+  bool get isLoading => this is ScheduleLoading || this is ScheduleInitial;
+
   ScheduleState({required this.data});
 }
 

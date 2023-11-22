@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
 import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
-import 'package:lettutor/ui/auth/views/signin_screen.dart';
-import 'package:lettutor/ui/auth/views/signup_screen.dart';
+import 'package:lettutor/ui/auth/views/page_controller.dart';
+import 'package:lettutor/ui/auth/views/widgets/sign_in/signin_screen.dart';
+import 'package:lettutor/ui/auth/views/widgets/sign_up/signup_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -14,14 +15,21 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final pageController = PageController(initialPage: 0);
+  static const int initialPage = 0;
+  final pageController = PageController(initialPage: initialPage);
+
+  final listPageWidget = const [
+    SignInScreen(),
+    SignUpScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PageNotifier(pageController),
+      create: (context) =>
+          AuthPageController(pages: listPageWidget, initialPage: initialPage),
       child: Scaffold(
-        resizeToAvoidBottomInset:true,
+        resizeToAvoidBottomInset: true,
         body: CustomTemplateScreenStackScroll(
           color: context.colorScheme.primary,
           appBar: AppBarCustom(
@@ -38,34 +46,26 @@ class _AuthScreenState extends State<AuthScreen> {
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(20)),
                 ),
-                child: PageView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: pageController,
-                  children: const [
-                    SignInScreen(),
-                    SignUpScreen(),
-                  ],
+                child: BlocListener<AuthPageController, int>(
+                  listener: (context, page) {
+                    pageController.animateToPage(
+                      page,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: PageView(
+                    controller: pageController,
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: listPageWidget,
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class PageNotifier extends Cubit<int> {
-  final PageController pageController;
-
-  PageNotifier(this.pageController) : super(SignInScreen.pageNum);
-
-  void nextPage(int index) {
-    pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.bounceIn,
     );
   }
 }

@@ -140,7 +140,7 @@ Future<_i1.GetIt> init(
         gh<_i27.TutorUseCase>(),
         gh<_i24.ScheduleUseCase>(),
       ));
-  gh.singleton<_i37.AuthBloc>(_i37.AuthBloc(
+  gh.singleton<_i37.AuthenticationBloc>(_i37.AuthenticationBloc(
     gh<_i28.AuthUseCase>(),
     gh<_i8.AppLocalStorage>(),
     gh<_i16.UserService>(),

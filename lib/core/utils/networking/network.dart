@@ -36,9 +36,11 @@ class NetworkService {
     final dio = Dio(baseOptions)..interceptors.add(LoggerInterceptor());
 
     if (haveApiInterceptor) {
-      dio.interceptors.add(ApiTokenInterceptor(
-        injector.get<AppLocalStorage>(),
-      ));
+      dio.interceptors.add(
+        ApiTokenInterceptor(
+          injector.get<AppLocalStorage>(),
+        ),
+      );
     }
 
     return dio;

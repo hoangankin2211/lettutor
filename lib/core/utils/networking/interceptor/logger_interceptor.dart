@@ -10,6 +10,7 @@ String prettyJsonStr(Map<dynamic, dynamic> json) {
 }
 
 class LoggerInterceptor extends Interceptor {
+  // ignore: deprecated_member_use
   final Function(DioError)? onRequestError;
   final bool Function(Response<dynamic>)? ignoreReponseDataLog;
 

@@ -22,15 +22,11 @@ class TutorScreen extends StatefulWidget {
 
 class _TutorScreenState extends State<TutorScreen>
     with AutomaticKeepAliveClientMixin {
-  late final tutorBloc = BlocProvider.of<TutorBloc>(context);
   final TextEditingController searchController = TextEditingController();
+  TutorBloc get tutorBloc => BlocProvider.of<TutorBloc>(context);
 
   @override
-  void initState() {
-    // tutorBloc.loadTutor();
-    // tutorBloc.fetchUpcomingClass();
-    super.initState();
-  }
+  bool get wantKeepAlive => true;
 
   void showFilterBottomSheet() {
     showModalBottomSheet(
@@ -54,25 +50,19 @@ class _TutorScreenState extends State<TutorScreen>
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
-          onTap: () {
-            tutorBloc.fetchUpcomingClass();
-          },
+          onTap: tutorBloc.fetchUpcomingClass,
           child: UpComingWidget(
             nextClass: tutorState.data.nextTutor,
             totalLearnTime: tutorState.data.totalLearnTime,
           ),
         ),
-        const SizedBox(height: 10),
         GestureDetector(
-          onTap: () {
-            tutorBloc.loadTutor();
-          },
+          onTap: tutorBloc.loadTutor,
           child: Text(
             context.l10n.findATutor,
             style: context.textTheme.headlineSmall?.boldTextTheme,
           ),
         ),
-        const SizedBox(height: 10),
         CourseSearchBar(
           controller: searchController,
           onTapFilter: showFilterBottomSheet,
@@ -84,7 +74,12 @@ class _TutorScreenState extends State<TutorScreen>
             ),
           ),
         ),
-      ],
+      ]
+          .expand<Widget>((element) => [
+                element,
+                const SizedBox(height: 10),
+              ])
+          .toList(),
     );
   }
 
@@ -160,7 +155,4 @@ class _TutorScreenState extends State<TutorScreen>
       },
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

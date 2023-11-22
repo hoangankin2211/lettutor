@@ -22,7 +22,8 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+  AuthenticationBloc get authBloc =>
+      BlocProvider.of<AuthenticationBloc>(context);
 
   ApplicationBloc get appBloc => BlocProvider.of<ApplicationBloc>(context);
 
@@ -334,7 +335,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       )
                       ..add(GestureDetector(
                         onTap: () {
-                          BlocProvider.of<AuthBloc>(context)
+                          BlocProvider.of<AuthenticationBloc>(context)
                               .add(LogoutAuthenticationRequest());
                         },
                         child: Container(
@@ -359,7 +360,8 @@ class _SettingScreenState extends State<SettingScreen> {
                               const SizedBox(width: 10),
                               Expanded(
                                 flex: 6,
-                                child: BlocBuilder<AuthBloc, AuthState>(
+                                child: BlocBuilder<AuthenticationBloc,
+                                    AuthenticationState>(
                                   bloc: authBloc,
                                   builder: (context, state) {
                                     return state.isLoading

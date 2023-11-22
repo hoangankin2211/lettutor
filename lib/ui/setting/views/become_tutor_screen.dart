@@ -19,8 +19,8 @@ class BecomeTutorView extends ConsumerStatefulWidget {
 }
 
 class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
-  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
-
+  AuthenticationBloc get authBloc =>
+      BlocProvider.of<AuthenticationBloc>(context);
 
   DateTime selectedDateTime = DateTime.now();
 

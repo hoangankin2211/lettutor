@@ -1,5 +1,10 @@
+import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
+import 'package:lettutor/data/entities/token_entity.dart';
 
+@injectable
 class AuthLocalData {
   final AppLocalStorage _appLocalStorage;
   const AuthLocalData(this._appLocalStorage);
@@ -8,8 +13,20 @@ class AuthLocalData {
     await _appLocalStorage.saveString('token', token);
   }
 
-  Future<String?> getToken() async {
-    return _appLocalStorage.getString('token');
+  Future<TokenEntity> getToken() async {
+    final tokenMap = _appLocalStorage.getMap(accessTokenKey);
+
+    if (tokenMap?.isNotEmpty ?? false) {
+      try {
+        final TokenEntity tokenEntity =
+            TokenEntity.fromJson(tokenMap!.convertMapDynamicToString());
+        return tokenEntity;
+      } catch (e) {
+        throw Exception('Cannot parse token');
+      }
+    } else {
+      throw Exception('Token is invalid');
+    }
   }
 
   Future<void> deleteToken() async {

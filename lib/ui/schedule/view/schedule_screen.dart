@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
+import 'package:lettutor/core/constants/ui_config.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
@@ -23,34 +24,28 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  late final scheduleBloc = BlocProvider.of<ScheduleBloc>(context);
-  final ValueNotifier<bool> isExtend = ValueNotifier(false);
-  final TextEditingController searchController = TextEditingController();
+  ScheduleBloc get _scheduleBloc => BlocProvider.of<ScheduleBloc>(context);
 
-  User? get user => BlocProvider.of<AuthBloc>(context).state.user;
+  User? get _user => BlocProvider.of<AuthenticationBloc>(context).state.user;
 
-  late final Animation<double> animation;
-  late final AnimationController animationController;
+  late final Animation<double> _animation;
+  late final AnimationController _animationController;
 
   @override
   void initState() {
-    // scheduleBloc.fetchScheduleList();
-
-    animationController = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    animation = CurvedAnimation(
-      parent: animationController,
+    _animation = CurvedAnimation(
+      parent: _animationController,
       curve: Curves.bounceIn,
     );
 
     super.initState();
   }
 
-  void _joinMeeting({
-    required String meetingUrl,
-  }) async {
+  void _joinMeeting(String meetingUrl) async {
     final meetingToken = meetingUrl.split('token=')[1];
     if (meetingToken.isNotEmpty) {
       Map<String, Object> featureFlags = {};
@@ -58,14 +53,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         var options = JitsiMeetingOptions(
           roomNameOrUrl: "learningRoom",
           serverUrl: "https://meet.lettutor.com",
-          // subject: subjectText.text,
           token: meetingToken,
           isAudioMuted: false,
           isAudioOnly: false,
           isVideoMuted: false,
-          userDisplayName: user?.name ?? '',
-          userEmail: user?.email ?? '',
-          userAvatarUrl: user?.avatar ?? "",
+          userDisplayName: _user?.name ?? '',
+          userEmail: _user?.email ?? '',
+          userAvatarUrl: _user?.avatar ?? "",
           featureFlags: featureFlags,
         );
 
@@ -76,17 +70,23 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     }
   }
 
+  String _formatTimestamp(int timestamp) {
+    return DateFormat()
+        .add_Hm()
+        .format(DateTime.fromMillisecondsSinceEpoch(timestamp));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return BlocConsumer<ScheduleBloc, ScheduleState>(
-      bloc: scheduleBloc,
+      bloc: _scheduleBloc,
       listener: (context, state) {
-        if (state is ScheduleError) {
-          context.showSnackBarAlert(state.message);
-        }
-        if (state is CancelScheduleFailed) {
-          context.showSnackBarAlert(state.message);
+        switch (state.runtimeType) {
+          case ScheduleError:
+            context.showSnackBarAlert((state as ScheduleError).message);
+          case CancelScheduleFailed:
+            context.showSnackBarAlert((state as CancelScheduleFailed).message);
         }
       },
       builder: (context, scheduleState) {
@@ -116,25 +116,23 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (animation.status ==
+                                  if (_animation.status ==
                                       AnimationStatus.completed) {
-                                    animationController.reverse();
+                                    _animationController.reverse();
                                   } else {
-                                    animationController.forward();
+                                    _animationController.forward();
                                   }
                                 },
-                                constraints: const BoxConstraints(),
+                                constraints: UiConfig.emptyBoxConstraints,
                                 splashRadius: 30,
-                                icon: const Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 30,
-                                ),
+                                icon:
+                                    const Icon(Icons.arrow_drop_down, size: 30),
                               ),
                             ],
                           ),
                           Flexible(
                             child: SizeTransition(
-                              sizeFactor: animation,
+                              sizeFactor: _animation,
                               axis: Axis.vertical,
                               child: Text(
                                 context.l10n.scheduleScreenTitle,
@@ -149,13 +147,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 ),
                 const SizedBox(height: 10),
                 Expanded(
-                  child: scheduleState is ScheduleLoading ||
-                          scheduleState is ScheduleInitial
+                  child: scheduleState.isLoading
                       ? const Center(child: AppLoadingIndicator())
                       : RefreshIndicator(
-                          onRefresh: scheduleBloc.fetchScheduleList,
+                          onRefresh: _scheduleBloc.fetchScheduleList,
                           child: DefaultPagination<BookingInfoEntity>(
-                            listenScrollBottom: scheduleBloc.loadMoreSchedule,
+                            listenScrollBottom: _scheduleBloc.loadMoreSchedule,
                             page: scheduleState.data.page,
                             totalPage: scheduleState.data.totalPage,
                             itemBuilder: (context, index) {
@@ -164,16 +161,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               return ScheduleWidget(
                                 openMeeting: () {
                                   if (schedule.studentMeetingLink != null) {
-                                    _joinMeeting(
-                                        meetingUrl:
-                                            schedule.studentMeetingLink!);
+                                    _joinMeeting(schedule.studentMeetingLink!);
                                   }
                                 },
                                 isCanceling:
                                     scheduleState is CancelingSchedule &&
                                         scheduleState.scheduleId == schedule.id,
                                 cancelSchedule: () {
-                                  scheduleBloc.cancelSchedule(schedule.id);
+                                  _scheduleBloc.cancelSchedule(schedule.id);
                                 },
                                 studentRequest: schedule.studentRequest ?? "",
                                 tutor: TutorMapper.fromTutorEntity(schedule
@@ -181,16 +176,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                                     .scheduleInfo!
                                     .tutorInfo),
                                 numberLesson: 3,
-                                startTime: DateFormat().add_Hm().format(
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          schedule.scheduleDetailInfo!
-                                              .startPeriodTimestamp),
-                                    ),
-                                endTime: DateFormat().add_Hm().format(
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          schedule.scheduleDetailInfo!
-                                              .endPeriodTimestamp),
-                                    ),
+                                startTime: _formatTimestamp(schedule
+                                    .scheduleDetailInfo!.startPeriodTimestamp),
+                                endTime: _formatTimestamp(schedule
+                                    .scheduleDetailInfo!.endPeriodTimestamp),
                                 time: DateTime.fromMillisecondsSinceEpoch(
                                     schedule.scheduleDetailInfo!
                                         .startPeriodTimestamp),

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lettutor/core/constants/enum.dart';
+import 'package:lettutor/core/constants/hive_key.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/domain/models/course/course_detail.dart';
@@ -25,14 +27,15 @@ class CourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<CourseScreen>
     with AutomaticKeepAliveClientMixin {
-  late final PageController _pageController = PageController(initialPage: currentPage.value, keepPage: true);
+  late final PageController _pageController =
+      PageController(initialPage: currentPage.value, keepPage: true);
   final ValueNotifier<int> currentPage = ValueNotifier(0);
 
   @override
   void initState() {
     super.initState();
     _pageController.addListener(() {
-      if (_pageController.page!=null) {
+      if (_pageController.page != null) {
         currentPage.value = _pageController.page!.ceil();
       }
     });
@@ -74,7 +77,7 @@ class _CourseScreenState extends State<CourseScreen>
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ValueListenableBuilder<int>(
               valueListenable: currentPage,
-              builder: (context, value, child) =>  NavigationBar(
+              builder: (context, value, child) => NavigationBar(
                 selectedIndex: value,
                 onDestinationSelected: (value) {
                   setState(() {
@@ -149,69 +152,70 @@ class _ListCoursePageState extends State<ListCoursePage>
     super.build(context);
     return BlocBuilder<CourseBloc, CourseState>(
       builder: (context, state) {
-        if (state is InitialCourseListPage) {
-          return const AppLoadingIndicator();
-        } else if (state is ErrorCourseList) {
-          return Center(child: Text(state.message));
-        } else {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: CourseSearchBar(
-                  controller: searchController,
-                  onTapFilter: () {},
-                  onSearch: (text) {
-                    courseBloc.searchCourse(
-                      q: text.isEmpty ? null : text,
-                      isFilter: true,
-                    );
-                  },
+        switch (state.runtimeType) {
+          case InitialCourseListPage:
+            return const AppLoadingIndicator();
+          case ErrorCourseList:
+            return Center(child: Text((state as ErrorCourseList).message));
+          default:
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CourseSearchBar(
+                    controller: searchController,
+                    onTapFilter: () {},
+                    onSearch: (text) {
+                      courseBloc.searchCourse(
+                        q: text.isEmpty ? null : text,
+                        isFilter: true,
+                      );
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: state is LoadingListCourse
-                    ? const Center(child: AppLoadingIndicator())
-                    : RefreshIndicator(
-                        onRefresh: courseBloc.fetchCourseList,
-                        child: DefaultPagination<CourseDetail>(
-                          page: state.data.page,
-                          totalPage: state.data.totalPage,
-                          separatorBuilder: (p0, p1) {
-                            return const SizedBox(height: 20);
-                          },
-                          listenScrollBottom: () => courseBloc.loadMoreCourse(
-                              page: state.data.page + 1),
-                          physics: const BouncingScrollPhysics(),
-                          items: state.data.course,
-                          loading: state is LoadingListCourse,
-                          itemBuilder: (context, index) {
-                            final courseItem =
-                                state.data.course.elementAt(index);
-                            return CourseWidget(
-                              key: ValueKey("${courseItem.id}_CourseScreen"),
-                              onTap: (id) {
-                                context.push(
-                                  RouteLocation.courseDetail,
-                                  extra: {
-                                    "courseId": id,
-                                    "from": "CourseScreen"
-                                  },
-                                );
-                              },
-                              courseId: courseItem.id,
-                              imageUrl: courseItem.imageUrl,
-                              title: courseItem.name,
-                              subTitle: courseItem.description,
-                              level: courseItem.level,
-                            );
-                          },
+                const SizedBox(height: 20),
+                Expanded(
+                  child: state is LoadingListCourse
+                      ? const Center(child: AppLoadingIndicator())
+                      : RefreshIndicator(
+                          onRefresh: courseBloc.fetchCourseList,
+                          child: DefaultPagination<CourseDetail>(
+                            page: state.data.page,
+                            totalPage: state.data.totalPage,
+                            separatorBuilder: (p0, p1) {
+                              return const SizedBox(height: 20);
+                            },
+                            listenScrollBottom: () => courseBloc.loadMoreCourse(
+                                page: state.data.page + 1),
+                            physics: const BouncingScrollPhysics(),
+                            items: state.data.course,
+                            loading: state is LoadingListCourse,
+                            itemBuilder: (context, index) {
+                              final courseItem =
+                                  state.data.course.elementAt(index);
+                              return CourseWidget(
+                                key: ValueKey("${courseItem.id}_CourseScreen"),
+                                onTap: (id) {
+                                  context.push(
+                                    RouteLocation.courseDetail,
+                                    extra: {
+                                      "courseId": id,
+                                      "from": "CourseScreen"
+                                    },
+                                  );
+                                },
+                                courseId: courseItem.id,
+                                imageUrl: courseItem.imageUrl,
+                                title: courseItem.name,
+                                subTitle: courseItem.description,
+                                level: courseItem.level,
+                              );
+                            },
+                          ),
                         ),
-                      ),
-              ),
-            ],
-          );
+                ),
+              ],
+            );
         }
       },
     );
@@ -253,46 +257,48 @@ class _ListEBookPageState extends State<ListEBookPage>
     super.build(context);
     return BlocBuilder<EBookBloc, EBookState>(
       builder: (context, state) {
-        if (state is LoadingListEBook || state is InitialEBookListPage) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is LoadListEBookSuccess) {
-          return Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CourseSearchBar(controller: TextEditingController())),
-              const SizedBox(height: 20),
+        switch (state.runtimeType) {
+          case LoadingListEBook || InitialEBookListPage:
+            return const Center(child: CircularProgressIndicator());
+          case ErrorEBookList:
+            return const Center(child: Text("Error"));
 
-              Expanded(
-                child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 20),
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  addAutomaticKeepAlives: true,
-                  itemBuilder: (context, index) {
-                    final ebookItem = state.data.eBook.elementAt(index);
-                    return CourseWidget(
-                      marginTop: index == 0 ? 15 : 0,
-                      key: ValueKey("${ebookItem.id}_CourseScreen"),
-                      onTap: (id) {
-                        _launcherURl(ebookItem.fileUrl);
-                      },
-                      courseId: ebookItem.id,
-                      imageUrl: ebookItem.imageUrl,
-                      title: ebookItem.name,
-                      subTitle: ebookItem.description,
-                      level: ebookItem.level,
-                    );
-                  },
+          default:
+            return Column(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child:
+                        CourseSearchBar(controller: TextEditingController())),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 20),
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    addAutomaticKeepAlives: true,
+                    itemBuilder: (context, index) {
+                      final ebookItem = state.data.eBook.elementAt(index);
+                      return CourseWidget(
+                        marginTop: index == 0 ? 15 : 0,
+                        key: ValueKey("${ebookItem.id}_CourseScreen"),
+                        onTap: (id) {
+                          _launcherURl(ebookItem.fileUrl);
+                        },
+                        courseId: ebookItem.id,
+                        imageUrl: ebookItem.imageUrl,
+                        title: ebookItem.name,
+                        subTitle: ebookItem.description,
+                        level: ebookItem.level,
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          );
-        } else {
-          return const Center(child: Text("Error"));
+              ],
+            );
         }
       },
     );
@@ -300,30 +306,6 @@ class _ListEBookPageState extends State<ListEBookPage>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-enum National {
-  vietnam,
-  england,
-}
-
-enum TutorTag {
-  All("All"),
-  Englishforkids("English for kids"),
-  EnglishforBusiness('English for Business'),
-  Conversational("Conversational"),
-  STARTERS("STARTERS"),
-  MOVERS("MOVERS"),
-  FLYERS("FLYERS"),
-  KET("KET"),
-  PET("PET"),
-  IELTS("IELTS"),
-  TOEFL("TOEFL"),
-  TOEIC("TOEIC");
-
-  final String name;
-
-  const TutorTag(this.name);
 }
 
 class FilterSheet extends StatefulWidget {

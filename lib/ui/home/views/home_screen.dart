@@ -22,7 +22,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+  AuthenticationBloc get authBloc =>
+      BlocProvider.of<AuthenticationBloc>(context);
   DashboardBloc get dashboardBloc => BlocProvider.of<DashboardBloc>(context);
   User? get user => authBloc.state.user;
   _buildHeader() {

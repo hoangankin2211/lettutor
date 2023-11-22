@@ -34,7 +34,8 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> with WidgetsBindingObserver {
-  AuthBloc get authBloc => BlocProvider.of<AuthBloc>(context);
+  AuthenticationBloc get authBloc =>
+      BlocProvider.of<AuthenticationBloc>(context);
 
   ApplicationBloc get applicationBloc =>
       BlocProvider.of<ApplicationBloc>(context);
@@ -93,7 +94,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     }
   }
 
-  void _authStateListener(BuildContext context, AuthState state) {
+  void _authStateListener(BuildContext context, AuthenticationState state) {
     switch (state.authStatus) {
       case AuthStatus.authenticated:
         widget.routeService.go(RouteLocation.dashboard);
@@ -121,7 +122,7 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
           //       statusBarIconBrightness: AdaptiveTheme.of(context).brightness == Brightness.light ? Brightness.dark : Brightness.light
           //   ),
           // );
-          return BlocListener<AuthBloc, AuthState>(
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
             listener: _authStateListener,
             child: _buildMaterialApp(
               locale: Locale(appState.data.language),

@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'signup_screen.dart';
+import 'widgets/sign_up/widget/custom_bottom_button.dart';
 import 'widgets/custom_scaffold_appbar.dart';
 import 'widgets/custom_scaffold_body.dart';
 
@@ -142,7 +142,7 @@ class _OTPScreenState extends State<OTPScreen> {
   Widget buildVerifyButton() {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: TCBottomButton(
+      child: CustomBottomButton(
         color: context.colorScheme.primary,
         title: 'Verify',
         onPressed: () {
