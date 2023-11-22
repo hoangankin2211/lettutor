@@ -8,7 +8,7 @@ class BookingInfoEntity {
   final String? userId;
   final String? scheduleId;
   final String? cancelReasonId;
-  final String? lessonPlanId;
+  final int? lessonPlanId;
   final String? calendarId;
   final String? cancelNote;
   final bool? isDeleted;
@@ -95,7 +95,7 @@ class BookingInfoEntity {
           ? map['cancelReasonId'] as String
           : null,
       lessonPlanId:
-          map['lessonPlanId'] != null ? map['lessonPlanId'] as String : null,
+          map['lessonPlanId'] != null ? map['lessonPlanId'] as int : null,
       calendarId:
           map['calendarId'] != null ? map['calendarId'] as String : null,
       cancelNote:

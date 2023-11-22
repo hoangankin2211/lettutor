@@ -23,6 +23,11 @@ class ApiTokenInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
+    if (options.path.contains(
+        '${EmailAuthApi.loginApi}||${EmailAuthApi.refreshTokenApi}||${EmailAuthApi.registerApi}')) {
+      super.onRequest(options, handler);
+      return;
+    }
     final tokenMap = _appLocalStorage.getMap(accessTokenKey);
 
     if (tokenMap?.isNotEmpty ?? false) {
@@ -45,7 +50,7 @@ class ApiTokenInterceptor extends Interceptor {
             ),
           ).refreshToken(body: {
             "refreshToken": tokenEntity.refresh.token,
-            "timezone": 7.toString(),
+            "timezone": 7,
           });
 
           await _appLocalStorage.saveMap(

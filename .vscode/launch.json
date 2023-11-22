@@ -22,6 +22,7 @@
         {
             "name": "devDebug",
             "request": "launch",
+            "args": ["--flavor","dev"],
             "type": "dart",
             "program": "lib/main_dev.dart",
             "flutterMode": "debug"

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:lettutor/core/configuration/configuration.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
@@ -33,7 +34,10 @@ class NetworkService {
         ? BaseOptions(baseUrl: baseUrl, headers: header)
         : BaseOptions();
 
-    final dio = Dio(baseOptions)..interceptors.add(LoggerInterceptor());
+    final dio = Dio(baseOptions);
+    if (Configurations.environment == "dev") {
+      dio.interceptors.add(LoggerInterceptor());
+    }
 
     if (haveApiInterceptor) {
       dio.interceptors.add(

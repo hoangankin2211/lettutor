@@ -26,7 +26,7 @@ class SignInFormWidget extends StatelessWidget {
   String? validatePassword(BuildContext context, {required String value}) {
     if (value.isEmpty) {
       return context.l10n.passwordRequired;
-    } else if (value.length < 6) {
+    } else if (value.length < 5) {
       return context.l10n.passwordCharactersLong;
     }
     return null;

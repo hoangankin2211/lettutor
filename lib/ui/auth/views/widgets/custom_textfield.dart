@@ -82,7 +82,7 @@ class _TCInputFieldState extends State<TCInputField> {
   }
 
   void _onFocus() {
-    if (widget.focusNode?.hasFocus??false) {
+    if (widget.focusNode?.hasFocus ?? false) {
       setState(() {
         showClearText = widget.controller?.text.isNotEmpty ?? false;
       });
@@ -211,16 +211,13 @@ class _TCInputFieldState extends State<TCInputField> {
         });
       },
       decoration: InputDecoration(
-        // enabledBorder: enableBorder(),
-        // focusedBorder: focusedBorder(),
         fillColor: widget.fillColor,
         filled: widget.filled,
         border: normalBorder(),
         prefixIcon: widget.prefixIcon,
         hintText: widget.hintText,
-        hintStyle: context.textTheme.bodyMedium!.copyWith(
-          color: context.theme.primaryTextTheme.displayMedium?.color,
-        ),
+        hintStyle: context.textTheme.bodyMedium!
+            .copyWith(color: context.theme.hintColor),
         labelText: widget.labelText,
         helperText: widget.helperText,
         suffixIcon: buildSuffixIcon(),
