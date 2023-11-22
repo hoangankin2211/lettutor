@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/views/widgets/custom_textfield.dart';
-import 'package:lettutor/ui/auth/views/widgets/sign_in/widget/sign_in_option_widget.dart';
 
 class SignInFormWidget extends StatelessWidget {
   const SignInFormWidget({
