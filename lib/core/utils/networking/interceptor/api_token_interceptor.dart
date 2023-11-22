@@ -45,7 +45,7 @@ class ApiTokenInterceptor extends Interceptor {
             ),
           ).refreshToken(body: {
             "refreshToken": tokenEntity.refresh.token,
-            "timezone": 7,
+            "timezone": 7.toString(),
           });
 
           await _appLocalStorage.saveMap(

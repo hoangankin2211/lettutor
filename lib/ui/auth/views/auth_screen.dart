@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
 import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
@@ -32,15 +33,17 @@ class _AuthScreenState extends State<AuthScreen> {
         resizeToAvoidBottomInset: true,
         body: CustomTemplateScreenStackScroll(
           color: context.colorScheme.primary,
+          afterMainScreen: SvgPicture.asset(
+              "assets/images/ic_lettutor_anytime_anywhere.svg"),
           appBar: AppBarCustom(
-            expandedHeight: context.height * 0.2,
-            backgroundColor: context.colorScheme.primary,
+            expandedHeight: context.height * 0.3,
+            backgroundColor: Colors.transparent,
           ),
           children: [
             SliverToBoxAdapter(
               child: Container(
                 padding: const EdgeInsets.all(15),
-                height: context.height * 0.8 - context.query.viewPadding.top,
+                height: context.height * 0.7 - context.query.viewPadding.top,
                 decoration: BoxDecoration(
                   color: context.theme.scaffoldBackgroundColor,
                   borderRadius:

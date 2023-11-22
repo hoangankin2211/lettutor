@@ -11,6 +11,7 @@ class SignUpHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Align(
@@ -28,6 +29,7 @@ class SignUpHeader extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Image.asset("assets/images/splash.png", height: 70),
             RichText(
               text: TextSpan(
                 style: context.textTheme.titleMedium?.copyWith(

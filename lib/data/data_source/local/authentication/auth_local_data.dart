@@ -1,3 +1,4 @@
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
@@ -13,19 +14,19 @@ class AuthLocalData {
     await _appLocalStorage.saveString('token', token);
   }
 
-  Future<TokenEntity> getToken() async {
+  Future<Either<String, TokenEntity>> getToken() async {
     final tokenMap = _appLocalStorage.getMap(accessTokenKey);
 
     if (tokenMap?.isNotEmpty ?? false) {
       try {
         final TokenEntity tokenEntity =
             TokenEntity.fromJson(tokenMap!.convertMapDynamicToString());
-        return tokenEntity;
+        return Right(tokenEntity);
       } catch (e) {
-        throw Exception('Cannot parse token');
+        return const Left('Cannot parse token');
       }
     } else {
-      throw Exception('Token is invalid');
+      return const Left('Token is invalid');
     }
   }
 

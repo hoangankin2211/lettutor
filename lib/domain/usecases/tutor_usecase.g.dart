@@ -7,7 +7,7 @@ part of 'tutor_usecase.dart';
 // **************************************************************************
 
 String _$registerBecomeTutorHash() =>
-    r'd32678b95a818d4d0c5f122ae1828b67e569be34';
+    r'a677ecfecf551e05311fc2fc90069d27ac63c878';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -18,7 +18,7 @@ class TCInputField extends StatefulWidget {
   final int? maxLength;
   final int? maxLines;
   final ValueChanged<String>? onChanged;
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final Widget? prefixIcon;
   final bool enableSuggestions;
   final bool autocorrect;
@@ -32,7 +32,7 @@ class TCInputField extends StatefulWidget {
 
   const TCInputField({
     super.key,
-    required this.focusNode,
+    this.focusNode,
     this.hintText,
     this.labelText,
     this.helperText,
@@ -72,17 +72,17 @@ class _TCInputFieldState extends State<TCInputField> {
   void initState() {
     super.initState();
     obscureText = widget.obscureText;
-    widget.focusNode.addListener(_onFocus);
+    widget.focusNode?.addListener(_onFocus);
   }
 
   @override
   void dispose() {
-    widget.focusNode.removeListener(_onFocus);
+    widget.focusNode?.removeListener(_onFocus);
     super.dispose();
   }
 
   void _onFocus() {
-    if (widget.focusNode.hasFocus) {
+    if (widget.focusNode?.hasFocus??false) {
       setState(() {
         showClearText = widget.controller?.text.isNotEmpty ?? false;
       });

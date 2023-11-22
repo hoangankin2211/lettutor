@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,15 @@ class AuthenticationBloc
   FutureOr<void> _onInitAuthenticationStatus(
       InitAuthenticationStatus event, Emitter<AuthenticationState> emit) async {
     try {
-      final TokenEntity tokenEntity = await _authLocalData.getToken();
+      final Either<String, TokenEntity> tokenLocal =
+          await _authLocalData.getToken();
+
+      if (tokenLocal.isLeft) {
+        return emit(
+            AuthenticationState.unauthenticated(message: tokenLocal.left));
+      }
+
+      final TokenEntity tokenEntity = tokenLocal.right;
 
       final accessExpiredTime = DateTime.parse(tokenEntity.access.expires);
 
@@ -68,10 +77,9 @@ class AuthenticationBloc
       EmailLoginRequest event, Emitter<AuthenticationState> emit) async {
     emit(const AuthenticationState.loading());
     (await authUseCase.signInEmail(event.email, event.password)).fold(
-      (left) {
-        emit(AuthenticationState.authenticated(user: left));
-      },
-      (right) => emit(AuthenticationState.unauthenticated(message: right)),
+      (user) => emit(AuthenticationState.authenticated(user: user)),
+      (errorMessage) =>
+          emit(AuthenticationState.unauthenticated(message: errorMessage)),
     );
   }
 

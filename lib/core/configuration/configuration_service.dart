@@ -31,7 +31,6 @@ Map<String, String>? _getHeader(Map jsonHeader) {
 Future<Map<String, dynamic>> getConfigFromJson(String fileConfig) async {
   final String response = await rootBundle.loadString(fileConfig);
   final config = await json.decode(response);
-
   return {
     'name': config['name'],
     'environment': config['environment'],

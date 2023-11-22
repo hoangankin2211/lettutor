@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/views/page_controller.dart';
-import 'package:lettutor/ui/auth/views/widgets/sign_up/signup_screen.dart';
 
 class SignInOptionWidget extends StatelessWidget {
-  const SignInOptionWidget({
-    super.key,
-  });
+  final String? otherChoice;
+  final VoidCallback? onTapOtherChoice;
+  const SignInOptionWidget(
+      {super.key, this.otherChoice, this.onTapOtherChoice});
   Widget buildSignInOptionButton(
     BuildContext context,
     String iconPath,
@@ -76,7 +76,8 @@ class SignInOptionWidget extends StatelessWidget {
             height: 16,
           ),
           GestureDetector(
-            onTap: context.read<AuthPageController>().openSignUp,
+            onTap: onTapOtherChoice ??
+                context.read<AuthPageController>().openSignUp,
             child: RichText(
               text: TextSpan(
                 style: context.textTheme.bodyMedium?.copyWith(
@@ -84,9 +85,11 @@ class SignInOptionWidget extends StatelessWidget {
                   color: context.theme.hintColor,
                 ),
                 children: [
-                  TextSpan(text: context.l10n.noAccount),
+                  TextSpan(text: otherChoice ?? context.l10n.noAccount),
                   TextSpan(
-                    text: context.l10n.signUp,
+                    text: otherChoice == null
+                        ? context.l10n.signUp
+                        : context.l10n.signIn,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: context.colorScheme.primary,
                     ),
