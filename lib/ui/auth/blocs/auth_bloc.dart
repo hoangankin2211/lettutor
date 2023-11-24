@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/data/data_source/local/authentication/auth_local_data.dart';
 import 'package:lettutor/data/data_source/remote/user/user_service.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
@@ -25,8 +24,11 @@ class AuthenticationBloc
   final UserService userService;
   final AuthLocalData _authLocalData;
 
-  AuthenticationBloc(this.authUseCase, this._authLocalData, this.userService)
-      : super(const AuthenticationState.unknown()) {
+  AuthenticationBloc(
+    this.authUseCase,
+    this._authLocalData,
+    this.userService,
+  ) : super(const AuthenticationState.unknown()) {
     on<EmailLoginRequest>(_onEmailLoginRequest);
     on<LogoutAuthenticationRequest>(_onLogoutAuthenticationRequest);
     on<InitAuthenticationStatus>(_onInitAuthenticationStatus);
@@ -68,7 +70,6 @@ class AuthenticationBloc
         );
       }
     } catch (e) {
-      logger.d(e.toString());
       emit(AuthenticationState.unauthenticated(message: e.toString()));
     }
   }
@@ -96,10 +97,12 @@ class AuthenticationBloc
   }
 
   FutureOr<void> _onLogoutAuthenticationRequest(
-      LogoutAuthenticationRequest event,
-      Emitter<AuthenticationState> emit) async {
+    LogoutAuthenticationRequest event,
+    Emitter<AuthenticationState> emit,
+  ) async {
     emit(const AuthenticationState.loading());
     if (await authUseCase.logout()) {
+      await _authLocalData.deleteToken();
       return emit(const AuthenticationState.unauthenticated(message: "Logout"));
     }
     return emit(const AuthenticationState.unknown());

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
@@ -75,15 +77,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     );
 
     if (state is DataSuccess) {
+      log(state.data!.toJson());
       await _appLocalStorage.saveMap(
         accessTokenKey,
         state.data!.tokens.toMap(),
       );
-
       return Left(state.data!.user);
     }
-
-    return Right(state.dioException?.message ?? "Error while sign in");
+    return Right(state.dioException?.message ??
+        "Error while sign in" +
+            (state.dioException?.response?.data as Map)["message"]);
   }
 
   @override

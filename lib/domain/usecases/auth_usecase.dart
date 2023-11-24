@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/domain/mapper/user_mapper.dart';
@@ -38,7 +40,10 @@ class AuthUseCase {
   ) async {
     return (await repository.register(email, password)).either(
       (left) => UserMapper.fromEntity(left),
-      (right) => right,
+      (right) {
+        log(right);
+        return right;
+      },
     );
   }
 }

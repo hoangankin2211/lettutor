@@ -20,10 +20,11 @@ class DataSuccess<T> extends DataState<T> {
 }
 
 class DataFailed<T> extends DataState<T> {
-  DataFailed({
-    required super.statusCode,
-    required DioException exception,
-  }) : super(data: null, dioException: exception);
+  DataFailed(
+      {required super.statusCode,
+      required DioException exception,
+      dynamic data})
+      : super(data: data, dioException: exception);
 }
 
 extension DataStateExtensions<T> on DataState<T> {

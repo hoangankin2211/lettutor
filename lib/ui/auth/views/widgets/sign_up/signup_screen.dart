@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lettutor/core/core.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 import 'package:lettutor/ui/auth/views/page_controller.dart';
 import 'package:lettutor/ui/auth/views/widgets/sign_in/widget/sign_in_option_widget.dart';
 import 'widget/sign_up_form.dart';
@@ -15,25 +18,27 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SignUpHeader(),
-        SignUpForm(
-          emailController: _emailController,
-          passwordController: _passwordController,
-        ),
-        const SizedBox(height: 8),
-        SignInOptionWidget(
-          otherChoice: "Already have an account? ",
-          onTapOtherChoice: context.read<AuthPageController>().openSignIn,
-        ),
-      ],
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state.authStatus == AuthStatus.unauthenticated &&
+            (state.message?.isNotEmpty ?? false)) {
+          context.showSnackBarAlert(state.message!);
+        }
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SignUpHeader(),
+          const SignUpForm(),
+          const SizedBox(height: 16),
+          SignInOptionWidget(
+            otherChoice: "Already have an account? ",
+            onTapOtherChoice: context.read<AuthPageController>().openSignIn,
+          ),
+        ],
+      ),
     );
   }
 }

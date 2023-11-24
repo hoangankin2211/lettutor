@@ -187,7 +187,6 @@ class _TCInputFieldState extends State<TCInputField> {
       style: context.textTheme.bodyMedium!.copyWith(
         color: colorText(),
       ),
-      expands: true,
       scrollPadding: widget.scrollPadding!,
       controller: widget.controller,
       obscureText: obscureText!,
@@ -212,6 +211,7 @@ class _TCInputFieldState extends State<TCInputField> {
         });
       },
       decoration: InputDecoration(
+        isDense: true,
         fillColor: widget.fillColor,
         filled: widget.filled,
         border: normalBorder(),
@@ -223,7 +223,6 @@ class _TCInputFieldState extends State<TCInputField> {
         helperText: widget.helperText,
         suffixIcon: buildSuffixIcon(),
         errorText: widget.errorText,
-        isDense: true,
       ),
     );
 
@@ -236,7 +235,7 @@ class _TCInputFieldState extends State<TCInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: widget.height ?? 56, child: buildTextFormField());
+    return SizedBox(height: 60, child: buildTextFormField());
   }
 }
 

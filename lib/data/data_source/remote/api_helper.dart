@@ -11,7 +11,9 @@ Future<DataState<T>> getStateOf<T>({
 }) async {
   try {
     final httpResponse = await request();
-    if (httpResponse.response.statusCode == HttpStatus.ok) {
+    if (httpResponse.response.statusCode == HttpStatus.ok ||
+        httpResponse.response.statusCode == HttpStatus.accepted ||
+        httpResponse.response.statusCode == HttpStatus.created) {
       return DataSuccess(
         data: parser == null
             ? httpResponse.data

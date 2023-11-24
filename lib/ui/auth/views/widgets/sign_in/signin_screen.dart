@@ -37,16 +37,21 @@ class _SignInScreenState extends State<SignInScreen> {
         return Form(
           key: formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               const SignInHeader(),
-              SignInFormWidget(
-                emailController: _emailController,
-                passwordController: _passwordController,
+              const SizedBox(height: 10),
+              Flexible(
+                child: SignInFormWidget(
+                  emailController: _emailController,
+                  passwordController: _passwordController,
+                ),
               ),
-              const SignInOptionWidget(),
               buildSignInButton(state),
-            ],
+              const Expanded(child: Center(child: SignInOptionWidget())),
+            ]
+                .expand<Widget>(
+                    (element) => [element, const SizedBox(height: 5)])
+                .toList(),
           ),
         );
       },

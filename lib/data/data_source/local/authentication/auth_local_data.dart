@@ -11,7 +11,7 @@ class AuthLocalData {
   const AuthLocalData(this._appLocalStorage);
 
   Future<void> setToken(String token) async {
-    await _appLocalStorage.saveString('token', token);
+    await _appLocalStorage.saveString(accessTokenKey, token);
   }
 
   Future<Either<String, TokenEntity>> getToken() async {
@@ -31,7 +31,7 @@ class AuthLocalData {
   }
 
   Future<void> deleteToken() async {
-    await _appLocalStorage.remove('token');
+    await _appLocalStorage.remove(accessTokenKey);
   }
 
   Future<void> setRefreshToken(String token) async {

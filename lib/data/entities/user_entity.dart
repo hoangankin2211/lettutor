@@ -10,13 +10,13 @@ class UserEntity {
   final String email;
   final String name;
   final String avatar;
-  final String country;
+  final String? country;
   final String phone;
   final List<String> roles;
   final String? language;
-  final String birthday;
+  final String? birthday;
   final bool isActivated;
-  final WalletInfoEntity walletInfo;
+  final WalletInfoEntity? walletInfo;
   final List<CourseEntity> courses;
   final String requireNote;
   final String level;
@@ -108,7 +108,7 @@ class UserEntity {
       'language': language,
       'birthday': birthday,
       'isActivated': isActivated,
-      'walletInfo': walletInfo.toMap(),
+      'walletInfo': walletInfo?.toMap(),
       'courses': courses,
       'requireNote': requireNote,
       'level': level,
@@ -123,39 +123,41 @@ class UserEntity {
 
   factory UserEntity.fromJson(Map<String, dynamic> map) {
     return UserEntity(
-      id: map['id'] as String,
-      email: map['email'] as String,
-      name: map['name'] as String,
-      avatar: map['avatar'] as String,
-      country: map['country'] as String,
-      phone: map['phone'] as String,
+      id: map['id'] as String? ?? "",
+      email: map['email'] as String? ?? "",
+      name: map['name'] as String? ?? "",
+      avatar: map['avatar'] as String? ?? "",
+      country: map['country'] as String? ?? "VN",
+      phone: map['phone'] as String? ?? "",
       roles: List<String>.from(
-          (map['roles'] as List<dynamic>).map((e) => e as String)),
+          (map['roles'] as List<dynamic>? ?? []).map((e) => e as String)),
       language: map['language'] as String?,
-      birthday: map['birthday'] as String,
+      birthday: map['birthday'] as String?,
       isActivated: map['isActivated'] as bool,
-      walletInfo:
-          WalletInfoEntity.fromMap(map['walletInfo'] as Map<String, dynamic>),
-      courses: List<CourseEntity>.from(
-          (map['courses'] as List<dynamic>? ?? []).map<CourseEntity>((e) => CourseEntity.fromJson(e))),
-      requireNote: map['requireNote'] as String,
-      level: map['level'] as String,
+      walletInfo: map['walletInfo'] != null
+          ? WalletInfoEntity.fromMap(map['walletInfo'] as Map<String, dynamic>)
+          : null,
+      courses: List<CourseEntity>.from((map['courses'] as List<dynamic>? ?? [])
+          .map<CourseEntity>((e) => CourseEntity.fromJson(e))),
+      requireNote: map['requireNote'] as String? ?? "",
+      level: map['level'] as String? ?? "",
       learnTopics: List<LearnTopics>.from(
-        (map['learnTopics'] as List<dynamic>).map(
+        (map['learnTopics'] as List<dynamic>? ?? []).map(
           (e) => LearnTopics.fromMap(
             e as Map<String, dynamic>,
           ),
         ),
       ),
       testPreparations: List<TestPreparationEntity>.from(
-        (map['testPreparations'] as List<dynamic>).map<TestPreparationEntity>(
+        (map['testPreparations'] as List<dynamic>? ?? [])
+            .map<TestPreparationEntity>(
           (x) => TestPreparationEntity.fromJson(x as Map<String, dynamic>),
         ),
       ),
-      isPhoneActivated: map['isPhoneActivated'] as bool,
-      timezone: map['timezone'] as int,
-      studySchedule: map['studySchedule'] as String,
-      canSendMessage: map['canSendMessage'] as bool,
+      isPhoneActivated: map['isPhoneActivated'] as bool? ?? false,
+      timezone: map['timezone'] as int? ?? 7,
+      studySchedule: map['studySchedule'] as String? ?? "",
+      canSendMessage: map['canSendMessage'] as bool? ?? false,
     );
   }
 

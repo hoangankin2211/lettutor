@@ -26,7 +26,9 @@ class UserMapper {
       timezone: userEntity.timezone,
       studySchedule: userEntity.studySchedule,
       canSendMessage: userEntity.canSendMessage,
-      walletInfo: WalletInfoMapper.fromEntity(userEntity.walletInfo),
+      walletInfo: userEntity.walletInfo != null
+          ? WalletInfoMapper.fromEntity(userEntity.walletInfo!)
+          : null,
       testPreparations: List.of(
         userEntity.testPreparations.map(
           (e) => TestPreparationMapper.fromEntity(e),
