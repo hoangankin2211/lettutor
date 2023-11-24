@@ -39,7 +39,9 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart",
-            "flutterMode": "profile"
+            "args": ["--flavor","dev"],
+            "flutterMode": "profile",
+            "noDebug": false
         },
         {
             "name": "prodProfile",

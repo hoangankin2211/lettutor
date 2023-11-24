@@ -187,6 +187,7 @@ class _TCInputFieldState extends State<TCInputField> {
       style: context.textTheme.bodyMedium!.copyWith(
         color: colorText(),
       ),
+      expands: true,
       scrollPadding: widget.scrollPadding!,
       controller: widget.controller,
       obscureText: obscureText!,

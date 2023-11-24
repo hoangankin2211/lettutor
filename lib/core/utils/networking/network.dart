@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/configuration/configuration.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor.dart';
@@ -35,7 +37,7 @@ class NetworkService {
         : BaseOptions();
 
     final dio = Dio(baseOptions);
-    if (Configurations.environment == "dev") {
+    if (kDebugMode && Configurations.environment == Environment.dev) {
       dio.interceptors.add(LoggerInterceptor());
     }
 

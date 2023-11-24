@@ -1,18 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
-  final List<bool> enable;
-
-  AppBlocObserver({
-    this.enable = const [
-      false,
-      false,
-      true,
-      false,
-    ],
-  });
+  bool _isAuthBloc(BlocBase bloc) => bloc.runtimeType is AuthenticationBloc;
 
   @override
   void onCreate(BlocBase bloc) {
@@ -23,10 +15,17 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onChange(BlocBase bloc, Change change) {
-    final message = '[AppBlocObserver] onChange -- '
-        '${bloc.runtimeType} '
-        '${change.currentState.runtimeType} -> ${change.nextState.runtimeType}';
-    log(message);
+    if (_isAuthBloc(bloc)) {
+      final message = '[AppBlocObserver] onChange -- '
+          '${bloc.runtimeType} '
+          '${(change.currentState as AuthenticationBloc).state.authStatus} -> ${(change.nextState as AuthenticationBloc).state.authStatus}';
+      log(message);
+    } else {
+      final message = '[AppBlocObserver] onChange -- '
+          '${bloc.runtimeType} '
+          '${change.currentState.runtimeType} -> ${change.nextState.runtimeType}';
+      log(message);
+    }
     super.onChange(bloc, change);
   }
 

@@ -21,3 +21,5 @@ enum TutorTag {
 
   const TutorTag(this.name);
 }
+
+enum Environment { dev, prod }
