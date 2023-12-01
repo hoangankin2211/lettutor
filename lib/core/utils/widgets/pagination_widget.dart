@@ -22,8 +22,8 @@ class PaginationWidget extends StatelessWidget {
       children: [
         IconButton(
           onPressed: onBack,
-          constraints: BoxConstraints(),
-          icon: Icon(Icons.arrow_back_ios),
+          constraints: const BoxConstraints(),
+          icon: const Icon(Icons.arrow_back_ios),
         ),
         const SizedBox(width: 5),
         Text(
@@ -33,8 +33,8 @@ class PaginationWidget extends StatelessWidget {
         const SizedBox(width: 5),
         IconButton(
           onPressed: onNext,
-          constraints: BoxConstraints(),
-          icon: Icon(Icons.arrow_forward_ios),
+          constraints: const BoxConstraints(),
+          icon: const Icon(Icons.arrow_forward_ios),
         ),
       ],
     );

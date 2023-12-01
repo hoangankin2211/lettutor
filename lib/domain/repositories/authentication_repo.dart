@@ -1,7 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
-import 'package:lettutor/ui/auth/views/widgets/forget_password/forget_password_widget.dart';
 
 import '../models/models.dart';
 

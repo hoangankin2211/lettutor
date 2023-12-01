@@ -1,5 +1,3 @@
-import 'package:lettutor/domain/models/tutor/tutor.dart';
-
 enum National {
   vietnam,
   native,

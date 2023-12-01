@@ -1,9 +1,7 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:language_code/language_code.dart';
 import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
-import 'package:lettutor/domain/models/tutor/tutor.dart';
 
 class SpecialtiesComponent extends StatelessWidget {
   const SpecialtiesComponent({
