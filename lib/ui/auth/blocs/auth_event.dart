@@ -30,3 +30,21 @@ class EmailRegisterRequest extends AuthenticationEvent {
     required this.password,
   });
 }
+
+class ForgetPasswordRequest extends AuthenticationEvent {
+  final String email;
+  ForgetPasswordRequest(this.email);
+}
+
+class InitChangePasswordFlow extends AuthenticationEvent {
+  InitChangePasswordFlow();
+}
+
+class ChangePasswordRequest extends AuthenticationEvent {
+  final String password;
+  final String newPassword;
+  ChangePasswordRequest({
+    required this.password,
+    required this.newPassword,
+  });
+}

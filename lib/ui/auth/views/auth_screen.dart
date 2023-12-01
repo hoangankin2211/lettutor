@@ -18,10 +18,18 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   static const int initialPage = 0;
   final pageController = PageController(initialPage: initialPage);
+  final ValueNotifier<bool> _isSignInForm = ValueNotifier(true);
 
-  final listPageWidget = const [
-    SignInScreen(),
-    SignUpScreen(),
+  late final listPageWidget = [
+    ValueListenableBuilder<bool>(
+      valueListenable: _isSignInForm,
+      builder: (context, value, child) => SignInScreen(
+        openForgetPassword: () => _isSignInForm.value = false,
+        openSignInForm: () => _isSignInForm.value = true,
+        isSignInForm: value,
+      ),
+    ),
+    const SignUpScreen(),
   ];
 
   @override

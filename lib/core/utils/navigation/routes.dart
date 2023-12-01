@@ -9,9 +9,10 @@ import 'package:lettutor/ui/course/views/widgets/page_view_pdf.dart';
 import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
 import 'package:lettutor/ui/history/views/history_screen.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
-import 'package:lettutor/ui/setting/views/become_tutor_screen.dart';
-import 'package:lettutor/ui/setting/views/profile_screen.dart';
 import 'package:lettutor/ui/setting/views/setting_screen.dart';
+import 'package:lettutor/ui/setting/views/widgets/become_tutor_screen.dart';
+import 'package:lettutor/ui/setting/views/widgets/change_password_screen.dart';
+import 'package:lettutor/ui/setting/views/widgets/profile_screen.dart';
 import 'package:lettutor/ui/splash/splash_screen.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_bloc.dart';
 import 'package:lettutor/ui/tutor/views/tutor_booking_time_screen.dart';
@@ -111,8 +112,14 @@ final routes = [
     builder: (context, state) => const SettingScreen(),
     routes: [
       GoRoute(
+        parentNavigatorKey: AppBuilder.appNavigationKey,
         path: RouteLocation.profile,
         builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        parentNavigatorKey: AppBuilder.appNavigationKey,
+        path: RouteLocation.changePassword,
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
       GoRoute(
         path: RouteLocation.history,

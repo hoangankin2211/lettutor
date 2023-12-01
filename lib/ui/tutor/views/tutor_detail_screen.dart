@@ -8,9 +8,7 @@ import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
-import 'package:lettutor/ui/dashboard/blocs/dashboard_bloc.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
-import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
 import 'package:lettutor/ui/tutor/views/widgets/specialties_component.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_video_player.dart';
@@ -225,8 +223,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                               direction: Axis.horizontal,
                               children: (tutorDetail.languages ?? "")
                                   .split(RegExp(r'[,]'))
-                                  .map(
-                                      (e) => SpecialtiesComponent(specialty: e))
+                                  .map((e) => SpecialtiesComponent(
+                                        specialty: e,
+                                        isLanguage: true,
+                                      ))
                                   .toList(),
                             ),
                           ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:lettutor/ui/dashboard/blocs/dashboard_bloc.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
@@ -92,13 +93,15 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<TutorBloc, TutorState>(
         bloc: dashboardBloc.tutorBloc,
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: UpComingWidget(
-              nextClass: state.data.nextTutor,
-              totalLearnTime: state.data.totalLearnTime,
-            ),
-          );
+          return state.data.tutors.isEmpty
+              ? const AppLoadingIndicator()
+              : Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: UpComingWidget(
+                    nextClass: state.data.nextTutor,
+                    totalLearnTime: state.data.totalLearnTime,
+                  ),
+                );
         },
       ),
     );
@@ -113,34 +116,37 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BlocBuilder<CourseBloc, CourseState>(
           bloc: dashboardBloc.courseBloc,
           builder: (context, state) {
-            return ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 20,
-              ),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final courseItem = state.data.course.elementAt(index);
-                return CourseWidget(
-                  key: ValueKey("${courseItem.id}_HomeScreen"),
-                  courseId: courseItem.id,
-                  onTap: (id) {
-                    context.push(
-                      RouteLocation.courseDetail,
-                      extra: {
-                        "courseId": id,
-                        "from": "HomeScreen",
-                      },
-                    );
-                  },
-                  imageUrl: courseItem.imageUrl,
-                  title: courseItem.name,
-                  subTitle: courseItem.description,
-                  level: courseItem.level,
-                );
-              },
-              itemCount:
-                  state.data.course.length < 5 ? state.data.course.length : 5,
-            );
+            return state.data.course.isEmpty
+                ? const AppLoadingIndicator()
+                : ListView.separated(
+                    separatorBuilder: (context, index) => const SizedBox(
+                      width: 20,
+                    ),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final courseItem = state.data.course.elementAt(index);
+                      return CourseWidget(
+                        key: ValueKey("${courseItem.id}_HomeScreen"),
+                        courseId: courseItem.id,
+                        onTap: (id) {
+                          context.push(
+                            RouteLocation.courseDetail,
+                            extra: {
+                              "courseId": id,
+                              "from": "HomeScreen",
+                            },
+                          );
+                        },
+                        imageUrl: courseItem.imageUrl,
+                        title: courseItem.name,
+                        subTitle: courseItem.description,
+                        level: courseItem.level,
+                      );
+                    },
+                    itemCount: state.data.course.length < 5
+                        ? state.data.course.length
+                        : 5,
+                  );
           },
         ),
       ),
@@ -156,32 +162,37 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BlocBuilder<TutorBloc, TutorState>(
           bloc: dashboardBloc.tutorBloc,
           builder: (context, state) {
-            return ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(width: 20),
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final tutor = state.data.tutors[index];
+            return state.data.tutors.isEmpty
+                ? const AppLoadingIndicator()
+                : ListView.separated(
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 20),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final tutor = state.data.tutors[index];
 
-                return TutorWidget(
-                  onTap: () {
-                    context.push(
-                      RouteLocation.tutorDetail,
-                      extra: {"tutorId": tutor.userId},
-                    );
-                  },
-                  imageUrl: tutor.avatar,
-                  name: tutor.name,
-                  country: tutor.country,
-                  specialties: tutor.specialties.split(RegExp(r'[-\n ,]')),
-                  rating: tutor.rating,
-                  description: tutor.bio,
-                  price: tutor.price,
-                );
-              },
-              itemCount:
-                  state.data.tutors.length < 5 ? state.data.tutors.length : 5,
-            );
+                      return TutorWidget(
+                        onTap: () {
+                          context.push(
+                            RouteLocation.tutorDetail,
+                            extra: {"tutorId": tutor.userId},
+                          );
+                        },
+                        imageUrl: tutor.avatar,
+                        name: tutor.name,
+                        country: tutor.country,
+                        specialties:
+                            tutor.specialties.split(RegExp(r'[-\n ,]')),
+                        rating: tutor.rating,
+                        description: tutor.bio,
+                        price: tutor.price,
+                      );
+                    },
+                    itemCount: state.data.tutors.length < 5
+                        ? state.data.tutors.length
+                        : 5,
+                  );
           },
         ),
       ),

@@ -32,4 +32,10 @@ class GoogleAuthImpl implements AuthenticationApi {
     // TODO: implement signUp
     throw UnimplementedError();
   }
+
+  @override
+  Future<HttpResponse> forgetPassword({required Map<String, dynamic> body}) {
+    // TODO: implement forgetPassword
+    throw UnimplementedError();
+  }
 }

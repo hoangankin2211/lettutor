@@ -34,6 +34,9 @@ class AuthenticationBloc
     on<InitAuthenticationStatus>(_onInitAuthenticationStatus);
     on<EmailRegisterRequest>(_onEmailRegisterRequest);
     on<RefreshTokenRequest>(_onRefreshTokenRequest);
+    on<ForgetPasswordRequest>(_onForgetPasswordRequest);
+    on<ChangePasswordRequest>(_onChangePasswordRequest);
+    on<InitChangePasswordFlow>(_onInitChangePasswordFlow);
   }
 
   FutureOr<void> _onInitAuthenticationStatus(
@@ -118,5 +121,32 @@ class AuthenticationBloc
             (right) => emit(const AuthenticationState.unknown()),
           ),
         );
+  }
+
+  FutureOr<void> _onForgetPasswordRequest(
+      ForgetPasswordRequest event, Emitter<AuthenticationState> emit) async {
+    emit(const AuthenticationState.loading());
+    final result = (await authUseCase.forgetPassword(event.email));
+    emit(AuthenticationState.sendEmailSuccess(message: result));
+  }
+
+  FutureOr<void> _onInitChangePasswordFlow(
+      InitChangePasswordFlow event, Emitter<AuthenticationState> emit) async {
+    emit(ChangePassword.init(
+        user: state.user, changePasswordStatus: ChangePasswordStatus.init));
+  }
+
+  FutureOr<void> _onChangePasswordRequest(
+      ChangePasswordRequest event, Emitter<AuthenticationState> emit) async {
+    emit(ChangePassword.loading(user: state.user));
+    await (authUseCase.changePassword(event.password, event.newPassword))
+        .then((value) => value.fold(
+              (left) {
+                emit(ChangePassword.success(left, user: state.user));
+              },
+              (right) {
+                emit(ChangePassword.fail(right, user: state.user));
+              },
+            ));
   }
 }

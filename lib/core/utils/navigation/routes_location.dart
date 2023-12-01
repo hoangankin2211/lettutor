@@ -18,4 +18,5 @@ class RouteLocation {
   static const String profile = 'profile';
   static const String meeting = '/meeting';
   static const String becomeTutor = '/becomeTutor';
+  static const String changePassword = 'changePassword';
 }

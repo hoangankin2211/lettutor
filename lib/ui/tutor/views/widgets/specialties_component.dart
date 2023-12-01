@@ -1,11 +1,17 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:language_code/language_code.dart';
+import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/domain/models/tutor/tutor.dart';
 
 class SpecialtiesComponent extends StatelessWidget {
   const SpecialtiesComponent({
     super.key,
+    this.isLanguage = false,
     required this.specialty,
   });
+  final bool isLanguage;
   final String specialty;
 
   @override
@@ -19,7 +25,9 @@ class SpecialtiesComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: Text(
-        specialty,
+        isLanguage
+            ? LanguageCodes.fromCode(specialty).name
+            : TutorTag.fromKey(specialty).name,
         style: context.textTheme.bodyLarge?.copyWith(
           color: context.theme.brightness == Brightness.light
               ? context.theme.primaryColor

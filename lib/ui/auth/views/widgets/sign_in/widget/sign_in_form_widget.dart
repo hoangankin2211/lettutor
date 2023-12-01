@@ -5,12 +5,14 @@ import 'package:lettutor/ui/auth/views/widgets/custom_textfield.dart';
 class SignInFormWidget extends StatelessWidget {
   const SignInFormWidget({
     super.key,
+    this.openForgetPassword,
     required this.emailController,
     required this.passwordController,
   });
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final VoidCallback? openForgetPassword;
 
   String? validateEmail(BuildContext context, {required String value}) {
     if (value.isEmpty) {
@@ -44,22 +46,17 @@ class SignInFormWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Flexible(
-          child: TCInputField(
-            fillColor: context.colorScheme.onBackground,
-            autocorrect: false,
-            controller: emailController,
-            enableSuggestions: false,
-            hintText: context.l10n.usernameEmail,
-            borderRadius: 5,
-            textInputAction: TextInputAction.next,
-            keyboardType: TextInputType.emailAddress,
-            // maxLines: 1,
-            ignoreShadow: true,
-            validator: (value) => validateEmail(context, value: value ?? ""),
-            onChanged: (value) => {},
-            onFieldSubmitted: (text) {},
-          ),
+        TCInputField(
+          fillColor: context.colorScheme.onBackground,
+          autocorrect: false,
+          controller: emailController,
+          enableSuggestions: false,
+          hintText: context.l10n.usernameEmail,
+          borderRadius: 5,
+          keyboardType: TextInputType.emailAddress,
+          maxLines: 1,
+          ignoreShadow: true,
+          validator: (value) => validateEmail(context, value: value ?? ""),
         ),
         const SizedBox(height: 8),
         Text(
@@ -82,15 +79,13 @@ class SignInFormWidget extends StatelessWidget {
             maxLines: 1,
             ignoreShadow: true,
             obscureText: true,
-            onChanged: (value) => {},
-            onFieldSubmitted: (text) {},
           ),
         ),
         const SizedBox(height: 8),
         Align(
           alignment: Alignment.bottomRight,
           child: GestureDetector(
-            onTap: () {},
+            onTap: openForgetPassword,
             child: Text(
               context.l10n.forgotPassword,
               style: context.textTheme.bodyMedium?.copyWith(

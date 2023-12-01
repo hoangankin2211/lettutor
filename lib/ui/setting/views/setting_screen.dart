@@ -212,6 +212,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d("Setting Screen: $location");
     return Scaffold(
       body: CustomTemplateScreenStackScroll(
         color: context.theme.scaffoldBackgroundColor,
@@ -275,6 +276,42 @@ class _SettingScreenState extends State<SettingScreen> {
                             context.l10n.otherSetting,
                             style: context.textTheme.titleLarge,
                           ))
+                      ..insert(
+                        0,
+                        GestureDetector(
+                          onTap: () {
+                            context.push(
+                                "${RouteLocation.setting}/${RouteLocation.changePassword}");
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 20,
+                            ),
+                            decoration: BoxDecoration(
+                              color: context.theme.cardColor,
+                              border: Border.all(width: 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                    flex: 1, child: Icon(Icons.password)),
+                                Expanded(
+                                    flex: 6,
+                                    child: Text(context.l10n.changePassword)),
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 12),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                       ..insert(
                         0,
                         GestureDetector(

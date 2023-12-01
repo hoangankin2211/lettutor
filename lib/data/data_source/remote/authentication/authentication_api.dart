@@ -13,4 +13,7 @@ abstract class AuthenticationApi {
 
   Future<HttpResponse<AuthResponse>> refreshToken(
       {@Body() required Map<String, dynamic> body});
+
+  Future<HttpResponse> forgetPassword(
+      {@Body() required Map<String, dynamic> body});
 }

@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
@@ -102,6 +103,7 @@ class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
         padding: const EdgeInsets.all(15.0),
         child: ElevatedBorderButton(
           onPressed: () {
+            // ignore: unused_result
             ref.refresh(register);
           },
           child: Text(
@@ -113,6 +115,11 @@ class _BecomeTutorViewState extends ConsumerState<BecomeTutorView> {
       ),
       appBar: AppBar(
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios,
+              color: context.textTheme.titleLarge?.color),
+          onPressed: context.pop,
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           context.l10n.tutorRegister,

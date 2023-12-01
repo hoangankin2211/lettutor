@@ -129,6 +129,7 @@ class TutorBloc extends Cubit<TutorState> {
                     tutors: right.rows,
                     count: right.count,
                     page: right.currentPage,
+                    filter: filter,
                   ),
                 ),
               );

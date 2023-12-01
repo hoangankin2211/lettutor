@@ -29,13 +29,6 @@ class SignInHeader extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 15),
-        Text(
-          context.l10n.signIn,
-          style: context.textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ],
     );
   }

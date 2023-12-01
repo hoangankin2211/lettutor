@@ -21,7 +21,7 @@ class CustomBottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 45,
       width: double.infinity,
       child: TextButton(
         style: TextButton.styleFrom(

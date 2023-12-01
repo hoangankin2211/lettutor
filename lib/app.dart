@@ -95,15 +95,17 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
   }
 
   void _authStateListener(BuildContext context, AuthenticationState state) {
-    switch (state.authStatus) {
-      case AuthStatus.authenticated:
-        widget.routeService.go(RouteLocation.dashboard);
-        break;
-      case AuthStatus.unauthenticated:
-        widget.routeService.go(RouteLocation.auth);
-        break;
-      default:
-        break;
+    if (state.runtimeType == AuthenticationState) {
+      switch (state.authStatus) {
+        case AuthStatus.authenticated:
+          widget.routeService.go(RouteLocation.dashboard);
+          break;
+        case AuthStatus.unauthenticated:
+          widget.routeService.go(RouteLocation.auth);
+          break;
+        default:
+          break;
+      }
     }
   }
 

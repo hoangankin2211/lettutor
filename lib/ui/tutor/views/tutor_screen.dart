@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/domain/models/tutor/tutor.dart';
-import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/course/views/widgets/course_search_bar.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
 import 'package:lettutor/ui/tutor/views/widgets/upcoming_lesson_widget.dart';
+
+import 'widgets/filter_sheet.dart';
 
 class TutorScreen extends StatefulWidget {
   const TutorScreen({super.key});
@@ -28,6 +30,31 @@ class _TutorScreenState extends State<TutorScreen>
   @override
   bool get wantKeepAlive => true;
 
+  Set<National> convertMapToSet(Map<String, dynamic>? nationalMap) {
+    Set<National> result = {};
+
+    if (nationalMap == null) return {};
+
+    if (nationalMap.containsKey("isNative") &&
+        nationalMap["isNative"] == true) {
+      result.add(National.native);
+    }
+
+    if (nationalMap.containsKey("isVietnamese") &&
+        nationalMap["isVietnamese"] == true) {
+      result.add(National.vietnam);
+    }
+
+    if (nationalMap.containsKey("isVietnamese") &&
+        nationalMap["isVietnamese"] == false &&
+        nationalMap.containsKey("isNative") &&
+        nationalMap["isNative"] == false) {
+      result.add(National.foreign);
+    }
+
+    return result;
+  }
+
   void showFilterBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -40,7 +67,48 @@ class _TutorScreenState extends State<TutorScreen>
         ),
       ),
       builder: (context) {
-        return const FilterSheet();
+        var filter = tutorBloc.state.data.filter;
+        return FilterSheet(
+          endTime: filter != null && filter.tutoringTimeAvailable.isNotEmpty
+              ? TimeOfDay.fromDateTime(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    filter.tutoringTimeAvailable[1],
+                  ),
+                )
+              : null,
+          startTime: filter != null && filter.tutoringTimeAvailable.isNotEmpty
+              ? TimeOfDay.fromDateTime(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    filter.tutoringTimeAvailable[0],
+                  ),
+                )
+              : null,
+          national: filter != null ? convertMapToSet(filter.nationality) : null,
+          selectedDate: filter?.date,
+          selectedTag: filter != null && filter.specialties.isNotEmpty
+              ? TutorTag.fromKey(filter.specialties.first)
+              : null,
+          onDone: (result) {
+            tutorBloc.searchTutor(
+              TutorSearchRequest(
+                  perPage: 12,
+                  page: 1,
+                  date: result['selectedDate'],
+                  nationality: result['national'],
+                  specialties: result['selectedTag'],
+                  tutoringTimeAvailable: switch (result) {
+                    (Map<String, dynamic> result)
+                        when result["startTime"] != null &&
+                            result["endTime"] != null =>
+                      <int>[
+                        result["startTime"],
+                        result["endTime"],
+                      ],
+                    _ => <int>[],
+                  }),
+            );
+          },
+        );
       },
     );
   }

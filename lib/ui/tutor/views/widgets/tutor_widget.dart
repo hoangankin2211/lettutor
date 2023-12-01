@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +56,18 @@ class _TutorWidgetState extends State<TutorWidget> {
     return SpecialtiesComponent(specialty: specialty);
   }
 
+  ImageProvider? _buildImageProvider(String url) {
+    try {
+      if (url.isEmpty) return null;
+      return CachedNetworkImageProvider(
+        url,
+        cacheKey: url,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
   _buildHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,32 +75,25 @@ class _TutorWidgetState extends State<TutorWidget> {
       children: [
         ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Uri.tryParse(url)?.hasAbsolutePath ?? false
-              ? CircleAvatar(
-                  radius: 30,
-                  foregroundImage:
-                      CachedNetworkImageProvider(url, cacheKey: url),
-                  onForegroundImageError: (exception, stackTrace) {
-                    setState(() {
-                      url = "";
-                    });
-                  },
-                  backgroundColor: Colors.blue.shade600,
-                  child: widget.imageUrl.isEmpty
-                      ? Text(
-                          widget.name
-                              .splitMapJoin(
-                                RegExp(r'\b\w'),
-                                onMatch: (p0) => p0.group(0)!,
-                                onNonMatch: (p0) => "",
-                              )
-                              .toUpperCase(),
-                          style: context.textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ))
-                      : null)
-              : null,
+          leading: CircleAvatar(
+              radius: 30,
+              backgroundColor: context.theme.cardColor,
+              foregroundImage: _buildImageProvider(url),
+              backgroundImage: const AssetImage("assets/images/user.png"),
+              child: widget.imageUrl.isEmpty
+                  ? Text(
+                      widget.name
+                          .splitMapJoin(
+                            RegExp(r'\b\w'),
+                            onMatch: (p0) => p0.group(0)!,
+                            onNonMatch: (p0) => "",
+                          )
+                          .toUpperCase(),
+                      style: context.textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ))
+                  : null),
           title: Text(
             widget.name,
             style: context.myTitleLarge(),

@@ -215,6 +215,7 @@ class _TCInputFieldState extends State<TCInputField> {
         fillColor: widget.fillColor,
         filled: widget.filled,
         border: normalBorder(),
+        errorMaxLines: 1,
         prefixIcon: widget.prefixIcon,
         hintText: widget.hintText,
         hintStyle: context.textTheme.bodyMedium!

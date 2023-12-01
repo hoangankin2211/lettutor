@@ -121,4 +121,20 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         (state.dioException!.message) ??
         "Error while refresh token"));
   }
+
+  @override
+  Future<String> forgetPassword(String email) async {
+    final dataState = await getStateOf<Map<String, String>>(
+      request: () => _authenticationApi.forgetPassword(body: {
+        "email": email,
+      }),
+    );
+
+    if (dataState is DataSuccess) {
+      return dataState.data?["message"]! ?? "Error while forget password";
+    }
+    return dataState.dioException?.message ??
+        "Error while forget password" +
+            (dataState.dioException?.response?.data as Map)["message"];
+  }
 }

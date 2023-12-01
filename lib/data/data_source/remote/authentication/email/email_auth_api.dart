@@ -11,11 +11,12 @@ part 'email_auth_api.g.dart';
 @Injectable(as: AuthenticationApi)
 @RestApi()
 abstract class EmailAuthApi implements AuthenticationApi {
-  static const String branch = "";
-  static const String loginApi = "/auth/login";
-  static const String refreshTokenApi = "$branch/auth/refresh-token";
-  static const String registerApi = "$branch/auth/register";
-  static const String logoutApi = "$branch/auth/logout";
+  static const String branch = "/auth";
+  static const String loginApi = "$branch/login";
+  static const String refreshTokenApi = "$branch/refresh-token";
+  static const String registerApi = "$branch/register";
+  static const String logoutApi = "$branch/logout";
+  static const String changePasswordApi = "$branch/change-password";
 
   @factoryMethod
   factory EmailAuthApi(Dio dio) = _EmailAuthApi;
@@ -38,4 +39,12 @@ abstract class EmailAuthApi implements AuthenticationApi {
   @POST(refreshTokenApi)
   Future<HttpResponse<AuthResponse>> refreshToken(
       {@Body() required Map<String, dynamic> body});
+
+  @POST(changePasswordApi)
+  Future<HttpResponse<Map<String, String>>> changePassword(
+      {@Body() required Map<String, dynamic> body});
+
+  @override
+  @POST("user/forgotPassword")
+  Future<HttpResponse> forgetPassword({required Map<String, dynamic> body});
 }

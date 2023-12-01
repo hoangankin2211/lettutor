@@ -16,8 +16,9 @@ class AuthenticationState extends Equatable {
 
   const AuthenticationState.unknown({bool isLoading = false}) : this._();
 
-  const AuthenticationState.loading({bool isLoading = true})
-      : this._(isLoading: true);
+  const AuthenticationState.loading(
+      {bool isLoading = true, AuthStatus authStatus = AuthStatus.unknown})
+      : this._(isLoading: true, authStatus: authStatus);
 
   const AuthenticationState.authenticated(
       {required User user, bool isLoading = false})
@@ -35,6 +36,64 @@ class AuthenticationState extends Equatable {
           isLoading: isLoading,
         );
 
+  const AuthenticationState.sendEmailSuccess(
+      {required String message, bool isLoading = false})
+      : this._(
+          authStatus: AuthStatus.sendEmailSuccess,
+          message: message,
+          isLoading: isLoading,
+        );
+
   @override
   List<Object?> get props => [authStatus, isLoading, user];
+}
+
+enum ChangePasswordStatus {
+  init,
+  loading,
+  success,
+  fail,
+}
+
+class ChangePassword extends AuthenticationState {
+  final ChangePasswordStatus changePasswordStatus;
+
+  bool get isChangingPassword =>
+      changePasswordStatus == ChangePasswordStatus.loading;
+
+  const ChangePassword.init({
+    this.changePasswordStatus = ChangePasswordStatus.init,
+    super.user,
+  }) : super._(
+          authStatus: AuthStatus.authenticated,
+          isLoading: false,
+        );
+
+  const ChangePassword.loading({
+    this.changePasswordStatus = ChangePasswordStatus.loading,
+    super.user,
+  }) : super._(
+          authStatus: AuthStatus.authenticated,
+          isLoading: false,
+        );
+
+  const ChangePassword.success(
+    String message, {
+    this.changePasswordStatus = ChangePasswordStatus.success,
+    super.user,
+  }) : super._(
+          message: message,
+          authStatus: AuthStatus.authenticated,
+          isLoading: false,
+        );
+
+  const ChangePassword.fail(
+    String message, {
+    this.changePasswordStatus = ChangePasswordStatus.fail,
+    super.user,
+  }) : super._(
+          message: message,
+          authStatus: AuthStatus.authenticated,
+          isLoading: false,
+        );
 }

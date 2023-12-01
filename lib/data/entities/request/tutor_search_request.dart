@@ -7,7 +7,7 @@ class TutorSearchRequest {
   final String search;
   final List<String> specialties;
   final Map<String, dynamic> nationality;
-  final List<String> tutoringTimeAvailable;
+  final List<int> tutoringTimeAvailable;
   final DateTime? date;
   TutorSearchRequest({
     required this.perPage,
@@ -23,7 +23,7 @@ class TutorSearchRequest {
     return <String, dynamic>{
       'filters': {
         'date': date != null
-            ? DateFormat('E MMM d y HH:mm:ss "GMT"Z (z)').format(date!)
+            ? "${DateFormat('E MMM d y HH:mm:ss').format(date!)} GMT+0700 (Indochina Time)"
             : null,
         'nationality': nationality,
         'specialties': specialties,

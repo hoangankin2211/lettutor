@@ -1,15 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/auth/blocs/auth_status.dart';
+import 'package:lettutor/ui/auth/views/widgets/forget_password/forget_password_widget.dart';
 import 'package:lettutor/ui/auth/views/widgets/sign_up/widget/custom_bottom_button.dart';
+
 import 'widget/sign_in_form_widget.dart';
 import 'widget/sign_in_header.dart';
 import 'widget/sign_in_option_widget.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  final bool isSignInForm;
+  final VoidCallback? openForgetPassword;
+  final VoidCallback? openSignInForm;
+
+  const SignInScreen({
+    Key? key,
+    this.isSignInForm = true,
+    this.openForgetPassword,
+    this.openSignInForm,
+  }) : super(key: key);
 
   @override
   State createState() {
@@ -41,17 +54,33 @@ class _SignInScreenState extends State<SignInScreen> {
               const SignInHeader(),
               const SizedBox(height: 10),
               Flexible(
-                child: SignInFormWidget(
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                ),
+                child: widget.isSignInForm
+                    ? Column(
+                        children: [
+                          Text(
+                            context.l10n.signIn,
+                            style: context.textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Flexible(
+                            child: SignInFormWidget(
+                              emailController: _emailController,
+                              passwordController: _passwordController,
+                              openForgetPassword: widget.openForgetPassword,
+                            ),
+                          ),
+                          buildSignInButton(state),
+                          const Expanded(
+                              child: Center(child: SignInOptionWidget())),
+                        ]
+                            .expand<Widget>((element) =>
+                                [element, const SizedBox(height: 5)])
+                            .toList(),
+                      )
+                    : ForgetPasswordForm(openSignInForm: widget.openSignInForm),
               ),
-              buildSignInButton(state),
-              const Expanded(child: Center(child: SignInOptionWidget())),
-            ]
-                .expand<Widget>(
-                    (element) => [element, const SizedBox(height: 5)])
-                .toList(),
+            ],
           ),
         );
       },

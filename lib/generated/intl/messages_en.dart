@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "and": MessageLookupByLibrary.simpleMessage("and"),
         "appearance": MessageLookupByLibrary.simpleMessage("Appearance"),
         "arrangeBy": MessageLookupByLibrary.simpleMessage("Organize By"),
+        "backToSignIn": MessageLookupByLibrary.simpleMessage("Back to Sign In"),
         "basicInfo": MessageLookupByLibrary.simpleMessage("Basic Information"),
         "beComeFluent": MessageLookupByLibrary.simpleMessage(
             "Become Fluent Faster Through Personalized One-on-One Video Chat Lessons"),
@@ -53,8 +54,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "bookTutor": MessageLookupByLibrary.simpleMessage("Book Tutor"),
         "byPrice": MessageLookupByLibrary.simpleMessage("Sort By Price"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "changePassword":
+            MessageLookupByLibrary.simpleMessage("Change Password"),
+        "checkEmail": MessageLookupByLibrary.simpleMessage(
+            "Check your inbox for a link to reset your password."),
         "codeAndFingerPrints":
             MessageLookupByLibrary.simpleMessage("Code and Fingerprint"),
+        "confirmPassword":
+            MessageLookupByLibrary.simpleMessage("Confirm Password"),
         "couldNotLaunchUrl":
             MessageLookupByLibrary.simpleMessage("Could not launch url "),
         "country": MessageLookupByLibrary.simpleMessage("Country"),
@@ -73,6 +80,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "education": MessageLookupByLibrary.simpleMessage("Education"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "emailAddress": MessageLookupByLibrary.simpleMessage("Email Address"),
+        "emailDoesNotExist":
+            MessageLookupByLibrary.simpleMessage("Email does not exist !"),
         "emailRequired":
             MessageLookupByLibrary.simpleMessage("Email is required"),
         "emptyAlert": MessageLookupByLibrary.simpleMessage(
@@ -84,8 +93,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "entUsernameEmail": MessageLookupByLibrary.simpleMessage(
             "Enter your username or email address"),
         "enterCode": MessageLookupByLibrary.simpleMessage("Enter Code"),
+        "enterConfirmPassword":
+            MessageLookupByLibrary.simpleMessage("Enter Confirm Password"),
         "enterEducation":
             MessageLookupByLibrary.simpleMessage("Enter Your Education"),
+        "enterNewPassword":
+            MessageLookupByLibrary.simpleMessage("Enter New Password"),
+        "enterOldPassword":
+            MessageLookupByLibrary.simpleMessage("Enter Old Password"),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Enter your Password"),
         "enterStudySchedule":
@@ -139,6 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "nationality": MessageLookupByLibrary.simpleMessage("Nationality"),
         "nativeEnglishTutor":
             MessageLookupByLibrary.simpleMessage("Native English Tutor"),
+        "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
         "nextClassWillBeginIn": MessageLookupByLibrary.simpleMessage(
             "Your next class will begin in"),
         "noAccount": MessageLookupByLibrary.simpleMessage("No Account ? "),
@@ -153,6 +169,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notOpenTutorProfile": MessageLookupByLibrary.simpleMessage(
             "Can not open this tutor profile detail"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "oldPassword": MessageLookupByLibrary.simpleMessage("Old Password"),
         "orContinue": MessageLookupByLibrary.simpleMessage("Or Continue With"),
         "otherReview": MessageLookupByLibrary.simpleMessage("Other Reviews"),
         "otherSetting": MessageLookupByLibrary.simpleMessage("Other Settings"),
@@ -160,8 +177,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("OTP Verification"),
         "overview": MessageLookupByLibrary.simpleMessage("Overview"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "passwordChanged": MessageLookupByLibrary.simpleMessage(
+            "Password changed successfully"),
         "passwordCharactersLong": MessageLookupByLibrary.simpleMessage(
-            "Password must be at least 8 characters long"),
+            "Password must be at least 6 characters long"),
+        "passwordNotChanged":
+            MessageLookupByLibrary.simpleMessage("Password not changed"),
+        "passwordNotCorrect":
+            MessageLookupByLibrary.simpleMessage("Password not correct"),
+        "passwordNotMatch":
+            MessageLookupByLibrary.simpleMessage("Password not match"),
         "passwordRequired":
             MessageLookupByLibrary.simpleMessage("Password is required"),
         "pdfViewer": MessageLookupByLibrary.simpleMessage("PDF Viewer"),
@@ -170,6 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter a valid email address"),
         "pleaseEnterYourEmail": MessageLookupByLibrary.simpleMessage(
             "Please Enter Your Email Address to Find Your Account"),
+        "pleaseEnterYourPass": MessageLookupByLibrary.simpleMessage(
+            "Please enter your email address to search for your account."),
         "professions": MessageLookupByLibrary.simpleMessage("Professions"),
         "profilePreview":
             MessageLookupByLibrary.simpleMessage("Profile Preview"),
@@ -216,17 +243,18 @@ class MessageLookup extends MessageLookupByLibrary {
             "Select your tutor\'s national"),
         "selectTutorTag":
             MessageLookupByLibrary.simpleMessage("Select Tutor Tags"),
+        "sendEmail": MessageLookupByLibrary.simpleMessage("Send Email"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "showLess": MessageLookupByLibrary.simpleMessage("Show Less"),
         "showMore": MessageLookupByLibrary.simpleMessage("Show More"),
         "signIn": MessageLookupByLibrary.simpleMessage("Sign In"),
         "signInApple":
-            MessageLookupByLibrary.simpleMessage("Sign in with Apple"),
+            MessageLookupByLibrary.simpleMessage("Continue with Apple"),
         "signInFace":
-            MessageLookupByLibrary.simpleMessage("Sign in with Facebook"),
+            MessageLookupByLibrary.simpleMessage("Continue with Facebook"),
         "signInGoogle":
-            MessageLookupByLibrary.simpleMessage("Sign in with Google"),
+            MessageLookupByLibrary.simpleMessage("Continue with Google"),
         "signUp": MessageLookupByLibrary.simpleMessage("Enroll"),
         "signUpToUse":
             MessageLookupByLibrary.simpleMessage("Sign Up to Use LetTutor"),
