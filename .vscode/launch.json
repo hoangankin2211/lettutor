@@ -41,7 +41,7 @@
             "program": "lib/main_dev.dart",
             "args": ["--flavor","dev"],
             "flutterMode": "profile",
-            "noDebug": false
+            "noDebug": true
         },
         {
             "name": "prodProfile",
@@ -53,7 +53,9 @@
         {
             "name": "devRelease",
             "request": "launch",
+            "noDebug": true,
             "type": "dart",
+            "args": ["--flavor","dev"],
             "program": "lib/main_dev.dart",
             "flutterMode": "release"
         },
