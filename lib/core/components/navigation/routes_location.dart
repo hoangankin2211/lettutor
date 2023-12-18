@@ -6,6 +6,7 @@ class RouteLocation {
   //routeLocation
   static const String home = '/';
   static const String splash = '/splash';
+  static const String chat = '/chat';
   static const String detailScreen = '/quoteDetails';
   static const String settings = '/settings';
   static const String search = '/search';

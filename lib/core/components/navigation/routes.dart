@@ -1,41 +1,22 @@
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/app.dart';
-import 'package:lettutor/app_init.dart';
+import 'package:lettutor/app/app_init.dart';
 import 'package:lettutor/core/components/navigation/routes_location.dart';
-import 'package:lettutor/ui/home/views/home_screen.dart';
-import 'package:lettutor/ui/splash/splash_screen.dart';
+import 'package:lettutor/ui/chat/chat_screen.dart';
 
-import '../../../ui/auth/views/signin_screen.dart';
-
-final routes = [
+final routes = <GoRoute>[
+  GoRoute(
+    parentNavigatorKey: AppBuilder.appNavigationKey,
+    path: RouteLocation.chat,
+    builder: (context, state) => const ChatScreen(),
+  ),
   // GoRoute(
+  //   parentNavigatorKey: AppBuilder.appNavigationKey,
   //   path: RouteLocation.auth,
+  //   builder: (context, state) => const SignInScreen(),
   // ),
   // GoRoute(
-  //   path: RouteLocation.detailScreen,
+  //   path: RouteLocation.splash,
+  //   parentNavigatorKey: AppBuilder.appNavigationKey,
+  //   builder: (context, state) => const SplashScreen(),
   // ),
-  // GoRoute(
-  //   path: RouteLocation.profile,
-  // ),
-  // GoRoute(
-  //   path: RouteLocation.search,
-  // ),
-  // GoRoute(
-  //   path: RouteLocation.settings,
-  // ),
-  GoRoute(
-    parentNavigatorKey: AppBuilder.appNavigationKey,
-    path: RouteLocation.home,
-    builder: (context, state) => const HomeScreen(),
-  ),
-  GoRoute(
-    parentNavigatorKey: AppBuilder.appNavigationKey,
-    path: RouteLocation.auth,
-    builder: (context, state) => const SignInScreen(),
-  ),
-  GoRoute(
-    path: RouteLocation.splash,
-    parentNavigatorKey: AppBuilder.appNavigationKey,
-    builder: (context, state) => const SplashScreen(),
-  ),
 ];

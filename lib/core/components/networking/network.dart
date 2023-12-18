@@ -1,7 +1,5 @@
 import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/components/configuration/configuration.dart';
 import 'package:lettutor/core/components/networking/interceptor/api_token_interceptor.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';

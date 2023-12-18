@@ -1,17 +1,10 @@
-import 'dart:async';
-
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lettutor/core/components/navigation/routes_location.dart';
-import 'package:lettutor/core/components/navigation/routes_service.dart';
-import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
-
-import 'core/components/blocs/app_bloc.dart/application_bloc.dart';
-import 'generated/l10n.dart';
-import 'ui/auth/blocs/auth_status.dart';
+import 'package:lettutor/core/components/blocs/app_bloc.dart/application_bloc.dart';
+import 'package:lettutor/generated/l10n.dart';
 
 class Application extends StatefulWidget {
   const Application({
@@ -34,11 +27,8 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> with WidgetsBindingObserver {
-  late final authBloc = BlocProvider.of<AuthBloc>(context);
-
   @override
   void initState() {
-    authBloc.add(InitAuthenticationStatus());
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -79,19 +69,6 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
     }
   }
 
-  void _authStateListener(BuildContext context, AuthState state) {
-    switch (state.authStatus) {
-      case AuthStatus.authenticated:
-        widget.routeService.go(RouteLocation.home);
-        break;
-      case AuthStatus.unauthenticated:
-        widget.routeService.go(RouteLocation.auth);
-        break;
-      default:
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ApplicationBloc, ApplicationState>(
@@ -101,10 +78,8 @@ class _ApplicationState extends State<Application> with WidgetsBindingObserver {
           initial: widget.savedThemeMode ?? AdaptiveThemeMode.light,
           light: ThemeData.light(),
           dark: ThemeData.dark(),
-          builder: (light, dark) => BlocListener<AuthBloc, AuthState>(
-            listener: _authStateListener,
-            child: _buildMaterialApp(locale: const Locale("en", "")),
-          ),
+          builder: (light, dark) =>
+              _buildMaterialApp(locale: const Locale("en", "")),
         );
       },
     );

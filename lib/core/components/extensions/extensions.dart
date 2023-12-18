@@ -6,6 +6,10 @@ extension BuildContextExt on BuildContext {
     return MediaQuery.of(this);
   }
 
+  double get width => query.size.width;
+
+  double get height => query.size.height;
+
   FocusScopeNode get focus {
     return FocusScope.of(this);
   }
