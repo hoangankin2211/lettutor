@@ -23,9 +23,9 @@ import '../../data/data_source/remote/authentication/authentication.dart'
 import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
     as _i18;
 import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
-    as _i4;
-import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
     as _i5;
+import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
+    as _i4;
 import '../../data/data_source/remote/chore/chores_service.dart' as _i21;
 import '../../data/data_source/remote/course/course_service.dart' as _i22;
 import '../../data/data_source/remote/ebook/ebook_service.dart' as _i13;
@@ -72,12 +72,12 @@ Future<_i1.GetIt> init(
   final hiveModule = _$HiveModule();
   final dioModule = _$DioModule();
   gh.factory<_i3.AuthenticationApi>(
-    () => _i4.FacebookAuthImpl(),
-    instanceName: 'FacebookAuthImpl',
+    () => _i4.GoogleAuthImpl(),
+    instanceName: 'GoogleAuthImpl',
   );
   gh.factory<_i3.AuthenticationApi>(
-    () => _i5.GoogleAuthImpl(),
-    instanceName: 'GoogleAuthImpl',
+    () => _i5.FacebookAuthImpl(),
+    instanceName: 'FacebookAuthImpl',
   );
   await gh.singletonAsync<_i6.HiveInterface>(
     () => hiveModule.initHive(),

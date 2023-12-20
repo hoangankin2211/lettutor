@@ -38,9 +38,11 @@ abstract class ScheduleService {
   Future<HttpResponse> cancelScheduleClass(
       {@Body() required Map<String, dynamic> body});
 
-  @POST(branch)
-  Future<HttpResponse> updateStudentRequest(
-      {@Path("bookedId") required String id});
+  @POST("$branch/$studentRequest")
+  Future<HttpResponse> updateStudentRequest({
+    @Path("bookedId") required String id,
+    @Body() required Map<String, dynamic> body,
+  });
 
   @GET("$getNextAppointmentUrl?dateTime={time}")
   Future<HttpResponse> getNextAppointment({@Path("time") required int time});

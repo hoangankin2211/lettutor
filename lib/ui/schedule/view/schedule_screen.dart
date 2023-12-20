@@ -87,8 +87,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             context.showSnackBarAlert((state as ScheduleError).message);
           case CancelScheduleFailed:
             context.showSnackBarAlert((state as CancelScheduleFailed).message);
+          case EditRequestFailed:
+            context.showSnackBarAlert((state as EditRequestFailed).message);
         }
       },
+      buildWhen: (previous, current) =>
+          current is ScheduleLoaded ||
+          current is ScheduleLoading ||
+          current is ScheduleError,
       builder: (context, scheduleState) {
         return Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -159,11 +165,18 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               final schedule =
                                   scheduleState.data.schedules[index];
                               return ScheduleWidget(
+                                scheduleId: schedule.id,
+                                editRequest: (request) {
+                                  _scheduleBloc.editRequest(
+                                      schedule.id, schedule.id, request);
+                                },
                                 openMeeting: () {
                                   if (schedule.studentMeetingLink != null) {
                                     _joinMeeting(schedule.studentMeetingLink!);
                                   }
                                 },
+                                isEditing: scheduleState is EditingRequest &&
+                                    scheduleState.scheduleId == schedule.id,
                                 isCanceling:
                                     scheduleState is CancelingSchedule &&
                                         scheduleState.scheduleId == schedule.id,

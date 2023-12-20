@@ -21,6 +21,20 @@ class ScheduleLoaded extends ScheduleState {
   ScheduleLoaded({required super.data});
 }
 
+class EditRequestSuccess extends ScheduleState {
+  final String newRequest;
+  final String scheduleId;
+  EditRequestSuccess(
+      {required super.data,
+      required this.newRequest,
+      required this.scheduleId});
+}
+
+class EditRequestFailed extends ScheduleState {
+  final String message;
+  EditRequestFailed({required super.data, required this.message});
+}
+
 class ScheduleError extends ScheduleState {
   final String message;
 
@@ -30,6 +44,14 @@ class ScheduleError extends ScheduleState {
 class CancelingSchedule extends ScheduleState {
   final String scheduleId;
   CancelingSchedule({
+    required super.data,
+    required this.scheduleId,
+  });
+}
+
+class EditingRequest extends ScheduleState {
+  final String scheduleId;
+  EditingRequest({
     required super.data,
     required this.scheduleId,
   });

@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
 import 'package:lettutor/domain/models/pagination.dart';
@@ -86,4 +87,8 @@ class ScheduleUseCase {
   }) =>
       scheduleRepository
           .bookClass(scheduleId: [scheduleId], studentNote: studentNote);
+
+  Future<DataState> editRequest(String bookId, String request) {
+    return scheduleRepository.changeStudentRequest(bookId, request);
+  }
 }

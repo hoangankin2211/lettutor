@@ -131,4 +131,13 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
     return Left(
         result.dioException?.message ?? "Error: Can not book this tutor");
   }
+
+  @override
+  Future<DataState> changeStudentRequest(
+      String bookedId, String newRequest) async {
+    return await getStateOf(
+      request: () => scheduleService.updateStudentRequest(
+          id: bookedId, body: {"studentRequest": newRequest}),
+    );
+  }
 }

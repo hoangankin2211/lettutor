@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
+import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:flutter_provider/flutter_provider.dart';
 
 import 'core/utils/blocs/app_bloc.dart/application_bloc.dart';
 import 'generated/l10n.dart';

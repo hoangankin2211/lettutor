@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/ui/auth/views/widgets/sign_up/widget/custom_bottom_button.dart';
+import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_info_header.dart';
 
 import '../../../../domain/models/tutor/tutor.dart';
 
 class ScheduleWidget extends StatefulWidget {
   final DateTime time;
+  final String scheduleId;
   final int numberLesson;
   final Tutor tutor;
   final String startTime;
@@ -15,7 +20,9 @@ class ScheduleWidget extends StatefulWidget {
   final String studentRequest;
   final void Function()? cancelSchedule;
   final void Function()? openMeeting;
+  final void Function(String request)? editRequest;
   final bool isCanceling;
+  final bool isEditing;
 
   const ScheduleWidget({
     super.key,
@@ -27,7 +34,10 @@ class ScheduleWidget extends StatefulWidget {
     required this.endTime,
     required this.studentRequest,
     this.openMeeting,
+    this.editRequest,
     this.isCanceling = false,
+    this.isEditing = false,
+    required this.scheduleId,
   });
 
   @override
@@ -181,12 +191,30 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                 const Spacer(),
                 TextButton(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {},
-                  child: Text(
-                    "Edit",
-                    style: context.textTheme.bodyLarge
-                        ?.copyWith(color: context.colorScheme.primary),
-                  ),
+                  onPressed: () {
+                    showAdaptiveDialog(
+                      context: context,
+                      builder: (context) {
+                        return const EditRequestDialog();
+                      },
+                    ).then((value) {
+                      if (value != null) {
+                        if (value is String && widget.editRequest != null) {
+                          widget.editRequest!(value);
+                        }
+                      }
+                    });
+                  },
+                  child: widget.isEditing
+                      ? AppLoadingIndicator(
+                          color: context.colorScheme.error,
+                          radius: 20,
+                        )
+                      : Text(
+                          "Edit",
+                          style: context.textTheme.bodyLarge
+                              ?.copyWith(color: context.colorScheme.primary),
+                        ),
                 )
               ],
             ),
@@ -196,12 +224,88 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
             axis: Axis.vertical,
             child: Padding(
               padding: const EdgeInsets.only(left: 25),
-              child: Text(widget.studentRequest.isEmpty
-                  ? context.l10n.historyScreen
-                  : widget.studentRequest),
+              child: BlocBuilder<ScheduleBloc, ScheduleState>(
+                buildWhen: (previous, current) => current is EditRequestSuccess,
+                builder: (context, state) {
+                  return Text(
+                    (state is! EditRequestSuccess) ||
+                            (state).newRequest.isEmpty ||
+                            (state).scheduleId == widget.scheduleId
+                        ? (widget.studentRequest.isEmpty
+                            ? context.l10n.historyScreen
+                            : widget.studentRequest)
+                        : (state).newRequest,
+                  );
+                },
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class EditRequestDialog extends StatefulWidget {
+  const EditRequestDialog({
+    super.key,
+  });
+
+  @override
+  State<EditRequestDialog> createState() => _EditRequestDialogState();
+}
+
+class _EditRequestDialogState extends State<EditRequestDialog> {
+  final textController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        width: context.width * 0.9,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Edit Student Request",
+              style: context.textTheme.headlineSmall,
+            ),
+            Text(
+              "New Request",
+              style: context.textTheme.bodyLarge,
+            ),
+            TextField(
+              controller: textController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    color: context.theme.dividerColor,
+                    width: 1,
+                  ),
+                ),
+              ),
+            ),
+            CustomBottomButton(
+              title: "Ok",
+              onPressed: () {
+                if (textController.text.isNotEmpty) {
+                  context.pop(textController.text);
+                } else {
+                  context.showSnackBarAlert("New Request can not be emptied");
+                }
+              },
+            )
+          ]
+              .expand<Widget>((element) => [
+                    element,
+                    const SizedBox(height: 10),
+                  ])
+              .toList(),
+        ),
       ),
     );
   }

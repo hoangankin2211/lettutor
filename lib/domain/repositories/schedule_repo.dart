@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/entities/response/booking_info_response.dart';
 import 'package:lettutor/data/entities/response/upcoming_class_response.dart';
 
@@ -22,8 +23,11 @@ abstract class ScheduleRepository {
 
   Future<Either<String, ScheduleResponse>> getScheduleByTutorId(
       {required String tutorId, required int from, required int to});
+
   Future<Either<String, bool>> bookClass({
     required List<String> scheduleId,
     required String studentNote,
   });
+
+  Future<DataState> changeStudentRequest(String bookedId, String newRequest);
 }

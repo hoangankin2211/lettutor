@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/utils/networking/networking.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/domain/usecases/schedule_usecase.dart';
 part 'schedule_state.dart';
@@ -85,5 +86,21 @@ class ScheduleBloc extends Cubit<ScheduleState> {
         ),
       ),
     );
+  }
+
+  Future<void> editRequest(
+      String scheduleId, String bookId, String request) async {
+    emit(EditingRequest(data: state.data, scheduleId: scheduleId));
+    final result = await scheduleUseCase.editRequest(bookId, request);
+
+    if (result is DataSuccess) {
+      emit(EditRequestSuccess(
+        newRequest: request,
+        data: state.data,
+        scheduleId: scheduleId,
+      ));
+    } else {
+      emit(ScheduleError(data: state.data, message: result as String));
+    }
   }
 }

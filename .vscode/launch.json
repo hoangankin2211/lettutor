@@ -7,9 +7,9 @@
         {
             "name": "devDefault",
             "request": "launch",
-            "noDebug": true,
             "type": "dart",
             "args": ["--flavor","dev"],
+            "flutterMode": "debug",
             "program": "lib/main_dev.dart",
         },
         {

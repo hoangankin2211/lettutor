@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:lettutor/data/entities/schedule/history_feedback_entity.dart';
 import 'package:lettutor/data/entities/schedule/schedule_detail_entity.dart';
 
@@ -29,6 +32,9 @@ class BookingInfoEntity {
   final bool? showRecordUrl;
   final List<dynamic>? studentMaterials;
   final List<HistoryFeedbackEntity>? feedbacks;
+
+  late final ValueNotifier<String> studentRequestController =
+      ValueNotifier(studentRequest ?? "");
 
   BookingInfoEntity({
     required this.id,
