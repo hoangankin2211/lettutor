@@ -29,7 +29,7 @@ class DashboardBloc extends Cubit<DashboardState> {
     Future.wait([
       courseBloc.fetchCourseList(),
       eBookBloc.fetchEBookList(),
-      tutorBloc.loadTutor(),
+      tutorBloc.searchTutor(),
       tutorBloc.fetchUpcomingClass(),
       scheduleBloc.fetchScheduleList(),
     ]).then(

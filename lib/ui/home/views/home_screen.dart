@@ -158,40 +158,48 @@ class _HomeScreenState extends State<HomeScreen> {
       title: context.l10n.recommendTutor,
       leading: Icon(Icons.person_2, color: context.theme.primaryColor),
       body: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: context.height * 0.39 + 5),
+        constraints: BoxConstraints(),
         child: BlocBuilder<TutorBloc, TutorState>(
           bloc: dashboardBloc.tutorBloc,
           builder: (context, state) {
             return state.data.tutors.isEmpty
                 ? const AppLoadingIndicator()
-                : ListView.separated(
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 20),
+                : SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    // a
+                    // padding: EdgeInsets.zero,
+                    // separatorBuilder: (context, index) =>
+                    // const SizedBox(width: 20),
                     scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final tutor = state.data.tutors[index];
-
-                      return TutorWidget(
-                        onTap: () {
-                          context.push(
-                            RouteLocation.tutorDetail,
-                            extra: {"tutorId": tutor.userId},
-                          );
-                        },
-                        imageUrl: tutor.avatar,
-                        name: tutor.name,
-                        country: tutor.country,
-                        specialties:
-                            tutor.specialties.split(RegExp(r'[-\n ,]')),
-                        rating: tutor.rating,
-                        description: tutor.bio,
-                        price: tutor.price,
-                      );
-                    },
-                    itemCount: state.data.tutors.length < 5
-                        ? state.data.tutors.length
-                        : 5,
+                    // shrinkWrap: true,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: state.data.tutors
+                          .map(
+                            (tutor) {
+                              return TutorWidget(
+                                onTap: () {
+                                  context.push(
+                                    RouteLocation.tutorDetail,
+                                    extra: {"tutorId": tutor.userId},
+                                  );
+                                },
+                                imageUrl: tutor.avatar,
+                                name: tutor.name,
+                                country: tutor.country,
+                                specialties:
+                                    tutor.specialties.split(RegExp(r'[-\n ,]')),
+                                rating: tutor.rating,
+                                description: tutor.bio,
+                                price: tutor.price,
+                              );
+                            },
+                          )
+                          .expand(
+                              (element) => [element, const SizedBox(width: 10)])
+                          .toList(),
+                    ),
+                    // itemCount: ,
                   );
           },
         ),

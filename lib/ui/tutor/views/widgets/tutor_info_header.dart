@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/ratting_widget_custom.dart';
 
+import 'flag_country_widget.dart';
+
 class TutorInfoHeader extends StatefulWidget {
   const TutorInfoHeader({
     super.key,
@@ -68,22 +70,7 @@ class _TutorInfoHeaderState extends State<TutorInfoHeader> {
                 widget.profession,
                 style: context.textTheme.bodyLarge,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CountryFlag.fromCountryCode(
-                    widget.country.toUpperCase(),
-                    height: 25,
-                    width: 45,
-                    borderRadius: 8,
-                  ),
-                  Text(
-                    Country.tryParse(widget.country)?.name ?? "Unknown",
-                    style: context.textTheme.bodyLarge,
-                  )
-                ],
-              ),
+              FlagCountryWidget(country: widget.country),
             ]
                 .expand<Widget>(
                     (element) => [element, const SizedBox(height: 5)])

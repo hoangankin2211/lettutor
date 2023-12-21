@@ -93,9 +93,6 @@ class Tutor {
     this.isFavoriteTutor = false,
   });
 
-  final StreamController<bool> favoriteController =
-      StreamController.broadcast();
-
   Tutor copyWith({
     String? id,
     String? level,

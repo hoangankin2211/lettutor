@@ -63,4 +63,28 @@ class ScheduleEntity {
       ),
     );
   }
+
+  ScheduleEntity copyWith({
+    String? id,
+    String? tutorId,
+    String? startTime,
+    String? endTime,
+    int? startTimestamp,
+    int? endTimestamp,
+    DateTime? createdAt,
+    bool? isBooked,
+    List<ScheduleDetailEntity>? scheduleDetails,
+  }) {
+    return ScheduleEntity(
+      id: id ?? this.id,
+      tutorId: tutorId ?? this.tutorId,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      startTimestamp: startTimestamp ?? this.startTimestamp,
+      endTimestamp: endTimestamp ?? this.endTimestamp,
+      createdAt: createdAt ?? this.createdAt,
+      isBooked: isBooked ?? this.isBooked,
+      scheduleDetails: scheduleDetails ?? this.scheduleDetails,
+    );
+  }
 }

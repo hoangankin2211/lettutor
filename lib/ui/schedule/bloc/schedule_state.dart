@@ -6,6 +6,14 @@ abstract class ScheduleState {
 
   bool get isLoading => this is ScheduleLoading || this is ScheduleInitial;
 
+  bool isEditing(String scheduleId) =>
+      this is EditingRequest &&
+      (this as EditingRequest).scheduleId == scheduleId;
+
+  bool isCanceling(String scheduleId) =>
+      this is CancelingSchedule &&
+      (this as CancelingSchedule).scheduleId == scheduleId;
+
   ScheduleState({required this.data});
 }
 
@@ -22,12 +30,11 @@ class ScheduleLoaded extends ScheduleState {
 }
 
 class EditRequestSuccess extends ScheduleState {
-  final String newRequest;
   final String scheduleId;
-  EditRequestSuccess(
-      {required super.data,
-      required this.newRequest,
-      required this.scheduleId});
+  EditRequestSuccess({
+    required super.data,
+    required this.scheduleId,
+  });
 }
 
 class EditRequestFailed extends ScheduleState {

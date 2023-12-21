@@ -67,6 +67,12 @@ extension FastShowSheet on BuildContext {
   void showSnackBarAlert(String content) {
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
+        elevation: 5,
+        showCloseIcon: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: theme.primaryColor, width: 2),
+        ),
         backgroundColor: theme.cardColor,
         content: Text(
           content,

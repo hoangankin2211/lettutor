@@ -1,10 +1,10 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
+import 'package:lettutor/ui/tutor/views/widgets/flag_country_widget.dart';
 
 import 'specialties_component.dart';
 
@@ -48,7 +48,12 @@ class _TutorWidgetState extends State<TutorWidget> {
       direction: Axis.horizontal,
       spacing: 5,
       runSpacing: 5,
-      children: widget.specialties.map(_buildSpecialtiesComponent).toList(),
+      children: widget.specialties
+          .toSet()
+          .expand((element) => [TutorTag.fromKey(element).name])
+          .where((element) => element.isNotEmpty)
+          .map(_buildSpecialtiesComponent)
+          .toList(),
     );
   }
 
@@ -98,20 +103,9 @@ class _TutorWidgetState extends State<TutorWidget> {
             widget.name,
             style: context.myTitleLarge(),
           ),
-          subtitle: Row(
-            children: [
-              const Icon(Icons.flag),
-              Expanded(
-                child: Text(
-                  widget.country,
-                  style: context.textTheme.bodyLarge?.copyWith(
-                    color: context.theme.disabledColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          subtitle: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: FlagCountryWidget(country: widget.country)),
           trailing: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -195,7 +189,7 @@ class _TutorWidgetState extends State<TutorWidget> {
         ),
         const Spacer(),
         Text(
-          "\$${widget.price.toString()}",
+          "\$${widget.price.ceil()}",
           style: context.textTheme.titleLarge,
         )
       ],

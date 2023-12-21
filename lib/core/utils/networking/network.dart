@@ -18,7 +18,7 @@ class NetworkService {
     'Referer': 'https://sandbox.app.lettutor.com/',
     'Sec-Ch-Ua':
         '"Microsoft Edge";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
-    'Sec-Ch-Ua-Mobile': '?1',
+    'Sec-Ch-Ua-Mobile': '?0',
     'Sec-Ch-Ua-Platform': '"Android"',
     'Sec-Fetch-Dest': 'empty',
     'Sec-Fetch-Mode': 'cors',

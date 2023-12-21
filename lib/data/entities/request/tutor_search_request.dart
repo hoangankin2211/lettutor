@@ -9,9 +9,9 @@ class TutorSearchRequest {
   final Map<String, dynamic> nationality;
   final List<int> tutoringTimeAvailable;
   final DateTime? date;
-  TutorSearchRequest({
-    required this.perPage,
-    required this.page,
+  const TutorSearchRequest({
+    this.perPage = 12,
+    this.page = 1,
     this.search = "",
     this.specialties = const [],
     this.nationality = const {},

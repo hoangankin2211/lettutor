@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/networking/networking.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/domain/usecases/schedule_usecase.dart';
@@ -81,7 +82,9 @@ class ScheduleBloc extends Cubit<ScheduleState> {
               data: state.data.copyWith(
             count: state.data.count - 1,
             schedules: state.data.schedules.toList()
-              ..removeWhere((element) => scheduleId == element.id),
+              ..removeWhere((element) {
+                return scheduleId == element.id;
+              }),
           )),
         ),
       ),
@@ -94,11 +97,12 @@ class ScheduleBloc extends Cubit<ScheduleState> {
     final result = await scheduleUseCase.editRequest(bookId, request);
 
     if (result is DataSuccess) {
-      emit(EditRequestSuccess(
-        newRequest: request,
-        data: state.data,
-        scheduleId: scheduleId,
-      ));
+      final schedule = state.data.schedules
+          .firstWhere((element) => element.id == scheduleId);
+      logger.d("request: $request");
+      schedule.studentRequestController.value = request;
+      logger.d(schedule.studentRequestController.value);
+      emit(EditRequestSuccess(data: state.data, scheduleId: scheduleId));
     } else {
       emit(ScheduleError(data: state.data, message: result as String));
     }

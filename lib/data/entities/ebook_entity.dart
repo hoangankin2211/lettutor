@@ -2,24 +2,16 @@ import 'package:lettutor/data/entities/course/course_category_entity.dart';
 
 class EBookEntity {
   final String id;
-
   final String? name;
-
   final String? description;
-
   final String? imageUrl;
-
   final String? level;
-
   final bool? visible;
-
   final String? fileUrl;
-
   final DateTime? createdAt;
-
   final DateTime? updatedAt;
-
   final List<CourseCategoryEntity>? categories;
+
   EBookEntity({
     required this.id,
     this.name,

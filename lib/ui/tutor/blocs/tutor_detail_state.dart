@@ -34,6 +34,12 @@ abstract class TutorDetailState {
     required this.data,
     this.isMainState = true,
   });
+
+  bool isBooking(String scheduleId) =>
+      this is BookingClass && scheduleId == (this as BookingClass).scheduleId;
+
+  bool isFetchingList() =>
+      this is LoadingFreeBooking && (this as LoadingFreeBooking).isFetching;
 }
 
 class TutorDetailInitial extends TutorDetailState {
@@ -56,7 +62,9 @@ class TutorDetailError extends TutorDetailState {
 }
 
 class LoadingFreeBooking extends TutorDetailState {
-  LoadingFreeBooking({required super.data}) : super(isMainState: false);
+  final bool isFetching;
+  LoadingFreeBooking({required super.data, this.isFetching = false})
+      : super(isMainState: false);
 }
 
 class LoadedFreeBooking extends TutorDetailState {

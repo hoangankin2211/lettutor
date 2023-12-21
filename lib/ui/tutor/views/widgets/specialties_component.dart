@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:language_code/language_code.dart';
-import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 
 class SpecialtiesComponent extends StatelessWidget {
@@ -23,9 +22,7 @@ class SpecialtiesComponent extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: Text(
-        isLanguage
-            ? LanguageCodes.fromCode(specialty).name
-            : TutorTag.fromKey(specialty).name,
+        isLanguage ? LanguageCodes.fromCode(specialty).name : specialty,
         style: context.textTheme.bodyLarge?.copyWith(
           color: context.theme.brightness == Brightness.light
               ? context.theme.primaryColor

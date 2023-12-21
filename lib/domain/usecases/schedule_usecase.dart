@@ -82,11 +82,11 @@ class ScheduleUseCase {
             ));
 
   Future<Either<String, bool>> bookClassById({
-    required String scheduleId,
+    required List<String> scheduleIds,
     String studentNote = "",
   }) =>
-      scheduleRepository
-          .bookClass(scheduleId: [scheduleId], studentNote: studentNote);
+      scheduleRepository.bookClass(
+          scheduleId: scheduleIds, studentNote: studentNote);
 
   Future<DataState> editRequest(String bookId, String request) {
     return scheduleRepository.changeStudentRequest(bookId, request);

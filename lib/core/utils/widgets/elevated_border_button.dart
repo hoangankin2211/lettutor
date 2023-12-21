@@ -8,16 +8,21 @@ class ElevatedBorderButton extends StatelessWidget {
     required this.child,
     this.borderColor,
     this.backgroundColor,
+    this.width,
   });
   final VoidCallback? onPressed;
   final Widget child;
   final Color? borderColor;
   final Color? backgroundColor;
+  final double? width;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
+        minimumSize: width != null ? Size(width!, 40) : null,
+        disabledBackgroundColor:
+            backgroundColor ?? context.colorScheme.onPrimary,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         elevation: 0,
         foregroundColor: Colors.transparent,

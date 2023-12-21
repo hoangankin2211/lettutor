@@ -11,7 +11,6 @@ import 'package:lettutor/domain/models/tutor/tutor.dart';
 import 'package:lettutor/ui/course/views/widgets/course_search_bar.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_bloc.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_widget.dart';
-import 'package:lettutor/ui/tutor/views/widgets/upcoming_lesson_widget.dart';
 
 import 'widgets/filter_sheet.dart';
 
@@ -90,7 +89,7 @@ class _TutorScreenState extends State<TutorScreen>
               : null,
           onDone: (result) {
             tutorBloc.searchTutor(
-              TutorSearchRequest(
+              filter: TutorSearchRequest(
                   perPage: 12,
                   page: 1,
                   date: result['selectedDate'],
@@ -117,13 +116,13 @@ class _TutorScreenState extends State<TutorScreen>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        GestureDetector(
-          onTap: tutorBloc.fetchUpcomingClass,
-          child: UpComingWidget(
-            nextClass: tutorState.data.nextTutor,
-            totalLearnTime: tutorState.data.totalLearnTime,
-          ),
-        ),
+        // GestureDetector(
+        //   onTap: tutorBloc.fetchUpcomingClass,
+        //   child: UpComingWidget(
+        //     nextClass: tutorState.data.nextTutor,
+        //     totalLearnTime: tutorState.data.totalLearnTime,
+        //   ),
+        // ),
         GestureDetector(
           onTap: tutorBloc.loadTutor,
           child: Text(
@@ -135,7 +134,7 @@ class _TutorScreenState extends State<TutorScreen>
           controller: searchController,
           onTapFilter: showFilterBottomSheet,
           onSearch: (value) => tutorBloc.searchTutor(
-            TutorSearchRequest(
+            filter: TutorSearchRequest(
               perPage: 10,
               page: 1,
               search: value,
@@ -145,7 +144,7 @@ class _TutorScreenState extends State<TutorScreen>
       ]
           .expand<Widget>((element) => [
                 element,
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
               ])
           .toList(),
     );
@@ -164,29 +163,24 @@ class _TutorScreenState extends State<TutorScreen>
                   totalPage: tutorState.data.totalPage,
                   itemBuilder: (context, index) {
                     final tutor = tutorState.data.tutors[index];
-                    return StreamBuilder<bool>(
-                      initialData: tutor.isFavoriteTutor,
-                      stream: tutor.favoriteController.stream,
-                      builder: (context, snapshot) => TutorWidget(
-                        isFavorite: snapshot.data ?? false,
-                        markFavorite: (value) {
-                          tutorBloc.markFavorite(tutor.userId, value);
-                        },
-                        onTap: () {
-                          context.push(
-                            RouteLocation.tutorDetail,
-                            extra: {"tutorId": tutor.userId},
-                          );
-                        },
-                        imageUrl: tutor.avatar,
-                        name: tutor.name,
-                        country: tutor.country,
-                        specialties:
-                            tutor.specialties.split(RegExp(r'[-\n ,]')),
-                        rating: tutor.rating,
-                        description: tutor.bio,
-                        price: tutor.price,
-                      ),
+                    return TutorWidget(
+                      isFavorite: tutor.isFavoriteTutor,
+                      markFavorite: (value) {
+                        tutorBloc.markFavorite(tutor.userId, value);
+                      },
+                      onTap: () {
+                        context.push(
+                          RouteLocation.tutorDetail,
+                          extra: {"tutorId": tutor.userId},
+                        );
+                      },
+                      imageUrl: tutor.avatar,
+                      name: tutor.name,
+                      country: tutor.country,
+                      specialties: tutor.specialties.split(RegExp(r'[-\n ,]')),
+                      rating: tutor.rating,
+                      description: tutor.bio,
+                      price: tutor.price,
                     );
                   },
                   separatorBuilder: (context, index) =>
@@ -214,7 +208,6 @@ class _TutorScreenState extends State<TutorScreen>
               children: [
                 const SizedBox(height: 10),
                 _buildHeader(tutorState),
-                const SizedBox(height: 20),
                 _buildBody(tutorState),
               ],
             ),

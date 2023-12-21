@@ -38,8 +38,9 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
     emit(TutorDetailLoaded(data: data));
   }
 
-  void getTutorFreeBooking(DateTime from, DateTime to) {
-    emit(LoadingFreeBooking(data: state.data));
+  void getTutorFreeBooking(DateTime from, DateTime to,
+      {bool isFetching = false}) {
+    emit(LoadingFreeBooking(data: state.data, isFetching: isFetching));
     scheduleUseCase
         .getScheduleByTutorId(
           tutorId: state.data.tutorDetail.user!.id,
@@ -55,22 +56,35 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
         );
   }
 
-  Future<void> bookTutor({
+  Future<bool> bookTutor({
     required String scheduleId,
+    required List<String> scheduleDetailIds,
     String note = "",
   }) async {
     emit(BookingClass(data: state.data, scheduleId: scheduleId));
-    await scheduleUseCase
-        .bookClassById(scheduleId: scheduleId, studentNote: note)
+    return await scheduleUseCase
+        .bookClassById(scheduleIds: scheduleDetailIds, studentNote: note)
         .then(
           (value) => value.fold(
-            (left) => emit(BookClassFailed(
-              message: left,
-              data: state.data,
-              scheduleId: scheduleId,
-            )),
-            (right) => emit(
-                BookClassSuccess(data: state.data, scheduleId: scheduleId)),
+            (left) {
+              emit(BookClassFailed(
+                message: left,
+                data: state.data,
+                scheduleId: scheduleId,
+              ));
+              return false;
+            },
+            (right) {
+              emit(BookClassSuccess(
+                  data: state.data.copyWith(
+                    bookingTime: state.data.bookingTime
+                        .map((e) =>
+                            e.id == scheduleId ? e.copyWith(isBooked: true) : e)
+                        .toList(),
+                  ),
+                  scheduleId: scheduleId));
+              return true;
+            },
           ),
         );
   }

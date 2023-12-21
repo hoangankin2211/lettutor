@@ -76,25 +76,25 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         .format(DateTime.fromMillisecondsSinceEpoch(timestamp));
   }
 
+  void _eventListenerHandler(
+      BuildContext context, ScheduleState scheduleState) {
+    switch (scheduleState.runtimeType) {
+      case ScheduleError:
+        context.showSnackBarAlert((scheduleState as ScheduleError).message);
+      case CancelScheduleFailed:
+        context
+            .showSnackBarAlert((scheduleState as CancelScheduleFailed).message);
+      case EditRequestFailed:
+        context.showSnackBarAlert((scheduleState as EditRequestFailed).message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return BlocConsumer<ScheduleBloc, ScheduleState>(
       bloc: _scheduleBloc,
-      listener: (context, state) {
-        switch (state.runtimeType) {
-          case ScheduleError:
-            context.showSnackBarAlert((state as ScheduleError).message);
-          case CancelScheduleFailed:
-            context.showSnackBarAlert((state as CancelScheduleFailed).message);
-          case EditRequestFailed:
-            context.showSnackBarAlert((state as EditRequestFailed).message);
-        }
-      },
-      buildWhen: (previous, current) =>
-          current is ScheduleLoaded ||
-          current is ScheduleLoading ||
-          current is ScheduleError,
+      listener: _eventListenerHandler,
       builder: (context, scheduleState) {
         return Scaffold(
           backgroundColor: context.theme.scaffoldBackgroundColor,
@@ -164,38 +164,44 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                             itemBuilder: (context, index) {
                               final schedule =
                                   scheduleState.data.schedules[index];
-                              return ScheduleWidget(
-                                scheduleId: schedule.id,
-                                editRequest: (request) {
-                                  _scheduleBloc.editRequest(
-                                      schedule.id, schedule.id, request);
-                                },
-                                openMeeting: () {
-                                  if (schedule.studentMeetingLink != null) {
-                                    _joinMeeting(schedule.studentMeetingLink!);
-                                  }
-                                },
-                                isEditing: scheduleState is EditingRequest &&
-                                    scheduleState.scheduleId == schedule.id,
-                                isCanceling:
-                                    scheduleState is CancelingSchedule &&
-                                        scheduleState.scheduleId == schedule.id,
-                                cancelSchedule: () {
-                                  _scheduleBloc.cancelSchedule(schedule.id);
-                                },
-                                studentRequest: schedule.studentRequest ?? "",
-                                tutor: TutorMapper.fromTutorEntity(schedule
-                                    .scheduleDetailInfo!
-                                    .scheduleInfo!
-                                    .tutorInfo),
-                                numberLesson: 3,
-                                startTime: _formatTimestamp(schedule
-                                    .scheduleDetailInfo!.startPeriodTimestamp),
-                                endTime: _formatTimestamp(schedule
-                                    .scheduleDetailInfo!.endPeriodTimestamp),
-                                time: DateTime.fromMillisecondsSinceEpoch(
-                                    schedule.scheduleDetailInfo!
-                                        .startPeriodTimestamp),
+                              return ValueListenableBuilder<String>(
+                                valueListenable:
+                                    schedule.studentRequestController,
+                                builder: (context, request, child) =>
+                                    ScheduleWidget(
+                                  scheduleId: schedule.id,
+                                  editRequest: (request) {
+                                    _scheduleBloc.editRequest(
+                                        schedule.id, schedule.id, request);
+                                  },
+                                  openMeeting: () {
+                                    if (schedule.studentMeetingLink != null) {
+                                      _joinMeeting(
+                                          schedule.studentMeetingLink!);
+                                    }
+                                  },
+                                  isEditing:
+                                      scheduleState.isEditing(schedule.id),
+                                  isCanceling:
+                                      scheduleState.isCanceling(schedule.id),
+                                  cancelSchedule: () {
+                                    _scheduleBloc.cancelSchedule(schedule.id);
+                                  },
+                                  studentRequest: request,
+                                  tutor: TutorMapper.fromTutorEntity(schedule
+                                      .scheduleDetailInfo!
+                                      .scheduleInfo!
+                                      .tutorInfo),
+                                  numberLesson: 3,
+                                  startTime: _formatTimestamp(schedule
+                                      .scheduleDetailInfo!
+                                      .startPeriodTimestamp),
+                                  endTime: _formatTimestamp(schedule
+                                      .scheduleDetailInfo!.endPeriodTimestamp),
+                                  time: DateTime.fromMillisecondsSinceEpoch(
+                                      schedule.scheduleDetailInfo!
+                                          .startPeriodTimestamp),
+                                ),
                               );
                             },
                             separatorBuilder: (context, index) =>

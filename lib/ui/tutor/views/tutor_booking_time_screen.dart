@@ -6,8 +6,10 @@ import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
+import 'package:lettutor/ui/tutor/views/widgets/booking_dialog.dart';
 
 import '../blocs/tutor_detail_bloc.dart';
+import 'widgets/booking_item.dart';
 
 class TutorBookingTimeScreen extends StatefulWidget {
   const TutorBookingTimeScreen({
@@ -65,6 +67,8 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
       listener: (context, state) {
         if (state is BookClassFailed) {
           context.showSnackBarAlert(state.message);
+        } else if (state is BookClassSuccess) {
+          context.showSnackBarAlert("Book class success");
         }
       },
       buildWhen: (previous, current) => !current.isMainState,
@@ -87,7 +91,8 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
             ),
           ),
           body: switch (tutorState) {
-            (TutorDetailState state) when state is LoadingFreeBooking =>
+            (TutorDetailState state)
+                when state is LoadingFreeBooking && !state.isFetching =>
               const AppLoadingIndicator(),
             _ => Padding(
                 padding: const EdgeInsets.all(10),
@@ -107,34 +112,76 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
                         ),
                       ),
                     ),
-                    if (tutorState.data.bookingTime.isEmpty) _buildEmptyAlert()
+                    if (tutorState.data.bookingTime.isEmpty)
+                      _buildEmptyAlert()
                     else
                       Expanded(
-                      child: ListView.separated(
-                        controller: scrollController,
-                        physics: const BouncingScrollPhysics(),
-                        addAutomaticKeepAlives: true,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final schedule = tutorState.data.bookingTime[index];
-                          return BookingItem(
-                            onTapBookButton: (note) =>
-                                tutorDetailBloc.bookTutor(
-                              scheduleId: schedule.id,
-                              note: note,
-                            ),
-                            isLoading: tutorState is BookingClass &&
-                                tutorState.scheduleId == schedule.id,
-                            from: schedule.startTime,
-                            to: schedule.endTime,
-                            time: DateTime.fromMillisecondsSinceEpoch(
-                                schedule.startTimestamp),
-                          );
-                        },
-                        separatorBuilder: (_, __) => const SizedBox(height: 15),
-                        itemCount: tutorState.data.bookingTime.length,
-                      ),
-                    )
+                        child: RefreshIndicator(
+                          onRefresh: () async =>
+                              tutorDetailBloc.getTutorFreeBooking(
+                            from,
+                            to,
+                            isFetching: true,
+                          ),
+                          child: tutorState.isFetchingList()
+                              ? const AppLoadingIndicator()
+                              : ListView.separated(
+                                  controller: scrollController,
+                                  physics: const BouncingScrollPhysics(),
+                                  addAutomaticKeepAlives: true,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    final schedule =
+                                        tutorState.data.bookingTime[index];
+                                    return BookingItem(
+                                      isBooked: schedule.isBooked,
+                                      onTapBookButton: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => BlocBuilder<
+                                              TutorDetailBloc,
+                                              TutorDetailState>(
+                                            bloc: tutorDetailBloc,
+                                            builder: (context, state) =>
+                                                BookingDialog(
+                                              isLoading:
+                                                  state.isBooking(schedule.id),
+                                              from: schedule.startTimestamp,
+                                              to: schedule.endTimestamp,
+                                              time: DateTime
+                                                  .fromMillisecondsSinceEpoch(
+                                                schedule.startTimestamp,
+                                              ),
+                                              onPressedBook:
+                                                  (context, note) async {
+                                                return tutorDetailBloc
+                                                    .bookTutor(
+                                                  scheduleId: schedule.id,
+                                                  scheduleDetailIds: schedule
+                                                      .scheduleDetails
+                                                      .map((e) => e.id)
+                                                      .toList(),
+                                                  note: note,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      isLoading: tutorState is BookingClass &&
+                                          tutorState.scheduleId == schedule.id,
+                                      from: schedule.startTime,
+                                      to: schedule.endTime,
+                                      time: DateTime.fromMillisecondsSinceEpoch(
+                                          schedule.startTimestamp),
+                                    );
+                                  },
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(height: 15),
+                                  itemCount: tutorState.data.bookingTime.length,
+                                ),
+                        ),
+                      )
                   ]
                       .expand<Widget>(
                           (element) => [const SizedBox(height: 10), element])
@@ -144,99 +191,6 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
           },
         );
       },
-    );
-  }
-}
-
-class BookingItem extends StatelessWidget {
-  const BookingItem({
-    super.key,
-    required this.time,
-    required this.from,
-    required this.to,
-    this.onTapBookButton,
-    this.isLoading = false,
-  });
-
-  final DateTime time;
-  final String from;
-  final String to;
-  final void Function(String)? onTapBookButton;
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    final bodyLarge = context.textTheme.bodyLarge;
-    final titleMedium = context.textTheme.titleMedium;
-    return Card(
-      clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "${context.l10n.Date}:  ",
-                      style: titleMedium?.boldTextTheme,
-                    ),
-                    Text(
-                      DateFormat().add_yMMMEd().format(time),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("${context.l10n.from}:",
-                        style: titleMedium?.boldTextTheme),
-                    const SizedBox(width: 5),
-                    Text(from, style: bodyLarge),
-                    const SizedBox(width: 10),
-                    Icon(
-                      Icons.arrow_right_alt,
-                      color: context.colorScheme.primary,
-                      size: 30,
-                    ),
-                    const SizedBox(width: 10),
-                    Text("${context.l10n.to}:",
-                        style: titleMedium?.boldTextTheme),
-                    const SizedBox(width: 5),
-                    Text(to, style: bodyLarge),
-                  ],
-                ),
-              ],
-            ),
-            ElevatedBorderButton(
-              onPressed: () {
-                if (onTapBookButton != null) {
-                  onTapBookButton!("");
-                }
-              },
-              child: isLoading
-                  ? const AppLoadingIndicator(radius: 15)
-                  : Text(
-                      context.l10n.bookTutor,
-                      style:
-                          context.textTheme.bodyLarge?.boldTextTheme.copyWith(
-                        color: context.colorScheme.primary,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

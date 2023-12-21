@@ -21,7 +21,6 @@ class TutorBloc extends Cubit<TutorState> {
   TutorBloc(this.tutorUseCase, this.scheduleUseCase)
       : super(const TutorInitial(data: TutorDataState()));
 
-  final List<Tutor> cacheListTutor = [];
   int cacheCount = 0;
 
   Future<void> loadTutor({
@@ -30,22 +29,15 @@ class TutorBloc extends Cubit<TutorState> {
   }) async {
     emit(TutorLoading(data: state.data));
 
-    final response =
-        await tutorUseCase.fetchTutorPage(page: page, perPage: perPage);
+    final response = await tutorUseCase.searchTutorByFilter(
+      TutorSearchRequest(page: page, perPage: perPage),
+    );
 
     final totalLearnTime = await tutorUseCase.getTotalTime();
 
     response.fold((left) {
       emit(TutorError(data: state.data, message: left));
     }, (right) async {
-      final listCourse = List.of(state.data.tutors, growable: true)
-        ..addAll(right.rows);
-      cacheCount = right.count;
-
-      cacheListTutor
-        ..clear()
-        ..addAll(listCourse);
-
       emit(
         TutorLoaded(
             data: state.data.copyWith(
@@ -61,15 +53,13 @@ class TutorBloc extends Cubit<TutorState> {
   void loadMoreTutor({
     required int page,
     int perPage = 10,
-    TutorSearchRequest? filter,
   }) async {
     if (state.data.page > state.data.totalPage) {
       return;
     }
 
-    final response = await tutorUseCase.fetchTutorPage(
-      page: page,
-      perPage: perPage,
+    final response = await tutorUseCase.searchTutorByFilter(
+      TutorSearchRequest(page: page, perPage: perPage),
     );
 
     response.fold((left) {
@@ -90,10 +80,16 @@ class TutorBloc extends Cubit<TutorState> {
     final response = await tutorUseCase.markFavoriteTutor(id: id);
     if (response) {
       logger.d(response);
-      state.data.tutors
-          .firstWhere((element) => element.userId.compareTo(id) == 0)
-          .favoriteController
-          .add(isFavorite);
+      emit(
+        TutorLoaded(
+          data: state.data.copyWith(
+            tutors: state.data.tutors
+                .map((e) =>
+                    e.userId == id ? e.copyWith(isFavorite: isFavorite) : e)
+                .toList(),
+          ),
+        ),
+      );
     }
   }
 
@@ -118,7 +114,8 @@ class TutorBloc extends Cubit<TutorState> {
         );
   }
 
-  void searchTutor(TutorSearchRequest filter) async {
+  Future<void> searchTutor(
+      {TutorSearchRequest filter = const TutorSearchRequest()}) async {
     tutorUseCase.searchTutorByFilter(filter).then(
           (value) => value.fold(
             (left) => emit(TutorError(data: state.data, message: left)),

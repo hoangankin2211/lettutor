@@ -1,3 +1,5 @@
+import 'package:lettutor/core/logger/custom_logger.dart';
+
 enum National {
   vietnam,
   native,
@@ -16,23 +18,26 @@ enum TutorTag {
   PET("PET"),
   IELTS("IELTS"),
   TOEFL("TOEFL"),
-  TOEIC("TOEIC");
+  TOEIC("TOEIC"),
+  unknown("");
 
   final String name;
 
-  static TutorTag fromKey(String key) => TutorTag.values.firstWhere(
-        (element) => element.key == key,
-        orElse: () => All,
-      );
+  static TutorTag fromKey(String key) {
+    return TutorTag.values.firstWhere(
+      (element) => element.key?.contains(key) ?? false,
+      orElse: () => TutorTag.unknown,
+    );
+  }
 
   String? get key {
     switch (this) {
       case All:
         return null;
       case Englishforkids:
-        return "english_for_kids";
+        return "english-for-kids";
       case EnglishforBusiness:
-        return "business_english";
+        return "business-english";
       case Conversational:
         return "conversational-english";
       case STARTERS:
@@ -53,6 +58,8 @@ enum TutorTag {
 
       case TOEIC:
         return "toeic";
+      case TutorTag.unknown:
+        return TutorTag.unknown.name;
     }
   }
 

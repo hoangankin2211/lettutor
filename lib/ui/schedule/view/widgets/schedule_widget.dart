@@ -188,34 +188,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
                   context.l10n.requestForLesson,
                   style: context.textTheme.bodyLarge?.boldTextTheme,
                 ),
-                const Spacer(),
-                TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {
-                    showAdaptiveDialog(
-                      context: context,
-                      builder: (context) {
-                        return const EditRequestDialog();
-                      },
-                    ).then((value) {
-                      if (value != null) {
-                        if (value is String && widget.editRequest != null) {
-                          widget.editRequest!(value);
-                        }
-                      }
-                    });
-                  },
-                  child: widget.isEditing
-                      ? AppLoadingIndicator(
-                          color: context.colorScheme.error,
-                          radius: 20,
-                        )
-                      : Text(
-                          "Edit",
-                          style: context.textTheme.bodyLarge
-                              ?.copyWith(color: context.colorScheme.primary),
-                        ),
-                )
               ],
             ),
           ),
@@ -224,19 +196,47 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
             axis: Axis.vertical,
             child: Padding(
               padding: const EdgeInsets.only(left: 25),
-              child: BlocBuilder<ScheduleBloc, ScheduleState>(
-                buildWhen: (previous, current) => current is EditRequestSuccess,
-                builder: (context, state) {
-                  return Text(
-                    (state is! EditRequestSuccess) ||
-                            (state).newRequest.isEmpty ||
-                            (state).scheduleId == widget.scheduleId
-                        ? (widget.studentRequest.isEmpty
+              child: Row(
+                children: [
+                  BlocBuilder<ScheduleBloc, ScheduleState>(
+                    buildWhen: (previous, current) =>
+                        current is EditRequestSuccess,
+                    builder: (context, state) => Expanded(
+                      child: Text(
+                        widget.studentRequest.isEmpty
                             ? context.l10n.historyScreen
-                            : widget.studentRequest)
-                        : (state).newRequest,
-                  );
-                },
+                            : widget.studentRequest,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {
+                      showAdaptiveDialog(
+                        context: context,
+                        builder: (context) {
+                          return const EditRequestDialog();
+                        },
+                      ).then((value) {
+                        if (value != null) {
+                          if (value is String && widget.editRequest != null) {
+                            widget.editRequest!(value);
+                          }
+                        }
+                      });
+                    },
+                    child: widget.isEditing
+                        ? AppLoadingIndicator(
+                            color: context.colorScheme.error,
+                            radius: 20,
+                          )
+                        : Text(
+                            context.l10n.edit,
+                            style: context.textTheme.bodyLarge
+                                ?.copyWith(color: context.colorScheme.primary),
+                          ),
+                  )
+                ],
               ),
             ),
           ),
