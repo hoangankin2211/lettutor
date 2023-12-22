@@ -53,7 +53,7 @@ class AuthUseCase {
     );
   }
 
-  Future<String> forgetPassword(String email) async {
+  Future<Either<DataFailed, DataSuccess>> forgetPassword(String email) async {
     return (await repository.forgetPassword(email));
   }
 

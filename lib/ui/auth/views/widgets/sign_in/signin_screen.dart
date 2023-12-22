@@ -14,14 +14,10 @@ import 'widget/sign_in_option_widget.dart';
 
 class SignInScreen extends StatefulWidget {
   final bool isSignInForm;
-  final VoidCallback? openForgetPassword;
-  final VoidCallback? openSignInForm;
 
   const SignInScreen({
     Key? key,
     this.isSignInForm = true,
-    this.openForgetPassword,
-    this.openSignInForm,
   }) : super(key: key);
 
   @override
@@ -34,6 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final ValueNotifier<bool> _isSignInForm = ValueNotifier(true);
 
   AuthenticationBloc get authBloc => context.read<AuthenticationBloc>();
 
@@ -45,42 +42,57 @@ class _SignInScreenState extends State<SignInScreen> {
             (state.message?.isNotEmpty ?? false)) {
           context.showSnackBarAlert(state.message!);
         }
+
+        if (state.authStatus == AuthStatus.sendEmailSuccess &&
+            (state.message?.isNotEmpty ?? false)) {
+          context.showSnackBarAlert(state.message!);
+        }
       },
       builder: (context, state) {
-        return Form(
-          key: formKey,
-          child: Column(
-            children: [
-              const SignInHeader(),
-              const SizedBox(height: 10),
-              Flexible(
-                child: widget.isSignInForm
-                    ? Column(
-                        children: [
-                          Text(
-                            context.l10n.signIn,
-                            style: context.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w600,
+        return ValueListenableBuilder(
+          valueListenable: _isSignInForm,
+          builder: (context, isSignInForm, child) => Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const SignInHeader(),
+                const SizedBox(height: 10),
+                Flexible(
+                  child: isSignInForm
+                      ? Column(
+                          children: [
+                            Text(
+                              context.l10n.signIn,
+                              style: context.textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          Flexible(
-                            child: SignInFormWidget(
-                              emailController: _emailController,
-                              passwordController: _passwordController,
-                              openForgetPassword: widget.openForgetPassword,
+                            Flexible(
+                              child: SignInFormWidget(
+                                emailController: _emailController,
+                                passwordController: _passwordController,
+                                openForgetPassword: () {
+                                  _isSignInForm.value = false;
+                                },
+                              ),
                             ),
-                          ),
-                          buildSignInButton(state),
-                          const Expanded(
-                              child: Center(child: SignInOptionWidget())),
-                        ]
-                            .expand<Widget>((element) =>
-                                [element, const SizedBox(height: 5)])
-                            .toList(),
-                      )
-                    : ForgetPasswordForm(openSignInForm: widget.openSignInForm),
-              ),
-            ],
+                            buildSignInButton(state),
+                            const Expanded(
+                                child: Center(child: SignInOptionWidget())),
+                          ]
+                              .expand<Widget>((element) =>
+                                  [element, const SizedBox(height: 5)])
+                              .toList(),
+                        )
+                      : ForgetPasswordForm(
+                          openSignInForm: () {
+                            _isSignInForm.value = true;
+                            authBloc.emit(const AuthenticationState.unknown());
+                          },
+                        ),
+                ),
+              ],
+            ),
           ),
         );
       },

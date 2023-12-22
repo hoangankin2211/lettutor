@@ -128,8 +128,9 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       return const Right(true);
     }
 
-    return Left(
-        result.dioException?.message ?? "Error: Can not book this tutor");
+    return Left(result.dioException?.response?.data["message"] ??
+        (result.dioException!.message) ??
+        "Error: Can not book this tutor");
   }
 
   @override

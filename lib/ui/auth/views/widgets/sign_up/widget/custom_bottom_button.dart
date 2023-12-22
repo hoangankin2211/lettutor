@@ -5,6 +5,7 @@ import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 
 class CustomBottomButton extends StatelessWidget {
   final String title;
+  final Widget? content;
   final Color color;
   final VoidCallback onPressed;
   final bool disabled;
@@ -16,6 +17,7 @@ class CustomBottomButton extends StatelessWidget {
     required this.onPressed,
     this.color = Colors.blue,
     this.disabled = false,
+    this.content,
   });
 
   @override

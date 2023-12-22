@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:video_player/video_player.dart';
@@ -50,21 +51,37 @@ class _LetTutorVideoPlayerState extends State<LetTutorVideoPlayer> {
         ),
       );
       return;
+    } else if (widget.url.contains("https://") ||
+        widget.url.contains("http://")) {
+      _videoController = VideoPlayerController.networkUrl(Uri.parse(widget.url))
+        ..initialize()
+        ..setLooping(true).then((_) {
+          if (mounted) {
+            setState(() {
+              initialized = true;
+              if (widget.autoPlay ?? false) {
+                _videoController?.play();
+              }
+            });
+          }
+        });
+      _videoController?.addListener(_listenVideo);
+    } else {
+      print("here");
+      _videoController = VideoPlayerController.file(File(widget.url))
+        ..initialize()
+        ..setLooping(true).then((_) {
+          if (mounted) {
+            setState(() {
+              initialized = true;
+              if (widget.autoPlay ?? false) {
+                _videoController?.play();
+              }
+            });
+          }
+        });
+      _videoController?.addListener(_listenVideo);
     }
-    // ignore: deprecated_member_use
-    _videoController = VideoPlayerController.network(widget.url)
-      ..initialize()
-      ..setLooping(true).then((_) {
-        if (mounted) {
-          setState(() {
-            initialized = true;
-            if (widget.autoPlay ?? false) {
-              _videoController?.play();
-            }
-          });
-        }
-      });
-    _videoController?.addListener(_listenVideo);
   }
 
   void _cancelTime() {

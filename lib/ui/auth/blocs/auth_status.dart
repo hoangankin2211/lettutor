@@ -3,4 +3,5 @@ enum AuthStatus {
   authenticated,
   unauthenticated,
   sendEmailSuccess,
+  registerSuccess,
 }

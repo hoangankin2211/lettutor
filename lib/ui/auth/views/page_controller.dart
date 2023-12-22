@@ -13,6 +13,8 @@ class AuthPageController extends Cubit<int> {
 
   void openSignIn() {
     int page = pages.indexWhere((widget) => widget.runtimeType == SignInScreen);
+    print(page);
+
     if (page == -1) return;
     emit(page);
   }

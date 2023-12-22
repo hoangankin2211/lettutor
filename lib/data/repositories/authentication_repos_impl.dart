@@ -84,9 +84,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       );
       return Left(state.data!.user);
     }
-    return Right(state.dioException?.message ??
-        "Error while sign in" +
-            (state.dioException?.response?.data as Map)["message"]);
+    return Right((state.dioException?.response?.data as Map)["message"] ??
+        state.dioException?.message);
   }
 
   @override
@@ -123,18 +122,23 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<String> forgetPassword(String email) async {
-    final dataState = await getStateOf<Map<String, String>>(
+  Future<Either<DataFailed, DataSuccess>> forgetPassword(String email) async {
+    final dataState = await getStateOf<Map<String, dynamic>>(
       request: () => _authenticationApi.forgetPassword(body: {
         "email": email,
       }),
     );
 
+    // if (dataState is DataSuccess) {
+    //   return dataState.data?["message"]! ?? "Error while forget password";
+    // }
+    // return dataState.dioException?.message ??
+    //     "Error while forget password" +
+    //         (dataState.dioException?.response?.data as Map)["message"];
+
     if (dataState is DataSuccess) {
-      return dataState.data?["message"]! ?? "Error while forget password";
+      return Right(dataState as DataSuccess);
     }
-    return dataState.dioException?.message ??
-        "Error while forget password" +
-            (dataState.dioException?.response?.data as Map)["message"];
+    return Left(dataState as DataFailed);
   }
 }

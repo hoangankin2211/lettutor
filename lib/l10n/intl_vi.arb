@@ -194,5 +194,13 @@
     "tapToSelectedAvatar": "Chạm để chọn hình đại diện",
     "yourTutorProfile": "Hồ sơ giáo viên của bạn là cơ hội để tự giới thiệu với học viên trên Tutoring",
     "EnterYourProfessions": "Nhập nghề nghiệp của bạn",
-    "studentsWillViewThisInformation": "Học viên sẽ xem xét thông tin này trên hồ sơ của bạn để xác định liệu bạn có phù hợp với họ không"
+    "studentsWillViewThisInformation": "Học viên sẽ xem xét thông tin này trên hồ sơ của bạn để xác định liệu bạn có phù hợp với họ không",
+    "pleaseUploadYourAvatar": "Please upload your avatar",
+    "pleaseEnterYourTutoringName": "Please enter your tutoring name",
+    "pleaseEnterYourInterests": "Please enter your interests",
+    "pleaseEnterYourEducation": "Please enter your education",
+    "pleaseEnterYourExperiences": "Please enter your experiences",
+    "pleaseEnterYourProfessions": "Please enter your professions",
+    "pleaseSelectYourLanguage": "Please select your language",
+    "pleaseSelectYourSpecialties": "Please select your specialties"
 }

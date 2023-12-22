@@ -34,6 +34,7 @@ class _TutorBookingTimeScreenState extends State<TutorBookingTimeScreen> {
   @override
   void initState() {
     super.initState();
+    print(tutorDetailBloc);
     tutorDetailBloc.getTutorFreeBooking(from, to);
   }
 

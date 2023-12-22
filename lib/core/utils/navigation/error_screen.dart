@@ -15,7 +15,7 @@ class ErrorScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          text ?? "l10n.somethingWentWrong",
+          text ?? "context.l10n.someError",
           style: textTheme.headlineMedium,
         ),
       ),

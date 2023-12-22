@@ -1,17 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:lettutor/core/constants/ui_config.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/domain/mapper/tutor_mapper.dart';
 import 'package:lettutor/domain/models/user.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:lettutor/ui/dashboard/blocs/dashboard_bloc.dart';
 import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
 import 'package:lettutor/ui/schedule/view/widgets/schedule_widget.dart';
 
@@ -157,57 +162,105 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       ? const Center(child: AppLoadingIndicator())
                       : RefreshIndicator(
                           onRefresh: _scheduleBloc.fetchScheduleList,
-                          child: DefaultPagination<BookingInfoEntity>(
-                            listenScrollBottom: _scheduleBloc.loadMoreSchedule,
-                            page: scheduleState.data.page,
-                            totalPage: scheduleState.data.totalPage,
-                            itemBuilder: (context, index) {
-                              final schedule =
-                                  scheduleState.data.schedules[index];
-                              return ValueListenableBuilder<String>(
-                                valueListenable:
-                                    schedule.studentRequestController,
-                                builder: (context, request, child) =>
-                                    ScheduleWidget(
-                                  scheduleId: schedule.id,
-                                  editRequest: (request) {
-                                    _scheduleBloc.editRequest(
-                                        schedule.id, schedule.id, request);
+                          child: scheduleState.data.schedules.isEmpty
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_month_outlined,
+                                      color: context.theme.hintColor
+                                          .withOpacity(0.5),
+                                      size: 100,
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "No schedule",
+                                        style: context.textTheme.headlineMedium
+                                            ?.boldTextTheme,
+                                      ),
+                                    ),
+                                    ElevatedBorderButton(
+                                      width: context.width * 0.5,
+                                      onPressed: () {
+                                        context
+                                            .read<DashboardBloc>()
+                                            .changeTab(1);
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_month,
+                                            color: context.theme.primaryColor,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            "${context.l10n.book} now",
+                                            style: context.textTheme.bodyMedium
+                                                ?.copyWith(
+                                                    color: context
+                                                        .theme.primaryColor),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : DefaultPagination<BookingInfoEntity>(
+                                  listenScrollBottom:
+                                      _scheduleBloc.loadMoreSchedule,
+                                  page: scheduleState.data.page,
+                                  totalPage: scheduleState.data.totalPage,
+                                  itemBuilder: (context, index) {
+                                    final schedule =
+                                        scheduleState.data.schedules[index];
+                                    return ValueListenableBuilder<String>(
+                                      valueListenable:
+                                          schedule.studentRequestController,
+                                      builder: (context, request, child) =>
+                                          ScheduleWidget(
+                                        scheduleId: schedule.id,
+                                        editRequest: (request) {
+                                          _scheduleBloc.editRequest(schedule.id,
+                                              schedule.id, request);
+                                        },
+                                        openMeeting: () {
+                                          if (schedule.studentMeetingLink !=
+                                              null) {
+                                            _joinMeeting(
+                                                schedule.studentMeetingLink!);
+                                          }
+                                        },
+                                        isEditing: scheduleState
+                                            .isEditing(schedule.id),
+                                        isCanceling: scheduleState
+                                            .isCanceling(schedule.id),
+                                        cancelSchedule: () {
+                                          _scheduleBloc
+                                              .cancelSchedule(schedule.id);
+                                        },
+                                        studentRequest: request,
+                                        tutor: TutorMapper.fromTutorEntity(
+                                            schedule.scheduleDetailInfo!
+                                                .scheduleInfo!.tutorInfo),
+                                        numberLesson: 3,
+                                        startTime: _formatTimestamp(schedule
+                                            .scheduleDetailInfo!
+                                            .startPeriodTimestamp),
+                                        endTime: _formatTimestamp(schedule
+                                            .scheduleDetailInfo!
+                                            .endPeriodTimestamp),
+                                        time:
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                schedule.scheduleDetailInfo!
+                                                    .startPeriodTimestamp),
+                                      ),
+                                    );
                                   },
-                                  openMeeting: () {
-                                    if (schedule.studentMeetingLink != null) {
-                                      _joinMeeting(
-                                          schedule.studentMeetingLink!);
-                                    }
-                                  },
-                                  isEditing:
-                                      scheduleState.isEditing(schedule.id),
-                                  isCanceling:
-                                      scheduleState.isCanceling(schedule.id),
-                                  cancelSchedule: () {
-                                    _scheduleBloc.cancelSchedule(schedule.id);
-                                  },
-                                  studentRequest: request,
-                                  tutor: TutorMapper.fromTutorEntity(schedule
-                                      .scheduleDetailInfo!
-                                      .scheduleInfo!
-                                      .tutorInfo),
-                                  numberLesson: 3,
-                                  startTime: _formatTimestamp(schedule
-                                      .scheduleDetailInfo!
-                                      .startPeriodTimestamp),
-                                  endTime: _formatTimestamp(schedule
-                                      .scheduleDetailInfo!.endPeriodTimestamp),
-                                  time: DateTime.fromMillisecondsSinceEpoch(
-                                      schedule.scheduleDetailInfo!
-                                          .startPeriodTimestamp),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 10),
+                                  items: scheduleState.data.schedules,
                                 ),
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 10),
-                            items: scheduleState.data.schedules,
-                          ),
                         ),
                 )
               ],

@@ -45,6 +45,8 @@ abstract class EmailAuthApi implements AuthenticationApi {
       {@Body() required Map<String, dynamic> body});
 
   @override
-  @POST("user/forgotPassword")
-  Future<HttpResponse> forgetPassword({required Map<String, dynamic> body});
+  @POST("/user/forgotPassword")
+  Future<HttpResponse> forgetPassword({
+    @Body() required Map<String, dynamic> body,
+  });
 }

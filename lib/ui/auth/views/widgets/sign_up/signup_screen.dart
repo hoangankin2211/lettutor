@@ -26,6 +26,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             (state.message?.isNotEmpty ?? false)) {
           context.showSnackBarAlert(state.message!);
         }
+
+        if (state.authStatus == AuthStatus.registerSuccess) {
+          context.showSnackBarAlert("Register success");
+          context.read<AuthPageController>().openSignIn();
+        }
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

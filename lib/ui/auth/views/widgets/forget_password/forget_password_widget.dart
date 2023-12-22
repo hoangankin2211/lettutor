@@ -50,46 +50,50 @@ class _ForgetPasswordFormState extends State<ForgetPasswordForm> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            context.l10n.pleaseEnterYourPass,
-                            style: context.textTheme.bodyLarge,
-                          ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          context.l10n.pleaseEnterYourPass,
+                          style: context.textTheme.bodyLarge,
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            context.l10n.email,
-                            style: context.textTheme.bodyLarge,
-                          ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          context.l10n.email,
+                          style: context.textTheme.bodyLarge,
                         ),
-                        TCInputField(
-                          fillColor: context.colorScheme.onBackground,
-                          autocorrect: false,
-                          controller: emailController,
-                          enableSuggestions: false,
-                          hintText: context.l10n.usernameEmail,
-                          borderRadius: 5,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.emailAddress,
-                          maxLines: 1,
-                          ignoreShadow: true,
-                          validator: (value) =>
-                              validateEmail(context, value: value ?? ""),
-                        ),
-                        CustomBottomButton(
-                          isLoading: state.isLoading,
-                          color: context.colorScheme.primary,
-                          title: context.l10n.sendEmail,
-                          onPressed: () {
-                            if (emailController.text.isNotEmpty) {
-                              authBloc.add(
-                                  ForgetPasswordRequest(emailController.text));
-                            }
-                          },
-                        ),
-                      ]),
+                      ),
+                      TCInputField(
+                        fillColor: context.colorScheme.onBackground,
+                        autocorrect: false,
+                        controller: emailController,
+                        enableSuggestions: false,
+                        hintText: context.l10n.usernameEmail,
+                        borderRadius: 5,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.emailAddress,
+                        maxLines: 1,
+                        ignoreShadow: true,
+                        validator: (value) =>
+                            validateEmail(context, value: value ?? ""),
+                      ),
+                      CustomBottomButton(
+                        isLoading: state.isLoading,
+                        color: context.colorScheme.primary,
+                        title: context.l10n.sendEmail,
+                        onPressed: () {
+                          if (emailController.text.isNotEmpty) {
+                            authBloc.add(
+                                ForgetPasswordRequest(emailController.text));
+                          }
+                        },
+                      ),
+                    ]
+                        .expand(
+                            (element) => [element, const SizedBox(height: 15)])
+                        .toList(),
+                  ),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton.icon(

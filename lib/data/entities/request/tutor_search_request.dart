@@ -36,4 +36,25 @@ class TutorSearchRequest {
       if (search.isNotEmpty) 'search': search,
     };
   }
+
+  TutorSearchRequest copyWith({
+    int? perPage,
+    int? page,
+    String? search,
+    List<String>? specialties,
+    Map<String, dynamic>? nationality,
+    List<int>? tutoringTimeAvailable,
+    DateTime? date,
+  }) {
+    return TutorSearchRequest(
+      perPage: perPage ?? this.perPage,
+      page: page ?? this.page,
+      search: search ?? this.search,
+      specialties: specialties ?? this.specialties,
+      nationality: nationality ?? this.nationality,
+      tutoringTimeAvailable:
+          tutoringTimeAvailable ?? this.tutoringTimeAvailable,
+      date: date ?? this.date,
+    );
+  }
 }

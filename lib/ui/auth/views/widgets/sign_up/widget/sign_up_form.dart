@@ -22,9 +22,10 @@ class _SignUpFormState extends State<SignUpForm> {
 
   final FocusNode _focusPassword = FocusNode();
 
-  Widget buildSignUpButton(BuildContext context) {
+  Widget buildSignUpButton(BuildContext context, bool isLoading) {
     return Flexible(
       child: CustomBottomButton(
+        isLoading: isLoading,
         color: context.colorScheme.primary,
         title: context.l10n.createAccount,
         onPressed: () {
@@ -92,7 +93,14 @@ class _SignUpFormState extends State<SignUpForm> {
           onFieldSubmitted: (text) {},
         ),
         const SizedBox(height: 10),
-        buildSignUpButton(context),
+        BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            return buildSignUpButton(
+              context,
+              state.isLoading,
+            );
+          },
+        ),
       ],
     );
   }

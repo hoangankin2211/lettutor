@@ -211,5 +211,6 @@
     "passwordNotMatch":"Password not match",
     "passwordChanged":"Password changed successfully",
     "passwordNotChanged":"Password not changed",
-    "passwordNotCorrect":"Password not correct"
+    "passwordNotCorrect":"Password not correct",
+    "somethingWentWrong":"Some thing went wrong"
 }

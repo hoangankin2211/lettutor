@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
 import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/ui/auth/views/page_controller.dart';
@@ -17,18 +18,11 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   static const int initialPage = 0;
-  final pageController = PageController(initialPage: initialPage);
-  final ValueNotifier<bool> _isSignInForm = ValueNotifier(true);
+  final pageController =
+      PageController(initialPage: initialPage, keepPage: false);
 
   late final listPageWidget = [
-    ValueListenableBuilder<bool>(
-      valueListenable: _isSignInForm,
-      builder: (context, value, child) => SignInScreen(
-        openForgetPassword: () => _isSignInForm.value = false,
-        openSignInForm: () => _isSignInForm.value = true,
-        isSignInForm: value,
-      ),
-    ),
+    const SignInScreen(),
     const SignUpScreen(),
   ];
 
@@ -59,6 +53,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 child: BlocListener<AuthPageController, int>(
                   listener: (context, page) {
+                    logger.d("Page: $page");
                     pageController.animateToPage(
                       page,
                       duration: const Duration(milliseconds: 500),

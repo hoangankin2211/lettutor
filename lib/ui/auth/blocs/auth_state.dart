@@ -36,12 +36,18 @@ class AuthenticationState extends Equatable {
           isLoading: isLoading,
         );
 
-  const AuthenticationState.sendEmailSuccess(
-      {required String message, bool isLoading = false})
+  const AuthenticationState.sendEmailSuccess({required String message})
       : this._(
           authStatus: AuthStatus.sendEmailSuccess,
           message: message,
-          isLoading: isLoading,
+          isLoading: false,
+        );
+
+  const AuthenticationState.registerSuccess({required String message})
+      : this._(
+          authStatus: AuthStatus.registerSuccess,
+          message: message,
+          isLoading: false,
         );
 
   @override

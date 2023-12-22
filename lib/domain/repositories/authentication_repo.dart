@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 
@@ -11,5 +12,5 @@ abstract class AuthenticationRepository {
   Future<Either<UserEntity, String>> register(String email, String password);
   Future<bool> logout();
   Future<User> getCurrentUser();
-  Future<String> forgetPassword(String email);
+  Future<Either<DataFailed, DataSuccess>> forgetPassword(String email);
 }

@@ -116,6 +116,7 @@ class TutorBloc extends Cubit<TutorState> {
 
   Future<void> searchTutor(
       {TutorSearchRequest filter = const TutorSearchRequest()}) async {
+    emit(TutorLoading(data: state.data));
     tutorUseCase.searchTutorByFilter(filter).then(
           (value) => value.fold(
             (left) => emit(TutorError(data: state.data, message: left)),

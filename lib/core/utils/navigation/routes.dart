@@ -89,7 +89,7 @@ final routes = [
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,
     path: RouteLocation.becomeTutor,
-    builder: (context, state) => const BecomeTutorView(),
+    builder: (context, state) => const BecomeTutorScreen(),
   ),
   GoRoute(
     parentNavigatorKey: AppBuilder.appNavigationKey,

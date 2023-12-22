@@ -93,7 +93,8 @@ class AuthenticationBloc
 
     (await authUseCase.signUpEmail(event.email, event.password)).fold(
       (left) {
-        emit(AuthenticationState.authenticated(user: left));
+        emit(const AuthenticationState.registerSuccess(
+            message: "Register Success"));
       },
       (right) => emit(AuthenticationState.unauthenticated(message: right)),
     );
@@ -127,7 +128,18 @@ class AuthenticationBloc
       ForgetPasswordRequest event, Emitter<AuthenticationState> emit) async {
     emit(const AuthenticationState.loading());
     final result = (await authUseCase.forgetPassword(event.email));
-    emit(AuthenticationState.sendEmailSuccess(message: result));
+    result.fold(
+      (left) => emit(
+        AuthenticationState.unauthenticated(
+            message: (left.dioException?.response?.data as Map)["message"] ??
+                "Error while forget password"),
+      ),
+      (right) {
+        emit(AuthenticationState.sendEmailSuccess(
+            message:
+                right.data?["message"]! ?? "Send Email Success, Check Email"));
+      },
+    );
   }
 
   FutureOr<void> _onInitChangePasswordFlow(

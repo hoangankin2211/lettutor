@@ -103,7 +103,11 @@ class _DashboardScreenState extends State<DashboardScreen>
         return SafeArea(
           child: BlocConsumer<DashboardBloc, DashboardState>(
             bloc: dashboardBloc,
-            listener: (context, state) {},
+            listener: (context, state) {
+              if (state is DashboardTabChanged) {
+                _onTap(state.data.currentPage);
+              }
+            },
             builder: (context, dashboardState) {
               return Scaffold(
                 backgroundColor: context.colorScheme.background,

@@ -15,7 +15,7 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
-.fvm/flutter_sdk
+.fvm/
 *.diff
 
 # The .vscode folder contains launch configuration and tasks you configure in

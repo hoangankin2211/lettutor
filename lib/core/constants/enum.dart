@@ -1,9 +1,12 @@
 import 'package:lettutor/core/logger/custom_logger.dart';
 
 enum National {
-  vietnam,
-  native,
-  foreign,
+  vietnam("Vietnamese Tutor"),
+  native("Native Tutor"),
+  foreign("Foreign Tutor");
+
+  final String name;
+  const National(this.name);
 }
 
 enum TutorTag {

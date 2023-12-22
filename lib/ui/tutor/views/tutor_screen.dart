@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
@@ -89,23 +90,26 @@ class _TutorScreenState extends State<TutorScreen>
               : null,
           onDone: (result) {
             tutorBloc.searchTutor(
-              filter: TutorSearchRequest(
-                  perPage: 12,
-                  page: 1,
-                  date: result['selectedDate'],
-                  nationality: result['national'],
-                  specialties: result['selectedTag'],
-                  tutoringTimeAvailable: switch (result) {
-                    (Map<String, dynamic> result)
-                        when result["startTime"] != null &&
-                            result["endTime"] != null =>
-                      <int>[
-                        result["startTime"],
-                        result["endTime"],
-                      ],
-                    _ => <int>[],
-                  }),
+              filter:
+                  (tutorBloc.state.data.filter ?? const TutorSearchRequest())
+                      .copyWith(
+                          perPage: 12,
+                          page: 1,
+                          date: result['selectedDate'],
+                          nationality: result['national'],
+                          specialties: result['selectedTag'],
+                          tutoringTimeAvailable: switch (result) {
+                            (Map<String, dynamic> result)
+                                when result["startTime"] != null &&
+                                    result["endTime"] != null =>
+                              <int>[
+                                result["startTime"],
+                                result["endTime"],
+                              ],
+                            _ => <int>[],
+                          }),
             );
+            context.pop();
           },
         );
       },
@@ -123,13 +127,24 @@ class _TutorScreenState extends State<TutorScreen>
         //     totalLearnTime: tutorState.data.totalLearnTime,
         //   ),
         // ),
-        GestureDetector(
-          onTap: tutorBloc.loadTutor,
-          child: Text(
-            context.l10n.findATutor,
-            style: context.textTheme.headlineSmall?.boldTextTheme,
-          ),
+        Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: context.theme.primaryColor),
+              child: SvgPicture.asset(
+                "assets/images/ic_lettutor_anytime_anywhere.svg",
+                height: 50,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              context.l10n.findATutor,
+              style: context.textTheme.headlineSmall?.boldTextTheme,
+            ),
+          ],
         ),
+        const SizedBox(height: 2),
         CourseSearchBar(
           controller: searchController,
           onTapFilter: showFilterBottomSheet,
@@ -156,41 +171,64 @@ class _TutorScreenState extends State<TutorScreen>
           ? const Center(child: AppLoadingIndicator())
           : RefreshIndicator(
               onRefresh: tutorBloc.loadTutor,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: DefaultPagination<Tutor>(
-                  page: tutorState.data.page,
-                  totalPage: tutorState.data.totalPage,
-                  itemBuilder: (context, index) {
-                    final tutor = tutorState.data.tutors[index];
-                    return TutorWidget(
-                      isFavorite: tutor.isFavoriteTutor,
-                      markFavorite: (value) {
-                        tutorBloc.markFavorite(tutor.userId, value);
-                      },
-                      onTap: () {
-                        context.push(
-                          RouteLocation.tutorDetail,
-                          extra: {"tutorId": tutor.userId},
-                        );
-                      },
-                      imageUrl: tutor.avatar,
-                      name: tutor.name,
-                      country: tutor.country,
-                      specialties: tutor.specialties.split(RegExp(r'[-\n ,]')),
-                      rating: tutor.rating,
-                      description: tutor.bio,
-                      price: tutor.price,
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  items: tutorState.data.tutors,
-                  listenScrollBottom: () {
-                    tutorBloc.loadMoreTutor(page: tutorState.data.page + 1);
-                  },
-                ),
-              ),
+              child: tutorState.data.tutors.isEmpty
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person_search_outlined,
+                          color: context.theme.hintColor.withOpacity(0.5),
+                          size: 100,
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              "Sorry we can't find any tutor with this keywords",
+                              style: context
+                                  .textTheme.headlineSmall?.boldTextTheme,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: DefaultPagination<Tutor>(
+                        page: tutorState.data.page,
+                        totalPage: tutorState.data.totalPage,
+                        itemBuilder: (context, index) {
+                          final tutor = tutorState.data.tutors[index];
+                          return TutorWidget(
+                            isFavorite: tutor.isFavoriteTutor,
+                            markFavorite: (value) {
+                              tutorBloc.markFavorite(tutor.userId, value);
+                            },
+                            onTap: () {
+                              context.push(
+                                RouteLocation.tutorDetail,
+                                extra: {"tutorId": tutor.userId},
+                              );
+                            },
+                            imageUrl: tutor.avatar,
+                            name: tutor.name,
+                            country: tutor.country,
+                            specialties:
+                                tutor.specialties.split(RegExp(r'[-\n ,]')),
+                            rating: tutor.rating,
+                            description: tutor.bio,
+                            price: tutor.price,
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
+                        items: tutorState.data.tutors,
+                        listenScrollBottom: () {
+                          tutorBloc.loadMoreTutor(
+                              page: tutorState.data.page + 1);
+                        },
+                      ),
+                    ),
             ),
     );
   }

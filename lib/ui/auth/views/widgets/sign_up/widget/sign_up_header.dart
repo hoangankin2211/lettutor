@@ -18,7 +18,9 @@ class SignUpHeader extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: InkWell(
               hoverColor: context.theme.hintColor,
-              onTap: context.read<AuthPageController>().openSignIn,
+              onTap: () {
+                context.read<AuthPageController>().openSignIn();
+              },
               child: Icon(
                 CupertinoIcons.back,
                 color: context.theme.primaryColor,
