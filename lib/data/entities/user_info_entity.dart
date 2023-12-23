@@ -78,7 +78,7 @@ class TutorInfo {
       interests: map['interests'] as String,
       languages: map['languages'],
       specialties: map['specialties'] as String,
-      rating: map['rating'] as double,
+      rating: (map['rating'] as int).toDouble(),
       isActivated: map['isActivated'] as bool,
       isNative: map['isNative'] as bool,
       youtubeVideoId: map['youtubeVideoId'],
@@ -146,30 +146,30 @@ class ReferralInfo {
 }
 
 class UserData {
-  final String id;
-  final String email;
-  final String name;
-  final String avatar;
-  final String country;
-  final String phone;
-  final List<String> roles;
-  final String language;
-  final String birthday;
-  final bool isActivated;
-  final TutorInfo tutorInfo;
-  final WalletUserInfo walletInfo;
-  final String requireNote;
-  final String level;
-  final List<LearnTopics> learnTopics;
-  final List<TestPreparationEntity> testPreparations;
-  final bool isPhoneActivated;
-  final int timezone;
-  final ReferralInfo referralInfo;
-  final String studySchedule;
-  final bool canSendMessage;
-  final dynamic studentGroup;
-  final dynamic studentInfo;
-  final double avgRating;
+  final String? id;
+  final String? email;
+  final String? name;
+  final String? avatar;
+  final String? country;
+  final String? phone;
+  final List<String>? roles;
+  final String? language;
+  final String? birthday;
+  final bool? isActivated;
+  final TutorInfo? tutorInfo;
+  final WalletUserInfo? walletInfo;
+  final String? requireNote;
+  final String? level;
+  final List<LearnTopics>? learnTopics;
+  final List<TestPreparationEntity>? testPreparations;
+  final bool? isPhoneActivated;
+  final int? timezone;
+  final ReferralInfo? referralInfo;
+  final String? studySchedule;
+  final bool? canSendMessage;
+  final dynamic? studentGroup;
+  final dynamic? studentInfo;
+  final double? avgRating;
 
   UserData({
     required this.id,
@@ -222,20 +222,28 @@ class UserData {
       language: json['language'] ?? "en",
       birthday: json['birthday'],
       isActivated: json['isActivated'],
-      tutorInfo: TutorInfo.fromJson(json['tutorInfo']),
-      walletInfo: WalletUserInfo.fromJson(json['walletInfo']),
+      tutorInfo: json['tutorInfo'] != null
+          ? TutorInfo.fromJson(json['tutorInfo'])
+          : null,
+      walletInfo: json['walletInfo'] != null
+          ? WalletUserInfo.fromJson(json['walletInfo'])
+          : null,
       requireNote: json['requireNote'],
       level: json['level'],
       learnTopics: learnTopics,
       testPreparations: testPreparations,
       isPhoneActivated: json['isPhoneActivated'],
       timezone: json['timezone'],
-      referralInfo: ReferralInfo.fromJson(json['referralInfo']),
+      referralInfo: json['referralInfo'] != null
+          ? ReferralInfo.fromJson(json['referralInfo'])
+          : null,
       studySchedule: json['studySchedule'],
       canSendMessage: json['canSendMessage'],
       studentGroup: json['studentGroup'],
       studentInfo: json['studentInfo'],
-      avgRating: json['avgRating'].toDouble(),
+      avgRating:
+          // ignore: prefer_null_aware_operators
+          json['avgRating'] != null ? json['avgRating']!.toDouble() : null,
     );
   }
 }

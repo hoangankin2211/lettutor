@@ -1,21 +1,18 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/review/feedback_service.dart';
 import 'package:lettutor/data/data_source/remote/tutorial/tutor_service.dart';
 import 'package:lettutor/data/data_source/remote/user/user_service.dart';
 import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
+import 'package:lettutor/data/entities/request/become_tutor_request.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/domain/mapper/tutor_mapper.dart';
 import 'package:lettutor/domain/models/pagination.dart';
 import 'package:lettutor/domain/models/tutor/tutor.dart';
 import 'package:lettutor/domain/models/tutor/tutor_detail.dart';
 import 'package:lettutor/domain/repositories/tutor_repo.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'tutor_usecase.g.dart';
 
 @injectable
 class TutorUseCase {
@@ -93,33 +90,10 @@ class TutorUseCase {
 
     return (dataState.data as Map<String, dynamic>?)?['total'] ?? 0;
   }
-}
 
-@riverpod
-Future<Either<String, String>> registerBecomeTutor(
-  RegisterBecomeTutorRef ref, {
-  required String interest,
-  required String education,
-  required String experience,
-  required String profession,
-  required String bio,
-  required String language,
-}) async {
-  final response = await getStateOf(
-    request: () => UserService(injector.get()).becomeTutor(body: {
-      'interest': interest,
-      'education': education,
-      'experience': experience,
-      'profession': profession,
-      'bio': bio,
-      'language': language,
-    }),
-  );
-
-  if (response is DataSuccess) {
-    return const Right("Register Successful");
+  Future<Either<String, String>> registerBecomeTutor(
+    BecomeTeacherRequest request,
+  ) async {
+    return tutorRepository.registerTutor(body: request.buildFormData());
   }
-  return Left(
-    response.data?["message"] ?? response.dioException?.message ?? "Error",
-  );
 }

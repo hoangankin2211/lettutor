@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/review/feedback_service.dart';
@@ -138,5 +140,27 @@ class TutorRepositoryImpl extends TutorRepository {
     }
     return Left(
         dataState.dioException?.message ?? "Error: Can not get tutor feedback");
+  }
+
+  @override
+  Future<Either<String, String>> registerTutor({required FormData body}) async {
+    try {
+      Map<String, dynamic> mapBody = {};
+      for (var element in body.fields) {
+        mapBody.addAll({element.key: element.value});
+      }
+      for (var element in body.files) {
+        mapBody.addAll({element.key: element.value});
+      }
+      final dataState = await injector.get<Dio>().post("/tutor/register",
+          data: body,
+          options: Options(contentType: Headers.multipartFormDataContentType));
+      if (dataState.statusCode == 200) {
+        return const Right("Success");
+      }
+      return Left(dataState.data["message"] ?? "Error: Can not register tutor");
+    } catch (e) {
+      return Left(e.toString());
+    }
   }
 }

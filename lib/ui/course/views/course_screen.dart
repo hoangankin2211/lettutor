@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/domain/models/course/course_detail.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
@@ -151,8 +153,6 @@ class _ListCoursePageState extends State<ListCoursePage>
         switch (state.runtimeType) {
           case InitialCourseListPage:
             return const AppLoadingIndicator();
-          case ErrorCourseList:
-            return Center(child: Text((state as ErrorCourseList).message));
           default:
             return Column(
               children: [
@@ -160,7 +160,6 @@ class _ListCoursePageState extends State<ListCoursePage>
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: CourseSearchBar(
                     controller: searchController,
-                    onTapFilter: () {},
                     onSearch: (text) {
                       courseBloc.searchCourse(
                         q: text.isEmpty ? null : text,
@@ -175,39 +174,92 @@ class _ListCoursePageState extends State<ListCoursePage>
                       ? const Center(child: AppLoadingIndicator())
                       : RefreshIndicator(
                           onRefresh: courseBloc.fetchCourseList,
-                          child: DefaultPagination<CourseDetail>(
-                            page: state.data.page,
-                            totalPage: state.data.totalPage,
-                            separatorBuilder: (p0, p1) {
-                              return const SizedBox(height: 20);
-                            },
-                            listenScrollBottom: () => courseBloc.loadMoreCourse(
-                                page: state.data.page + 1),
-                            physics: const BouncingScrollPhysics(),
-                            items: state.data.course,
-                            loading: state is LoadingListCourse,
-                            itemBuilder: (context, index) {
-                              final courseItem =
-                                  state.data.course.elementAt(index);
-                              return CourseWidget(
-                                key: ValueKey("${courseItem.id}_CourseScreen"),
-                                onTap: (id) {
-                                  context.push(
-                                    RouteLocation.courseDetail,
-                                    extra: {
-                                      "courseId": id,
-                                      "from": "CourseScreen"
-                                    },
-                                  );
-                                },
-                                courseId: courseItem.id,
-                                imageUrl: courseItem.imageUrl,
-                                title: courseItem.name,
-                                subTitle: courseItem.description,
-                                level: courseItem.level,
-                              );
-                            },
-                          ),
+                          child: (state is ErrorCourseList)
+                              ? CustomTemplateScreenStackScroll(
+                                  appBar: AppBarCustom(
+                                    expandedHeight: context.height * 0.3,
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                  children: [
+                                    SliverToBoxAdapter(
+                                      child: Center(
+                                        child: Text(state.message),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : (state.data.course.isEmpty)
+                                  ? CustomTemplateScreenStackScroll(
+                                      appBar: AppBarCustom(
+                                        expandedHeight: context.height * 0,
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                      children: [
+                                        SliverToBoxAdapter(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.person_search_outlined,
+                                                color: context.theme.hintColor
+                                                    .withOpacity(0.5),
+                                                size: 100,
+                                              ),
+                                              Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 15),
+                                                  child: Text(
+                                                    "Can not find any course !",
+                                                    style: context
+                                                        .textTheme
+                                                        .headlineSmall
+                                                        ?.boldTextTheme,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : DefaultPagination<CourseDetail>(
+                                      page: state.data.page,
+                                      totalPage: state.data.totalPage,
+                                      separatorBuilder: (p0, p1) {
+                                        return const SizedBox(height: 20);
+                                      },
+                                      listenScrollBottom: () =>
+                                          courseBloc.loadMoreCourse(
+                                              page: state.data.page + 1),
+                                      physics: const BouncingScrollPhysics(),
+                                      items: state.data.course,
+                                      loading: state is LoadingListCourse,
+                                      itemBuilder: (context, index) {
+                                        final courseItem =
+                                            state.data.course.elementAt(index);
+                                        return CourseWidget(
+                                          key: ValueKey(
+                                              "${courseItem.id}_CourseScreen"),
+                                          onTap: (id) {
+                                            context.push(
+                                              RouteLocation.courseDetail,
+                                              extra: {
+                                                "courseId": id,
+                                                "from": "CourseScreen"
+                                              },
+                                            );
+                                          },
+                                          courseId: courseItem.id,
+                                          imageUrl: courseItem.imageUrl,
+                                          title: courseItem.name,
+                                          subTitle: courseItem.description,
+                                          level: courseItem.level,
+                                        );
+                                      },
+                                    ),
                         ),
                 ),
               ],

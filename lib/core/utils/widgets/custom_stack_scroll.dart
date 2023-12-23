@@ -56,12 +56,10 @@ class _CustomTemplateScreenStackScrollState
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(toolbarHeight: 0),
         extendBody: true,
         floatingActionButton: widget.floatingButton,
         bottomNavigationBar: widget.bottomSheet,
-        backgroundColor:
-            widget.color ?? context.theme.scaffoldBackgroundColor,
+        backgroundColor: widget.color ?? context.theme.scaffoldBackgroundColor,
         body: Stack(
           children: [
             if (widget.afterMainScreen != null) widget.afterMainScreen!,

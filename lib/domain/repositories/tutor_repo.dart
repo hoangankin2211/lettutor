@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/data/entities/response/feedback_response.dart';
@@ -21,4 +22,8 @@ abstract class TutorRepository {
   });
   Future<Either<String, FeedbackResponse>> getTutorFeedbackById(
       {required String id, int perPage = 10, int page = 1});
+
+  Future<Either<String, String>> registerTutor({
+    required FormData body,
+  });
 }

@@ -10,6 +10,8 @@ import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
@@ -163,47 +165,62 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       : RefreshIndicator(
                           onRefresh: _scheduleBloc.fetchScheduleList,
                           child: scheduleState.data.schedules.isEmpty
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              ? CustomTemplateScreenStackScroll(
+                                  appBar: const AppBarCustom(
+                                    height: 0,
+                                    backgroundColor: Colors.transparent,
+                                  ),
                                   children: [
-                                    Icon(
-                                      Icons.calendar_month_outlined,
-                                      color: context.theme.hintColor
-                                          .withOpacity(0.5),
-                                      size: 100,
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        "No schedule",
-                                        style: context.textTheme.headlineMedium
-                                            ?.boldTextTheme,
-                                      ),
-                                    ),
-                                    ElevatedBorderButton(
-                                      width: context.width * 0.5,
-                                      onPressed: () {
-                                        context
-                                            .read<DashboardBloc>()
-                                            .changeTab(1);
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
+                                    SliverToBoxAdapter(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Icon(
-                                            Icons.calendar_month,
-                                            color: context.theme.primaryColor,
+                                            Icons.calendar_month_outlined,
+                                            color: context.theme.hintColor
+                                                .withOpacity(0.5),
+                                            size: 100,
                                           ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            "${context.l10n.book} now",
-                                            style: context.textTheme.bodyMedium
-                                                ?.copyWith(
-                                                    color: context
-                                                        .theme.primaryColor),
+                                          Center(
+                                            child: Text(
+                                              "No schedule",
+                                              style: context
+                                                  .textTheme
+                                                  .headlineMedium
+                                                  ?.boldTextTheme,
+                                            ),
+                                          ),
+                                          ElevatedBorderButton(
+                                            width: context.width * 0.5,
+                                            onPressed: () {
+                                              context
+                                                  .read<DashboardBloc>()
+                                                  .changeTab(1);
+                                            },
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.calendar_month,
+                                                  color: context
+                                                      .theme.primaryColor,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  "${context.l10n.book} now",
+                                                  style: context
+                                                      .textTheme.bodyMedium
+                                                      ?.copyWith(
+                                                          color: context.theme
+                                                              .primaryColor),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
+                                    )
                                   ],
                                 )
                               : DefaultPagination<BookingInfoEntity>(

@@ -324,20 +324,26 @@ class _SettingScreenState extends State<SettingScreen> {
                             ),
                             child: Row(
                               children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: avatar != null
-                                      ? CircleAvatar(
-                                          foregroundImage:
-                                              NetworkImage(avatar!),
-                                          backgroundImage: const AssetImage(
-                                              "assets/images/user.png"),
-                                        )
-                                      : Image.asset(
-                                          "assets/images/user.png",
-                                          fit: BoxFit.contain,
-                                          height: 60,
-                                        ),
+                                BlocBuilder<AuthenticationBloc,
+                                    AuthenticationState>(
+                                  bloc: authBloc,
+                                  builder: (context, state) {
+                                    return Expanded(
+                                      flex: 1,
+                                      child: avatar != null
+                                          ? CircleAvatar(
+                                              foregroundImage:
+                                                  NetworkImage(avatar!),
+                                              backgroundImage: const AssetImage(
+                                                  "assets/images/user.png"),
+                                            )
+                                          : Image.asset(
+                                              "assets/images/user.png",
+                                              fit: BoxFit.contain,
+                                              height: 60,
+                                            ),
+                                    );
+                                  },
                                 ),
                                 Expanded(
                                   flex: 6,

@@ -28,6 +28,14 @@ class AuthenticationState extends Equatable {
           isLoading: isLoading,
         );
 
+  const AuthenticationState.updateProfile(
+      {required User user, bool isLoading = false})
+      : this._(
+          authStatus: AuthStatus.updateProfileSuccess,
+          user: user,
+          isLoading: isLoading,
+        );
+
   const AuthenticationState.unauthenticated(
       {required String message, bool isLoading = false})
       : this._(

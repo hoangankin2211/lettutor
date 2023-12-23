@@ -106,21 +106,22 @@ class _CourseSearchBarState extends State<CourseSearchBar> {
             ),
           ),
           const SizedBox(width: 10),
-          ElevatedButton(
-            onPressed: widget.onTapFilter,
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size.fromWidth(widget.height ?? 35),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(11),
+          if (widget.onTapFilter != null)
+            ElevatedButton(
+              onPressed: widget.onTapFilter,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size.fromWidth(widget.height ?? 35),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                backgroundColor: context.theme.hintColor.withOpacity(0.1),
               ),
-              backgroundColor: context.theme.hintColor.withOpacity(0.1),
+              child: Icon(
+                Icons.filter_list_outlined,
+                color: context.theme.hintColor,
+              ),
             ),
-            child: Icon(
-              Icons.filter_list_outlined,
-              color: context.theme.hintColor,
-            ),
-          ),
         ],
       ),
     );

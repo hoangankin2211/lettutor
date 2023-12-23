@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
+import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/ui/history/views/widgets/history_widget.dart';
 import 'package:lettutor/ui/schedule/bloc/schedule_bloc.dart';
@@ -48,50 +51,83 @@ class _HistoryScreenState extends State<HistoryScreen>
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: RefreshIndicator(
                 onRefresh: scheduleBloc.fetchScheduleList,
-                child: DefaultPagination<BookingInfoEntity>(
-                  listenScrollBottom: scheduleBloc.loadMoreSchedule,
-                  page: scheduleState.data.page,
-                  totalPage: scheduleState.data.totalPage,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  items: scheduleState.data.schedules,
-                  itemBuilder: (context, index) {
-                    final bookingItem = scheduleState.data.schedules[index];
-                    return HistoryWidget(
-                      onPressedTutorHeader: () {
-                        context.push(RouteLocation.tutorDetail, extra: {
-                          "tutorId": bookingItem.scheduleDetailInfo
-                              ?.scheduleInfo?.tutorInfo.userId
-                        });
-                      },
-                      onTapComment: () {},
-                      onTapEdit: () {},
-                      onTapReport: () {},
-                      ratings:
-                          (bookingItem.feedbacks?.map((e) => e.rating) ?? [])
-                              .toList(),
-                      time: bookingItem.createdAt ?? DateTime.now(),
-                      studentRequest: bookingItem.studentRequest ?? "",
-                      tutorName: bookingItem.scheduleDetailInfo?.scheduleInfo
-                              ?.tutorInfo.name ??
-                          "",
-                      avatar: bookingItem.scheduleDetailInfo?.scheduleInfo
-                              ?.tutorInfo.avatar ??
-                          "",
-                      country: bookingItem.scheduleDetailInfo?.scheduleInfo
-                              ?.tutorInfo.country ??
-                          "",
-                      startTime: DateFormat().add_Hm().format(
-                            DateTime.fromMillisecondsSinceEpoch(bookingItem
-                                .scheduleDetailInfo!.startPeriodTimestamp),
-                          ),
-                      endTime: DateFormat().add_Hm().format(
-                            DateTime.fromMillisecondsSinceEpoch(bookingItem
-                                .scheduleDetailInfo!.endPeriodTimestamp),
-                          ),
-                    );
-                  },
-                ),
+                child: scheduleState.data.schedules.isEmpty
+                    ? CustomTemplateScreenStackScroll(
+                        appBar: const AppBarCustom(
+                          height: 0,
+                          backgroundColor: Colors.transparent,
+                        ),
+                        children: [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.calendar_month_outlined,
+                                  color:
+                                      context.theme.hintColor.withOpacity(0.5),
+                                  size: 100,
+                                ),
+                                Center(
+                                  child: Text(
+                                    "You have not enroll in any course yet",
+                                    style: context.textTheme.headlineMedium
+                                        ?.boldTextTheme,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : DefaultPagination<BookingInfoEntity>(
+                        listenScrollBottom: scheduleBloc.loadMoreSchedule,
+                        page: scheduleState.data.page,
+                        totalPage: scheduleState.data.totalPage,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 10),
+                        items: scheduleState.data.schedules,
+                        itemBuilder: (context, index) {
+                          final bookingItem =
+                              scheduleState.data.schedules[index];
+                          return HistoryWidget(
+                            onPressedTutorHeader: () {
+                              context.push(RouteLocation.tutorDetail, extra: {
+                                "tutorId": bookingItem.scheduleDetailInfo
+                                    ?.scheduleInfo?.tutorInfo.userId
+                              });
+                            },
+                            onTapComment: () {},
+                            onTapEdit: () {},
+                            onTapReport: () {},
+                            ratings:
+                                (bookingItem.feedbacks?.map((e) => e.rating) ??
+                                        [])
+                                    .toList(),
+                            time: bookingItem.createdAt ?? DateTime.now(),
+                            studentRequest: bookingItem.studentRequest ?? "",
+                            tutorName: bookingItem.scheduleDetailInfo
+                                    ?.scheduleInfo?.tutorInfo.name ??
+                                "",
+                            avatar: bookingItem.scheduleDetailInfo?.scheduleInfo
+                                    ?.tutorInfo.avatar ??
+                                "",
+                            country: bookingItem.scheduleDetailInfo
+                                    ?.scheduleInfo?.tutorInfo.country ??
+                                "",
+                            startTime: DateFormat().add_Hm().format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      bookingItem.scheduleDetailInfo!
+                                          .startPeriodTimestamp),
+                                ),
+                            endTime: DateFormat().add_Hm().format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      bookingItem.scheduleDetailInfo!
+                                          .endPeriodTimestamp),
+                                ),
+                          );
+                        },
+                      ),
               ),
             ),
     );

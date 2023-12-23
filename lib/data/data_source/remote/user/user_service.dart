@@ -21,7 +21,8 @@ abstract class UserService {
   Future<HttpResponse<UserInfoResponse>> getUserInfo();
 
   @PUT(branch + info)
-  Future<HttpResponse<UserEntity>> updateUserInfo();
+  Future<HttpResponse<UserInfoResponse>> updateUserInfo(
+      {@Body() required Map<String, dynamic> body});
 
   @POST(branch + register)
   Future<HttpResponse> becomeTutor({

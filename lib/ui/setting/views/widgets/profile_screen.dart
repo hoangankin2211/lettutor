@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
+import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/data/data_source/remote/chore/chores_provider.dart';
+import 'package:lettutor/data/data_source/remote/user/user_service.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
@@ -30,6 +37,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   late final authBloc = BlocProvider.of<AuthenticationBloc>(context);
 
+  ImageProvider? image;
+
   String get userEmail => authBloc.state.user?.email ?? "";
   String get userName => authBloc.state.user?.name ?? "";
   String get birthday => authBloc.state.user?.birthday ?? "";
@@ -38,7 +47,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   String get countryCode => authBloc.state.user?.country ?? "";
   String get phone => authBloc.state.user?.phone ?? "";
   String get amount => authBloc.state.user?.walletInfo?.amount ?? "";
-  String get level => authBloc.state.user?.level ?? "";
+  String get level => (authBloc.state.user != null &&
+          authBloc.state.user?.level != null &&
+          authBloc.state.user!.level!.isNotEmpty)
+      ? authBloc.state.user!.level!
+      : "BEGINNER";
+
+  bool isUploadingAvatar = false;
+  bool isUpdatingProfile = false;
+
+  @override
+  void initState() {
+    super.initState();
+    print("birthday: $birthday");
+
+    image = avatar != null && avatar!.isNotEmpty
+        ? CachedNetworkImageProvider(avatar!, cacheKey: avatar!)
+        : null;
+  }
 
   List<LearnTopics> get topic => (authBloc.state.user?.learnTopics ?? [])
     ..addAll(
@@ -67,17 +93,55 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           style: ElevatedButton.styleFrom(
             backgroundColor: context.colorScheme.primary,
             elevation: 0,
+            maximumSize: const Size.fromHeight(40),
             minimumSize: const Size.fromHeight(40),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
           ),
-          onPressed: () {},
-          child: Text(
-            context.l10n.update,
-            style: context.textTheme.titleMedium?.boldTextTheme
-                .copyWith(color: context.colorScheme.onPrimary),
-          ),
+          onPressed: () {
+            setState(() {
+              isUpdatingProfile = true;
+            });
+            injector.get<UserService>().updateUserInfo(body: {
+              "name": _nameController.text,
+              "country": _countryCode.value,
+              "birthday": _birthday.value,
+              "level": _level.value,
+              "learnTopics": topic.map((e) => e.key).toList(),
+            }).then((value) {
+              if (mounted) {
+                if (value.response.statusCode == 200) {
+                  authBloc.reloadProfile().then(
+                    (value) {
+                      if (mounted) {
+                        setState(() {
+                          context.showSnackBarAlert(
+                              "Update user profile successfully");
+                        });
+                      }
+                    },
+                  );
+                } else {
+                  context.showSnackBarAlert(
+                      "Some thing wrong: ${value.response.data}");
+                }
+                setState(() {
+                  isUpdatingProfile = false;
+                });
+              }
+            });
+          },
+          child: isUpdatingProfile
+              ? AppLoadingIndicator(
+                  color: context.colorScheme.onPrimary,
+                  radius: 15,
+                )
+              : Text(
+                  context.l10n.update,
+                  style: context.textTheme.titleMedium?.boldTextTheme
+                      .copyWith(color: context.colorScheme.onPrimary),
+                ),
         ),
       ),
       appBar: AppBar(
@@ -94,6 +158,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
       ),
       body: _buildBody((learnTopics.value ?? [])
+        ..clear()
         ..addAll((testPreparation.value ?? []).map(
           (e) => LearnTopics(
             id: e.id,
@@ -167,16 +232,91 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: () {},
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            foregroundImage: avatar != null
-                ? CachedNetworkImageProvider(avatar!, cacheKey: avatar!)
-                : null,
-            radius: 80,
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5, color: context.theme.hintColor),
+            shape: BoxShape.circle,
           ),
+          child: GestureDetector(
+              onTap: () async {
+                final XFile? _image =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (_image != null) {
+                  final File file = File(_image.path);
+                  image = FileImage(file);
+                  setState(() {
+                    isUploadingAvatar = true;
+                  });
+                  await injector
+                      .get<Dio>()
+                      .post("/user/uploadAvatar",
+                          data: FormData()
+                            ..files.add(
+                              MapEntry(
+                                "avatar",
+                                MultipartFile.fromFileSync(
+                                  file.path,
+                                  filename: file.path.split("/").last,
+                                ),
+                              ),
+                            ))
+                      .then((value) {
+                    if (mounted) {
+                      if (value.statusCode == 200) {
+                        authBloc.reloadProfile().then((value) {
+                          if (mounted) {
+                            setState(() {
+                              image = FileImage(file);
+                              isUploadingAvatar = false;
+                            });
+                            context.showSnackBarAlert(
+                                "Update Profile Successfully");
+                          }
+                        });
+                      } else {
+                        setState(() {
+                          isUploadingAvatar = false;
+                        });
+                        context.showSnackBarAlert("Update Profile Failed");
+                      }
+                    }
+                  });
+                }
+              },
+              child: image != null
+                  ? CircleAvatar(
+                      onForegroundImageError: (exception, stackTrace) {
+                        setState(() {
+                          image = null;
+                        });
+                      },
+                      backgroundColor: Colors.white,
+                      foregroundImage: image,
+                      radius: 80,
+                      child: isUploadingAvatar
+                          ? Center(
+                              child: AppLoadingIndicator(
+                                color: context.colorScheme.primary,
+                                radius: 15,
+                              ),
+                            )
+                          : null,
+                    )
+                  : CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 80,
+                      child: isUploadingAvatar
+                          ? Center(
+                              child: AppLoadingIndicator(
+                                color: context.colorScheme.primary,
+                                radius: 15,
+                              ),
+                            )
+                          : const Icon(Icons.person,
+                              size: 80, color: Colors.grey),
+                    )),
         ),
+        const SizedBox(width: 5),
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
@@ -195,16 +335,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Icon(
                             e[0] as IconData,
                             color: context.theme.hintColor,
-                            size: 35,
+                            size: 25,
                           ),
                           const SizedBox(width: 10),
-                          AutoSizeText(
-                            e[1] as String,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            style: context.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).hintColor,
+                          Flexible(
+                            child: AutoSizeText(
+                              e[1] as String,
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              style: context.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).hintColor,
+                              ),
                             ),
                           ),
                         ],
@@ -243,6 +385,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   showFlag: true,
                   hideSearch: false,
                   showFlagDialog: true,
+                  builder: (p0) {
+                    return Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Image.asset(
+                            p0!.flagUri!,
+                            package: 'country_code_picker',
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          p0.name ?? "Select your Country",
+                          style: context.textTheme.bodyLarge,
+                        )
+                      ],
+                    );
+                  },
                   onChanged: (value) {
                     _countryCode.value = value.code;
                   },
@@ -272,7 +432,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       builder: (_, level, __) {
         return SizedBox(
           width: double.infinity,
-          child: CustomDropDownButton<String?>(
+          child: CustomDropDownButton<String>(
             borderWidth: 1.5,
             radius: 10.0,
             items: userLevels.entries
@@ -283,7 +443,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ),
                 )
                 .toList(),
-            value: level.toUpperCase(),
+            value: level,
             onChange: (value) {
               if (value?.isNotEmpty ?? false) {
                 _level.value = value!;
@@ -407,9 +567,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   ValueListenableBuilder<dynamic> _calendarField() {
-    return ValueListenableBuilder(
+    return ValueListenableBuilder<String>(
       valueListenable: _birthday,
-      builder: (_, birthDay, __) {
+      builder: (_, myBirthDay, __) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
           decoration: BoxDecoration(
@@ -421,9 +581,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: Text(
-                    DateFormat().add_yMMMd().format(DateTime.parse(birthday)),
-                    style: context.textTheme.titleMedium),
+                child: Text(myBirthDay, style: context.textTheme.titleMedium),
               ),
               InkWell(
                 onTap: () => showDatePicker(
@@ -433,7 +591,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   lastDate: DateTime.now().add(const Duration(days: 30)),
                   confirmText: context.l10n.select,
                   cancelText: context.l10n.cancel,
-                ),
+                ).then((value) {
+                  if (value != null) {
+                    _birthday.value = DateFormat("yyyy-MM-dd").format(value);
+                  }
+                }),
                 child: Icon(Icons.calendar_month,
                     color: context.theme.primaryColor),
               )

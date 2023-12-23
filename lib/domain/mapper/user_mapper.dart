@@ -56,12 +56,16 @@ class UserMapper {
       timezone: userEntity.timezone,
       studySchedule: userEntity.studySchedule,
       canSendMessage: userEntity.canSendMessage,
-      walletInfo: WalletInfoMapper.fromUserInfoEntity(userEntity.walletInfo),
-      testPreparations: List.of(
-        userEntity.testPreparations.map(
-          (e) => TestPreparationMapper.fromEntity(e),
-        ),
-      ),
+      walletInfo: userEntity.walletInfo != null
+          ? WalletInfoMapper.fromUserInfoEntity(userEntity.walletInfo!)
+          : null,
+      testPreparations: userEntity.testPreparations != null
+          ? List.of(
+              userEntity.testPreparations!.map(
+                (e) => TestPreparationMapper.fromEntity(e),
+              ),
+            )
+          : null,
     );
   }
 }

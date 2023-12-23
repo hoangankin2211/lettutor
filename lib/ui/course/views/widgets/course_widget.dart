@@ -60,7 +60,18 @@ class CourseWidget extends StatelessWidget {
     );
   }
 
-  _buildDegree(
+  String renderExperienceText(String? level) => switch (level) {
+        "0" => "Any level",
+        "1" => "Beginner",
+        "2" => "High Beginner",
+        "3" => "Pre-Intermediate",
+        "4" => "Intermediate",
+        "5" => "Upper-Intermediate",
+        "6" => "Advanced",
+        _ => "Proficiency"
+      };
+
+  Widget _buildDegree(
     BuildContext context, {
     MaterialAccentColor color = Colors.orangeAccent,
   }) {
@@ -68,11 +79,13 @@ class CourseWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: List.generate(
-        5,
+        7,
         (index) => Container(
-          height: 4 + index * 4,
+          height: 3 + index * 3,
           width: 4,
-          color: index < 3 ? color : color.shade100.withOpacity(0.5),
+          color: index <= int.parse((level ?? "0"))
+              ? color
+              : color.shade100.withOpacity(0.5),
         ),
       )
           .expand((element) => [
@@ -92,7 +105,7 @@ class CourseWidget extends StatelessWidget {
         _buildDegree(context),
         const SizedBox(width: 10),
         Text(
-          level ?? "",
+          level != null ? renderExperienceText(level!) : "",
           style: context.textTheme.bodyLarge?.copyWith(
             color: color.withOpacity(0.9),
           ),

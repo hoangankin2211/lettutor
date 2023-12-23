@@ -24,7 +24,7 @@ class DashboardBloc extends Cubit<DashboardState> {
     emit(DashboardTabChanged(data: state.data.copyWith(currentPage: index)));
   }
 
-  void fetchInitialApplicationData() {
+  Future<void> fetchInitialApplicationData() async {
     emit(DashboardLoading(data: state.data));
     Future.wait([
       courseBloc.fetchCourseList(),

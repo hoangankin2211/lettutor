@@ -15,6 +15,7 @@ import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/data/entities/request/become_tutor_request.dart';
+import 'package:lettutor/domain/usecases/tutor_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/tutor/views/widgets/booking_dialog.dart';
 import 'package:lettutor/ui/tutor/views/widgets/tutor_video_player.dart';
@@ -38,7 +39,7 @@ class _BecomeTutorScreenState extends State<BecomeTutorScreen> {
 
   bool isLoading = false;
 
-  final Dio _dio = injector.get<Dio>();
+  TutorUseCase tutorUseCase = injector.get<TutorUseCase>();
 
   bool showFloatingButton = true;
   @override
@@ -105,50 +106,51 @@ class _BecomeTutorScreenState extends State<BecomeTutorScreen> {
                             setState(() {
                               isLoading = true;
                             });
-                            print(
-                                _profileKey.currentState!._bioController.text);
-                            await _dio.post(
-                              "/tutor/register",
-                              data: BecomeTeacherRequest(
-                                name: _profileKey
-                                    .currentState!._bioController.text,
+                            final result =
+                                await tutorUseCase.registerBecomeTutor(
+                              BecomeTeacherRequest(
+                                avatar: _profileKey.currentState!._avatar!.path,
+                                bio: _profileKey.currentState!._name.text,
                                 country:
-                                    _profileKey.currentState!.country.code!,
+                                    _profileKey.currentState!.country.code ??
+                                        "VN",
                                 birthday:
                                     _profileKey.currentState!.selectedDateTime,
-                                interests: _profileKey
-                                    .currentState!._interestsController.text,
                                 education: _profileKey
                                     .currentState!._eductionController.text,
                                 experience: _profileKey
                                     .currentState!._experienceController.text,
-                                profession: _profileKey
-                                    .currentState!._professionController.text,
+                                interests: _profileKey
+                                    .currentState!._interestsController.text,
                                 languages:
                                     _profileKey.currentState!.language.toList(),
-                                bio: _profileKey
-                                    .currentState!._bioController.text,
+                                profession: _profileKey
+                                    .currentState!._professionController.text,
                                 targetStudent:
                                     _profileKey.currentState!._studentType,
                                 specialties: _profileKey
                                     .currentState!.selectedTag
                                     .map((e) => e.name)
                                     .toList(),
-                                price: 0,
                                 videoIntroduction: _videoIntroductionKey
                                     .currentState!.video!.path,
-                                avatar: _profileKey.currentState!._avatar!.path,
-                              ).buildFormData(),
+                                name: _profileKey.currentState!._name.text,
+                                price: 5000,
+                              ),
                             );
                             setState(() {
                               isLoading = false;
-                              showFloatingButton = false;
+                            });
+
+                            result.either(
+                                (left) => context.showSnackBarAlert(
+                                    "context.l10n.registerSuccessfully: $left"),
+                                (right) {
+                              context.showSnackBarAlert(right);
+                              throw Exception(right);
                             });
                           } catch (e) {
                             print(e);
-                            setState(() {
-                              isLoading = false;
-                            });
                             return;
                           }
                         }
@@ -215,12 +217,13 @@ class EnterIntroductionVideoView extends StatefulWidget {
       _EnterIntroductionVideoViewState();
 }
 
-class _EnterIntroductionVideoViewState
-    extends State<EnterIntroductionVideoView> {
+class _EnterIntroductionVideoViewState extends State<EnterIntroductionVideoView>
+    with AutomaticKeepAliveClientMixin {
   XFile? video;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(15),
@@ -359,6 +362,10 @@ class _EnterIntroductionVideoViewState
             ),
           );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class ApprovalView extends StatelessWidget {
@@ -404,7 +411,8 @@ class EnterProfileView extends StatefulWidget {
   State<EnterProfileView> createState() => _EnterProfileViewState();
 }
 
-class _EnterProfileViewState extends State<EnterProfileView> {
+class _EnterProfileViewState extends State<EnterProfileView>
+    with AutomaticKeepAliveClientMixin {
   AuthenticationBloc get authBloc =>
       BlocProvider.of<AuthenticationBloc>(context);
 
@@ -424,7 +432,7 @@ class _EnterProfileViewState extends State<EnterProfileView> {
   final _eductionController = TextEditingController();
   final _experienceController = TextEditingController();
   final _professionController = TextEditingController();
-  final _bioController = TextEditingController();
+  final _name = TextEditingController();
   final _languageController = TextEditingController();
   String _studentType = "Beginner";
   DateTime selectedDateTime = DateTime.now();
@@ -442,7 +450,7 @@ class _EnterProfileViewState extends State<EnterProfileView> {
       context.showSnackBarAlert("context.l10n.pleaseUploadYourAvatar");
       return false;
     }
-    if (_bioController.text.isEmpty) {
+    if (_name.text.isEmpty) {
       context.showSnackBarAlert("context.l10n.pleaseEnterYourTutoringName");
       return false;
     }
@@ -483,7 +491,7 @@ class _EnterProfileViewState extends State<EnterProfileView> {
 
   @override
   void dispose() {
-    _bioController.dispose();
+    _name.dispose();
     _interestsController.dispose();
     _eductionController.dispose();
     _experienceController.dispose();
@@ -496,6 +504,7 @@ class _EnterProfileViewState extends State<EnterProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return isLoading
         ? const Center(child: AppLoadingIndicator(radius: 30))
         : SingleChildScrollView(
@@ -769,7 +778,7 @@ class _EnterProfileViewState extends State<EnterProfileView> {
           ),
         ),
         _informationTextField(
-          controller: _bioController,
+          controller: _name,
           labelText: "Tutoring Name",
           hintText: "Tutoring Name",
           lines: 1,
@@ -940,4 +949,8 @@ class _EnterProfileViewState extends State<EnterProfileView> {
           .toList(),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

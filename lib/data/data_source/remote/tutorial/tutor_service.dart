@@ -13,6 +13,7 @@ abstract class TutorService {
   static const String fetchTutorial = "$branch/more";
   static const String searchTutorApi = "$branch/search";
   static const String getTutorByIdApi = branch;
+  static const String registerTutorApi = "$branch/register";
   static const String getTotalTimeApi = "/call/total";
   static const String markFavorite = "/user/manageFavoriteTutor";
 
@@ -38,4 +39,7 @@ abstract class TutorService {
 
   @GET('$getTutorByIdApi/{id}')
   Future<HttpResponse> getTutorById(@Path('id') String id);
+
+  @POST(registerTutorApi)
+  Future<HttpResponse> registerTutor({@Body() required FormData body});
 }

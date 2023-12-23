@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/ui/course/views/widgets/course_widget.dart';
 import 'package:lettutor/ui/dashboard/blocs/dashboard_bloc.dart';
 import 'package:lettutor/ui/home/views/widgets/home_item_component.dart';
@@ -158,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
       title: context.l10n.recommendTutor,
       leading: Icon(Icons.person_2, color: context.theme.primaryColor),
       body: ConstrainedBox(
-        constraints: BoxConstraints(),
+        constraints: const BoxConstraints(),
         child: BlocBuilder<TutorBloc, TutorState>(
           bloc: dashboardBloc.tutorBloc,
           builder: (context, state) {
@@ -166,12 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const AppLoadingIndicator()
                 : SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    // a
-                    // padding: EdgeInsets.zero,
-                    // separatorBuilder: (context, index) =>
-                    // const SizedBox(width: 20),
                     scrollDirection: Axis.horizontal,
-                    // shrinkWrap: true,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: state.data.tutors
@@ -250,16 +247,25 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      body: RefreshIndicator(
+        onRefresh: dashboardBloc.fetchInitialApplicationData,
+        child: CustomTemplateScreenStackScroll(
+          appBar: AppBarCustom(
+            height: 0,
+            expandedHeight: context.height * 0,
+          ),
           children: [
-            _buildHeader(),
-            Flexible(child: _buildUpComingCourse()),
-            Flexible(child: _buildRecommendCourse()),
-            Flexible(child: _buildRecommendTutor()),
+            SliverToBoxAdapter(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildHeader(),
+                  Flexible(child: _buildUpComingCourse()),
+                  Flexible(child: _buildRecommendCourse()),
+                  Flexible(child: _buildRecommendTutor()),
+                ],
+              ),
+            )
           ],
         ),
       ),

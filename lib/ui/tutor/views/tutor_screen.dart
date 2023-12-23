@@ -6,6 +6,8 @@ import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
+import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/utils/widgets/infinity_scroll_view.dart';
 import 'package:lettutor/data/entities/request/tutor_search_request.dart';
 import 'package:lettutor/domain/models/tutor/tutor.dart';
@@ -172,22 +174,33 @@ class _TutorScreenState extends State<TutorScreen>
           : RefreshIndicator(
               onRefresh: tutorBloc.loadTutor,
               child: tutorState.data.tutors.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  ? CustomTemplateScreenStackScroll(
+                      appBar: AppBarCustom(
+                        expandedHeight: context.height * 0.3,
+                        backgroundColor: Colors.transparent,
+                      ),
                       children: [
-                        Icon(
-                          Icons.person_search_outlined,
-                          color: context.theme.hintColor.withOpacity(0.5),
-                          size: 100,
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(
-                              "Sorry we can't find any tutor with this keywords",
-                              style: context
-                                  .textTheme.headlineSmall?.boldTextTheme,
-                            ),
+                        SliverToBoxAdapter(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.person_search_outlined,
+                                color: context.theme.hintColor.withOpacity(0.5),
+                                size: 100,
+                              ),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: Text(
+                                    "Sorry we can't find any tutor with this keywords",
+                                    style: context
+                                        .textTheme.headlineSmall?.boldTextTheme,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

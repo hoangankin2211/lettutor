@@ -39,6 +39,15 @@ class AuthenticationBloc
     on<InitChangePasswordFlow>(_onInitChangePasswordFlow);
   }
 
+  Future<void> reloadProfile() async {
+    emit(
+      AuthenticationState.updateProfile(
+        user: UserMapper.fromUserInfoEntity(
+            (await userService.getUserInfo()).data.user),
+      ),
+    );
+  }
+
   FutureOr<void> _onInitAuthenticationStatus(
       InitAuthenticationStatus event, Emitter<AuthenticationState> emit) async {
     try {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http_parser/src/media_type.dart';
 
@@ -59,24 +60,18 @@ class BecomeTeacherRequest {
 
     // Add file fields
     if (videoIntroduction.isNotEmpty) {
-      formData.files.add(MapEntry(
-        'videoIntroduction',
-        MultipartFile.fromBytes(
-          utf8.encode(videoIntroduction),
-          filename: 'video.mp4',
-          contentType: MediaType('application', 'octet-stream'),
+      formData.files.add(
+        MapEntry(
+          'video',
+          MultipartFile.fromBytes(File(videoIntroduction).readAsBytesSync()),
         ),
-      ));
+      );
     }
 
     if (avatar.isNotEmpty) {
       formData.files.add(MapEntry(
         'avatar',
-        MultipartFile.fromBytes(
-          utf8.encode(avatar),
-          filename: 'avatar.png',
-          contentType: MediaType('application', 'octet-stream'),
-        ),
+        MultipartFile.fromBytes(File(avatar).readAsBytesSync()),
       ));
     }
 
