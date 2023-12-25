@@ -98,7 +98,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         return await _authenticationApi.refreshToken(
           body: {
             "refreshToken": refreshToken,
-            "timezone": refreshToken,
+            "timezone": timezone,
           },
         );
       },

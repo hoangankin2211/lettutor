@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/data/data_source/remote/tutorial/tutor_service.dart';
 import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
 import 'package:lettutor/domain/models/tutor/tutor_detail.dart';
 import 'package:lettutor/domain/usecases/schedule_usecase.dart';
@@ -9,9 +10,10 @@ import 'package:lettutor/ui/tutor/blocs/tutor_detail_state.dart';
 @injectable
 class TutorDetailBloc extends Cubit<TutorDetailState> {
   final TutorUseCase tutorUseCase;
+  final TutorService tutorService;
   final ScheduleUseCase scheduleUseCase;
 
-  TutorDetailBloc(this.tutorUseCase, this.scheduleUseCase)
+  TutorDetailBloc(this.tutorUseCase, this.scheduleUseCase, this.tutorService)
       : super(TutorDetailInitial(data: TutorDetailDataState()));
 
   void fetchTutorDetailData(String id) async {
@@ -54,6 +56,38 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
                 data: state.data.copyWith(bookingTime: right))),
           ),
         );
+  }
+
+  void markFavorite(bool isFavorite) async {
+    final response = await tutorUseCase.markFavoriteTutor(
+        id: state.data.tutorDetail.user!.id);
+    if (response) {
+      emit(
+        TutorDetailLoaded(
+          data: state.data.copyWith(
+            tutorDetail:
+                state.data.tutorDetail.copyWith(isFavorite: isFavorite),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> reportTutor({
+    required String tutorId,
+    required String content,
+  }) async {
+    emit(ReportingTutor(data: state.data));
+    final response = await tutorService.reportTutor(body: {
+      "tutorId": tutorId,
+      "content": content,
+    });
+
+    if (response.response.statusCode == 200) {
+      emit(ReportedTutor(data: state.data));
+    } else {
+      emit(ReportTutorFailed(data: state.data, message: response.data));
+    }
   }
 
   Future<bool> bookTutor({

@@ -17,6 +17,7 @@ import 'package:lettutor/data/data_source/remote/chore/chores_provider.dart';
 import 'package:lettutor/data/data_source/remote/user/user_service.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
+import 'package:lettutor/domain/models/user/update_profile_request.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 import 'package:lettutor/ui/setting/views/widgets/custom_drop_down_btn.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,23 +60,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    print("birthday: $birthday");
-
     image = avatar != null && avatar!.isNotEmpty
         ? CachedNetworkImageProvider(avatar!, cacheKey: avatar!)
         : null;
   }
 
-  List<LearnTopics> get topic => (authBloc.state.user?.learnTopics ?? [])
-    ..addAll(
-      (authBloc.state.user?.testPreparations ?? []).map(
-        (e) => LearnTopics(
-          id: e.id,
-          key: e.key,
-          name: e.name,
-        ),
-      ),
-    );
+  List<LearnTopics> get userTopic => (authBloc.state.user?.learnTopics ?? []);
+
+  List<TestPreparation> get userTestPreparation =>
+      (authBloc.state.user?.testPreparations ?? []);
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +96,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             setState(() {
               isUpdatingProfile = true;
             });
-            injector.get<UserService>().updateUserInfo(body: {
-              "name": _nameController.text,
-              "country": _countryCode.value,
-              "birthday": _birthday.value,
-              "level": _level.value,
-              "learnTopics": topic.map((e) => e.key).toList(),
-            }).then((value) {
+            injector
+                .get<UserService>()
+                .updateUserInfo(
+                  body: UpdateProfileRequest(
+                    name: _nameController.text,
+                    birthday: _birthday.value,
+                    country: _countryCode.value ?? "VN",
+                    learnTopics: userTopic.map((e) => e.id.toString()).toList(),
+                    level: _level.value,
+                    phone: phone,
+                    studySchedule: "",
+                    testPreparations: userTestPreparation
+                        .map((e) => e.id.toString())
+                        .toList(),
+                  ),
+                )
+                .then((value) {
               if (mounted) {
                 if (value.response.statusCode == 200) {
                   authBloc.reloadProfile().then(
@@ -157,15 +160,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               color: context.textTheme.titleLarge?.color),
         ),
       ),
-      body: _buildBody((learnTopics.value ?? [])
-        ..clear()
-        ..addAll((testPreparation.value ?? []).map(
-          (e) => LearnTopics(
-            id: e.id,
-            key: e.key,
-            name: e.name,
-          ),
-        ))),
+      body: _buildBody(
+        learnTopics.value ?? [],
+        testPreparation.value ?? [],
+      ),
     );
   }
 
@@ -457,7 +455,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _topicsField({
     required List<LearnTopics> topics,
-    required List<LearnTopics> topicsSelected,
+    required List<dynamic> topicsSelected,
   }) {
     return Wrap(
       spacing: 6.0,
@@ -485,7 +483,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     color: context.colorScheme.primary, size: 15.0)
                 : null,
             selected: isSelected,
-            onSelected: (_) {},
+            onSelected: (_) {
+              setState(() {
+                if (topicsSelected
+                        .indexWhere((element) => element.key == e.key) !=
+                    -1) {
+                  topicsSelected.removeWhere((element) => element.key == e.key);
+                } else {
+                  if (topicsSelected is List<LearnTopics>) {
+                    topicsSelected.add(e);
+                  } else {
+                    topicsSelected.add(
+                      TestPreparation(
+                        id: e.id,
+                        key: e.key,
+                        name: e.name,
+                      ),
+                    );
+                  }
+                }
+              });
+            },
             backgroundColor: Theme.of(context).dividerColor.withOpacity(0.07),
             selectedColor: context.colorScheme.primary.withOpacity(0.1),
           );
@@ -494,7 +512,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget _buildBody(List<LearnTopics> topics) {
+  Widget _buildBody(
+      List<LearnTopics> topics, List<TestPreparation> testPreparations) {
     return SingleChildScrollView(
         padding: const EdgeInsets.all(15),
         child: Column(
@@ -521,8 +540,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 "icon": Icons.bookmark_outlined,
               },
               {
-                "label": context.l10n.topicsAndPreparations,
+                "label": context.l10n.allTopics,
                 "icon": Icons.topic,
+              },
+              {
+                "label": "context.l10n.testPreparation",
+                "icon": Icons.bookmark_outlined,
               },
             ].asMap().entries.map<Widget>(
                   (e) => Column(
@@ -551,9 +574,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         0 => _calendarField(),
                         1 => _selectedCountryField(),
                         2 => _levelField(),
-                        _ => _topicsField(
+                        3 => _topicsField(
                             topics: topics,
-                            topicsSelected: topic,
+                            topicsSelected: userTopic,
+                          ),
+                        _ => _topicsField(
+                            topics: testPreparations
+                                .map(
+                                  (e) => LearnTopics(
+                                    id: e.id,
+                                    key: e.key,
+                                    name: e.name,
+                                  ),
+                                )
+                                .toList(),
+                            topicsSelected: userTestPreparation,
                           ),
                       }
                     ],
@@ -587,7 +622,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 onTap: () => showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime.now(),
+                  firstDate: DateTime(1900),
                   lastDate: DateTime.now().add(const Duration(days: 30)),
                   confirmText: context.l10n.select,
                   cancelText: context.l10n.cancel,

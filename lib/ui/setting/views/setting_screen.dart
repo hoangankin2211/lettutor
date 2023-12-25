@@ -11,6 +11,7 @@ import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
 import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/generated/l10n.dart';
+import 'package:lettutor/ui/auth/blocs/auth_status.dart';
 
 import '../../auth/blocs/auth_bloc.dart';
 
@@ -213,232 +214,247 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     logger.d("Setting Screen: $location");
-    return Scaffold(
-      body: CustomTemplateScreenStackScroll(
-        color: context.theme.scaffoldBackgroundColor,
-        paddingAll: const EdgeInsets.all(5),
-        afterMainScreen: Image.asset("assets/images/home_v2.png"),
-        appBar: AppBarCustom(
-          expandedHeight: context.height * 0.32,
-          backgroundColor: Colors.transparent,
-        ),
-        children: [
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              decoration: BoxDecoration(
-                color: context.theme.scaffoldBackgroundColor,
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(25)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: ([...displayInformation, ...displaySettingChoice]
-                        .map<Widget>((e) => GestureDetector(
-                              onTap: e['onTap'],
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      bloc: authBloc,
+      buildWhen: (previous, current) =>
+          current.authStatus == AuthStatus.updateProfileSuccess,
+      builder: (context, state) {
+        return Scaffold(
+          body: CustomTemplateScreenStackScroll(
+            color: context.theme.scaffoldBackgroundColor,
+            paddingAll: const EdgeInsets.all(5),
+            afterMainScreen: Image.asset("assets/images/home_v2.png"),
+            appBar: AppBarCustom(
+              expandedHeight: context.height * 0.32,
+              backgroundColor: Colors.transparent,
+            ),
+            children: [
+              SliverToBoxAdapter(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: context.theme.scaffoldBackgroundColor,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(25)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: ([...displayInformation, ...displaySettingChoice]
+                            .map<Widget>((e) => GestureDetector(
+                                  onTap: e['onTap'],
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                      horizontal: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          e['title'] == "displaySettingChoice"
+                                              ? context.theme.cardColor
+                                              : null,
+                                      border: Border.all(width: 0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            flex: 1, child: Icon(e['icon'])),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                            flex: 6, child: Text(e['content'])),
+                                        if (e["selection"] != null)
+                                          Text(e["selection"]()),
+                                        if (e['title'] ==
+                                            "displaySettingChoice")
+                                          IconButton(
+                                            constraints: const BoxConstraints(),
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              size: 15,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ))
+                            .toList()
+                          ..insert(
+                              2,
+                              Text(
+                                context.l10n.otherSetting,
+                                style: context.textTheme.titleLarge,
+                              ))
+                          ..insert(
+                            0,
+                            GestureDetector(
+                              onTap: () {
+                                context.push(
+                                    "${RouteLocation.setting}/${RouteLocation.changePassword}");
+                              },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 12,
                                   horizontal: 20,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: e['title'] == "displaySettingChoice"
-                                      ? context.theme.cardColor
-                                      : null,
+                                  color: context.theme.cardColor,
                                   border: Border.all(width: 0.1),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Row(
                                   children: [
-                                    Expanded(flex: 1, child: Icon(e['icon'])),
-                                    const SizedBox(width: 10),
+                                    const Expanded(
+                                        flex: 1, child: Icon(Icons.password)),
                                     Expanded(
-                                        flex: 6, child: Text(e['content'])),
-                                    if (e["selection"] != null)
-                                      Text(e["selection"]()),
-                                    if (e['title'] == "displaySettingChoice")
-                                      IconButton(
-                                        constraints: const BoxConstraints(),
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          size: 15,
-                                        ),
+                                        flex: 6,
+                                        child:
+                                            Text(context.l10n.changePassword)),
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 12),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        size: 15,
                                       ),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ))
-                        .toList()
-                      ..insert(
-                          2,
-                          Text(
-                            context.l10n.otherSetting,
-                            style: context.textTheme.titleLarge,
-                          ))
-                      ..insert(
-                        0,
-                        GestureDetector(
-                          onTap: () {
-                            context.push(
-                                "${RouteLocation.setting}/${RouteLocation.changePassword}");
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 20,
                             ),
-                            decoration: BoxDecoration(
-                              color: context.theme.cardColor,
-                              border: Border.all(width: 0.1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const Expanded(
-                                    flex: 1, child: Icon(Icons.password)),
-                                Expanded(
-                                    flex: 6,
-                                    child: Text(context.l10n.changePassword)),
-                                const Padding(
-                                  padding: EdgeInsets.only(right: 12),
-                                  child: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 15,
-                                  ),
+                          )
+                          ..insert(
+                            0,
+                            GestureDetector(
+                              onTap: openUserProfile,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 7, horizontal: 20),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                      ..insert(
-                        0,
-                        GestureDetector(
-                          onTap: openUserProfile,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 7, horizontal: 20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                BlocBuilder<AuthenticationBloc,
-                                    AuthenticationState>(
-                                  bloc: authBloc,
-                                  builder: (context, state) {
-                                    return Expanded(
-                                      flex: 1,
-                                      child: avatar != null
-                                          ? CircleAvatar(
-                                              foregroundImage:
-                                                  NetworkImage(avatar!),
-                                              backgroundImage: const AssetImage(
-                                                  "assets/images/user.png"),
-                                            )
-                                          : Image.asset(
-                                              "assets/images/user.png",
-                                              fit: BoxFit.contain,
-                                              height: 60,
-                                            ),
-                                    );
-                                  },
+                                child: Row(
+                                  children: [
+                                    BlocBuilder<AuthenticationBloc,
+                                        AuthenticationState>(
+                                      bloc: authBloc,
+                                      builder: (context, state) {
+                                        return Expanded(
+                                          flex: 1,
+                                          child: avatar != null
+                                              ? CircleAvatar(
+                                                  foregroundImage:
+                                                      NetworkImage(avatar!),
+                                                  backgroundImage: const AssetImage(
+                                                      "assets/images/user.png"),
+                                                )
+                                              : Image.asset(
+                                                  "assets/images/user.png",
+                                                  fit: BoxFit.contain,
+                                                  height: 60,
+                                                ),
+                                        );
+                                      },
+                                    ),
+                                    Expanded(
+                                      flex: 6,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 9),
+                                        child: Text(
+                                          userName,
+                                          style: context.textTheme.bodyLarge,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      constraints: const BoxConstraints(),
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  flex: 6,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 9),
-                                    child: Text(
-                                      userName,
-                                      style: context.textTheme.bodyLarge,
+                              ),
+                            ),
+                          )
+                          ..insert(
+                            0,
+                            Text(
+                              context.l10n.profileSetting,
+                              style: context.textTheme.titleLarge,
+                            ),
+                          )
+                          ..add(GestureDetector(
+                            onTap: () {
+                              BlocProvider.of<AuthenticationBloc>(context)
+                                  .add(LogoutAuthenticationRequest());
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                color: context.theme.cardColor,
+                                border: Border.all(width: 0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Icon(
+                                      Icons.logout,
+                                      color: context.colorScheme.error,
                                     ),
                                   ),
-                                ),
-                                IconButton(
-                                  constraints: const BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 15,
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    flex: 6,
+                                    child: BlocBuilder<AuthenticationBloc,
+                                        AuthenticationState>(
+                                      bloc: authBloc,
+                                      builder: (context, state) {
+                                        return state.isLoading
+                                            ? AppLoadingIndicator(
+                                                radius: 15,
+                                                color:
+                                                    context.colorScheme.error,
+                                              )
+                                            : Text(
+                                                context.l10n.logOut,
+                                                style: context
+                                                    .textTheme.bodyLarge
+                                                    ?.copyWith(
+                                                  color:
+                                                      context.colorScheme.error,
+                                                ),
+                                              );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                      )
-                      ..insert(
-                        0,
-                        Text(
-                          context.l10n.profileSetting,
-                          style: context.textTheme.titleLarge,
-                        ),
-                      )
-                      ..add(GestureDetector(
-                        onTap: () {
-                          BlocProvider.of<AuthenticationBloc>(context)
-                              .add(LogoutAuthenticationRequest());
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 20,
-                          ),
-                          decoration: BoxDecoration(
-                            color: context.theme.cardColor,
-                            border: Border.all(width: 0.1),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Icon(
-                                  Icons.logout,
-                                  color: context.colorScheme.error,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                flex: 6,
-                                child: BlocBuilder<AuthenticationBloc,
-                                    AuthenticationState>(
-                                  bloc: authBloc,
-                                  builder: (context, state) {
-                                    return state.isLoading
-                                        ? AppLoadingIndicator(
-                                            radius: 15,
-                                            color: context.colorScheme.error,
-                                          )
-                                        : Text(
-                                            context.l10n.logOut,
-                                            style: context.textTheme.bodyLarge
-                                                ?.copyWith(
-                                              color: context.colorScheme.error,
-                                            ),
-                                          );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )))
-                    .toList()
-                    .expand<Widget>(
-                      (element) => [
-                        element,
-                        const SizedBox(height: 10),
-                      ],
-                    )
-                    .toList(),
+                          )))
+                        .toList()
+                        .expand<Widget>(
+                          (element) => [
+                            element,
+                            const SizedBox(height: 10),
+                          ],
+                        )
+                        .toList(),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

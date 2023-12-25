@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/data/entities/user_info_entity.dart';
+import 'package:lettutor/domain/models/user/update_profile_request.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'user_service.g.dart';
@@ -22,7 +22,7 @@ abstract class UserService {
 
   @PUT(branch + info)
   Future<HttpResponse<UserInfoResponse>> updateUserInfo(
-      {@Body() required Map<String, dynamic> body});
+      {@Body() required UpdateProfileRequest body});
 
   @POST(branch + register)
   Future<HttpResponse> becomeTutor({

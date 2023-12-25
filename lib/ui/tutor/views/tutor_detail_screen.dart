@@ -163,8 +163,25 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TutorDetailBloc, TutorDetailState>(
+    return BlocConsumer<TutorDetailBloc, TutorDetailState>(
       bloc: tutorDetailBloc,
+      listener: (context, state) {
+        if (state is TutorDetailError) {
+          context.showSnackBarAlert(
+            state.message,
+          );
+        }
+        if (state is ReportedTutor) {
+          context.showSnackBarAlert(
+            "Send Report Successfully",
+          );
+        }
+        if (state is ReportTutorFailed) {
+          context.showSnackBarAlert(
+            state.message,
+          );
+        }
+      },
       buildWhen: (previous, current) => current.isMainState,
       builder: (context, tutorDetailState) {
         final tutorDetail = tutorDetailState.data.tutorDetail;
@@ -198,8 +215,19 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> {
                             numOfFeedback: tutorDetail.totalFeedback ?? 0,
                           ),
                         TutorListButton(
+                          isFavorite: tutorDetail.isFavorite ?? false,
                           openBooking: _openBooking,
                           tutorId: widget.tutorId,
+                          markFavorite: () {
+                            tutorDetailBloc.markFavorite(
+                                !(tutorDetail.isFavorite ?? false));
+                          },
+                          onReportTutor: (content) {
+                            tutorDetailBloc.reportTutor(
+                              tutorId: tutorDetail.user!.id,
+                              content: content,
+                            );
+                          },
                         ),
                         buildDescription(tutorDetail.bio ?? ""),
                         HomeItemComponent(
@@ -318,9 +346,15 @@ class TutorListButton extends StatelessWidget {
     super.key,
     required this.openBooking,
     required this.tutorId,
+    required this.markFavorite,
+    required this.isFavorite,
+    required this.onReportTutor,
   });
 
   final VoidCallback openBooking;
+  final bool isFavorite;
+  final VoidCallback markFavorite;
+  final void Function(String content) onReportTutor;
 
   @override
   Widget build(BuildContext context) {
@@ -348,13 +382,18 @@ class TutorListButton extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               elevation: 0, backgroundColor: Colors.transparent),
-          onPressed: () {},
+          onPressed: markFavorite,
           child: Column(
             children: [
-              Icon(
-                Icons.favorite_border,
-                color: Colors.pink.shade600,
-              ),
+              isFavorite
+                  ? Icon(
+                      Icons.favorite_outlined,
+                      color: Colors.pink.shade600,
+                    )
+                  : Icon(
+                      Icons.favorite_border,
+                      color: Colors.pink.shade600,
+                    ),
               Text(
                 context.l10n.favorite,
                 style: context.textTheme.bodyLarge
@@ -366,7 +405,43 @@ class TutorListButton extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               elevation: 0, backgroundColor: Colors.transparent),
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                final controller = TextEditingController();
+                return AlertDialog(
+                  title: Text(context.l10n.report),
+                  content: TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: context.l10n.report,
+                    ),
+                    maxLines: 5,
+                    minLines: 3,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(context.l10n.cancel),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(controller.text);
+                      },
+                      child: const Text("Ok"),
+                    ),
+                  ],
+                );
+              },
+            ).then((value) {
+              if (value != null) {
+                onReportTutor(value);
+              }
+            });
+          },
           child: Column(
             children: [
               Icon(

@@ -10,6 +10,7 @@ part 'tutor_service.g.dart';
 @RestApi()
 abstract class TutorService {
   static const String branch = "/tutor";
+  static const String report = "/report";
   static const String fetchTutorial = "$branch/more";
   static const String searchTutorApi = "$branch/search";
   static const String getTutorByIdApi = branch;
@@ -39,6 +40,10 @@ abstract class TutorService {
 
   @GET('$getTutorByIdApi/{id}')
   Future<HttpResponse> getTutorById(@Path('id') String id);
+
+  @POST(report)
+  Future<HttpResponse> reportTutor(
+      {@Body() required Map<String, dynamic> body});
 
   @POST(registerTutorApi)
   Future<HttpResponse> registerTutor({@Body() required FormData body});

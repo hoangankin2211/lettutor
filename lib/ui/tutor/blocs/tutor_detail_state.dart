@@ -50,6 +50,20 @@ class TutorDetailLoading extends TutorDetailState {
   TutorDetailLoading({required TutorDetailDataState data}) : super(data: data);
 }
 
+class ReportingTutor extends TutorDetailState {
+  ReportingTutor({required TutorDetailDataState data}) : super(data: data);
+}
+
+class ReportedTutor extends TutorDetailState {
+  ReportedTutor({required TutorDetailDataState data}) : super(data: data);
+}
+
+class ReportTutorFailed extends TutorDetailState {
+  final String message;
+  ReportTutorFailed({required TutorDetailDataState data, required this.message})
+      : super(data: data);
+}
+
 class TutorDetailLoaded extends TutorDetailState {
   TutorDetailLoaded({required TutorDetailDataState data}) : super(data: data);
 }

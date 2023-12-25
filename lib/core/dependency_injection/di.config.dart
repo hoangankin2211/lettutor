@@ -149,6 +149,7 @@ Future<_i1.GetIt> init(
   gh.factory<_i38.TutorDetailBloc>(() => _i38.TutorDetailBloc(
         gh<_i28.TutorUseCase>(),
         gh<_i25.ScheduleUseCase>(),
+        gh<_i16.TutorService>(),
       ));
   gh.factory<_i39.CourseBloc>(() => _i39.CourseBloc(gh<_i34.CourseUseCase>()));
   gh.factory<_i40.CourseDetailBloc>(
