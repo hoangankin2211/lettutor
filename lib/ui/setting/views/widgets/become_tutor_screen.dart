@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,6 +33,7 @@ class _BecomeTutorScreenState extends State<BecomeTutorScreen> {
       GlobalKey<_EnterProfileViewState>();
 
   int currentPage = 0;
+
   late PageController pageController =
       PageController(initialPage: currentPage, keepPage: true);
 
@@ -138,6 +138,7 @@ class _BecomeTutorScreenState extends State<BecomeTutorScreen> {
                                 price: 5000,
                               ),
                             );
+
                             setState(() {
                               isLoading = false;
                             });

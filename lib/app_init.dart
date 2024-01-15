@@ -11,6 +11,7 @@ import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/navigation/routes_service.dart';
+import 'package:lettutor/core/utils/networking/socket/app_socket.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 import 'core/utils/blocs/app_bloc_observer.dart';

@@ -19,7 +19,7 @@ import '../../../domain/models/user.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-@injectable
+@singleton
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthUseCase authUseCase;

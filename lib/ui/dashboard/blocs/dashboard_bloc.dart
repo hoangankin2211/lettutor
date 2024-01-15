@@ -1,5 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
+import 'package:lettutor/core/utils/networking/socket/app_socket.dart';
+import 'package:lettutor/domain/usecases/chat_usecase.dart';
+import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
+import 'package:lettutor/ui/chat/bloc/chat_cubit.dart';
+import 'package:lettutor/ui/chat/bloc/chat_list_cubit.dart';
 import 'package:lettutor/ui/course/blocs/course_bloc.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';
 import 'package:lettutor/ui/dashboard/blocs/dashboard_state.dart';
@@ -12,12 +18,20 @@ class DashboardBloc extends Cubit<DashboardState> {
   final EBookBloc eBookBloc;
   final TutorBloc tutorBloc;
   final ScheduleBloc scheduleBloc;
+  final AuthenticationBloc authenticationBloc;
+  final ChatListCubit chatListCubit;
+  final ChatUseCase chatUseCase;
+  final AppSocket appSocket;
 
   DashboardBloc(
     this.courseBloc,
+    this.appSocket,
     this.eBookBloc,
     this.tutorBloc,
     this.scheduleBloc,
+    this.chatListCubit,
+    this.authenticationBloc,
+    this.chatUseCase,
   ) : super(DashboardInitial());
 
   void changeTab(int index) {
@@ -26,6 +40,13 @@ class DashboardBloc extends Cubit<DashboardState> {
 
   Future<void> fetchInitialApplicationData() async {
     emit(DashboardLoading(data: state.data));
+    if (authenticationBloc.state.user != null) {
+      logger.d("Init socket");
+      appSocket.initSocket(authenticationBloc.state.user!);
+      appSocket.connectSocket();
+      chatUseCase.connectSocket();
+      chatListCubit.connectSocket();
+    }
     Future.wait([
       courseBloc.fetchCourseList(),
       eBookBloc.fetchEBookList(),

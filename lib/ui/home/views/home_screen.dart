@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/utils/networking/socket/app_socket.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/core/utils/widgets/custom_appbar.dart';
 import 'package:lettutor/core/utils/widgets/custom_stack_scroll.dart';
@@ -210,10 +211,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         toolbarHeight: kToolbarHeight + 10,
         elevation: 0,
-        leading: Image.asset(
-          "assets/images/splash.png",
-          cacheHeight: 50,
-          cacheWidth: 50,
+        leading: GestureDetector(
+          onTap: () {
+            injector.get<AppSocket>().connectSocket();
+          },
+          child: Image.asset(
+            "assets/images/splash.png",
+            cacheHeight: 50,
+            cacheWidth: 50,
+          ),
         ),
         backgroundColor: context.theme.cardColor,
         title: Text(

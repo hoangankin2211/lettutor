@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:lettutor/data/entities/course/course_entity.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 
@@ -97,12 +99,48 @@ class User {
   String toString() {
     return 'User(id: $id, email: $email, name: $name, avatar: $avatar, country: $country, phone: $phone, roles: $roles, language: $language, birthday: $birthday, isActivated: $isActivated, walletInfo: $walletInfo, courses: $courses, requireNote: $requireNote, level: $level, learnTopics: $learnTopics, testPreparations: $testPreparations, isPhoneActivated: $isPhoneActivated, timezone: $timezone, studySchedule: $studySchedule, canSendMessage: $canSendMessage)';
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'email': email,
+      'name': name,
+      'avatar': avatar,
+      'country': country,
+      'phone': phone,
+      'roles': roles,
+      'language': language,
+      'birthday': birthday,
+      'isActivated': isActivated,
+      'walletInfo': {
+        'amount': walletInfo?.amount,
+        'isBlocked': walletInfo?.isBlocked,
+        'bonus': walletInfo?.bonus,
+      },
+      'courses': courses?.map((x) => x.toMap()).toList(),
+      'requireNote': requireNote,
+      'level': level,
+      'learnTopics': learnTopics?.map((x) => x.toMap()).toList(),
+      'testPreparations': testPreparations
+          ?.map((x) => {
+                'id': x.id,
+                'key': x.key,
+                'name': x.name,
+              })
+          .toList(),
+      'isPhoneActivated': isPhoneActivated,
+      'timezone': timezone,
+      'studySchedule': studySchedule,
+      'canSendMessage': canSendMessage,
+    };
+  }
 }
 
 class TestPreparation {
   final int id;
   final String key;
   final String name;
+
   TestPreparation({
     required this.id,
     required this.key,

@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:lettutor/app_init.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/navigation/error_screen.dart';
+import 'package:lettutor/data/entities/chat/message_entity.dart';
 import 'package:lettutor/ui/auth/views/auth_screen.dart';
+import 'package:lettutor/ui/chat/chat_screen.dart';
 import 'package:lettutor/ui/course/views/course_detail_screen.dart';
 import 'package:lettutor/ui/course/views/widgets/page_view_pdf.dart';
 import 'package:lettutor/ui/dashboard/views/dashboard_screen.dart';
@@ -81,6 +83,21 @@ final routes = [
         final TutorDetailBloc? tutorDetailBloc = data["tutorDetailBloc"];
         if (tutorDetailBloc != null) {
           return TutorBookingTimeScreen(tutorDetailBloc: tutorDetailBloc);
+        }
+      }
+      return const ErrorScreen();
+    },
+  ),
+  GoRoute(
+    parentNavigatorKey: AppBuilder.appNavigationKey,
+    path: RouteLocation.chatScreen,
+    builder: (context, state) {
+      if (state.extra != null && state.extra is Map) {
+        final Map<String, dynamic> data = state.extra as Map<String, dynamic>;
+        final MessageEntity? messageEntity = data["messageEntity"];
+        final String? partnerId = data["partnerId"];
+        if (messageEntity != null && partnerId != null) {
+          return ChatScreen(messageEntity: messageEntity, partnerId: partnerId);
         }
       }
       return const ErrorScreen();

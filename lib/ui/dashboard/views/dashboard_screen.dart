@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/dependency_injection/di.dart';
+import 'package:lettutor/ui/chat/bloc/chat_cubit.dart';
+import 'package:lettutor/ui/chat/bloc/chat_list_cubit.dart';
+import 'package:lettutor/ui/chat/chat_list.dart';
+import 'package:lettutor/ui/chat/chat_screen.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/dashboard/blocs/dashboard_state.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';
@@ -35,6 +39,17 @@ class _DashboardScreenState extends State<DashboardScreen>
       'title': context.l10n.Home,
       'icon': CupertinoIcons.house_alt_fill,
       "widget": const HomeScreen(),
+    },
+    {
+      'title': "Messages",
+      'icon': CupertinoIcons.chat_bubble_2,
+      "widget": MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => injector.get<ChatListCubit>()),
+          BlocProvider(create: (context) => injector.get<ChatCubit>()),
+        ],
+        child: const ChatListScreen(),
+      ),
     },
     {
       'title': context.l10n.Teachers,
@@ -78,6 +93,11 @@ class _DashboardScreenState extends State<DashboardScreen>
   void initState() {
     super.initState();
     dashboardBloc.fetchInitialApplicationData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _onTap(int index) {
