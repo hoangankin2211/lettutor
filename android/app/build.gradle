@@ -59,11 +59,9 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".debug"
             debuggable true
         }
         release {
-            applicationIdSuffix ".release"
             minifyEnabled true
         }
     }
@@ -71,13 +69,11 @@ android {
     flavorDimensions "version"
     productFlavors {
         dev {
-            applicationIdSuffix ".dev"
             dimension "version"
             resValue "string", "app_name", "LetTutor Dev"
         }
 
         prod {
-            applicationIdSuffix ".prod"
             dimension "version"
             resValue "string", "app_name", "LetTutor"
         }

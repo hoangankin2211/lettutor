@@ -26,6 +26,13 @@ class AuthUseCase {
     );
   }
 
+  Future<Either<User, String>> signInByGoogle(String token) async {
+    return (await repository.loginByGoogle(token)).either(
+      (left) => UserMapper.fromEntity(left),
+      (right) => right,
+    );
+  }
+
   Future<Either<User, String>> refreshToken(
       {required String refreshToken, required int timezone}) async {
     return (await repository.refreshToken(

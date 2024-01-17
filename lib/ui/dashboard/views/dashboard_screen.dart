@@ -6,7 +6,6 @@ import 'package:lettutor/core/dependency_injection/di.dart';
 import 'package:lettutor/ui/chat/bloc/chat_cubit.dart';
 import 'package:lettutor/ui/chat/bloc/chat_list_cubit.dart';
 import 'package:lettutor/ui/chat/chat_list.dart';
-import 'package:lettutor/ui/chat/chat_screen.dart';
 import 'package:lettutor/ui/course/views/course_screen.dart';
 import 'package:lettutor/ui/dashboard/blocs/dashboard_state.dart';
 import 'package:lettutor/ui/home/views/home_screen.dart';

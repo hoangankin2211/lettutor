@@ -6,7 +6,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lettutor/core/core.dart';
-import 'package:lettutor/core/utils/networking/socket/app_socket.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
 
 import 'core/utils/blocs/app_bloc.dart/application_bloc.dart';

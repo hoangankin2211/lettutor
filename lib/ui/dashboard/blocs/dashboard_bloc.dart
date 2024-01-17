@@ -4,7 +4,6 @@ import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/networking/socket/app_socket.dart';
 import 'package:lettutor/domain/usecases/chat_usecase.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
-import 'package:lettutor/ui/chat/bloc/chat_cubit.dart';
 import 'package:lettutor/ui/chat/bloc/chat_list_cubit.dart';
 import 'package:lettutor/ui/course/blocs/course_bloc.dart';
 import 'package:lettutor/ui/course/blocs/ebook_bloc.dart';

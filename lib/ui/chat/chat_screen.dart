@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lettutor/core/core.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
+import 'package:lettutor/data/data_source/remote/chat/chat_query.dart';
 import 'package:lettutor/data/entities/chat/message_entity.dart';
 import 'package:lettutor/ui/chat/bloc/chat_cubit.dart';
 import 'package:lettutor/ui/chat/bloc/chat_state.dart';
@@ -21,9 +23,27 @@ class _ChatScreenState extends State<ChatScreen> {
   ChatCubit get _chatCubit => injector.get<ChatCubit>();
 
   final TextEditingController _textEditingController = TextEditingController();
-
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels != 0) {
+          if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent) {
+            logger.d("load more");
+            _chatCubit.loadMoreChat(
+              partnerId: widget.partnerId,
+              chatQueries: ChatQuery(
+                page: _chatCubit.state.chatQuery.page + 1,
+                perPage: _chatCubit.state.chatQuery.perPage,
+                startTime: _chatCubit.state.chatQuery.startTime,
+              ),
+            );
+          }
+        }
+      }
+    });
     super.initState();
   }
 
@@ -180,11 +200,17 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget buildListMessage(ChatState chatState) {
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       reverse: true,
       physics: const AlwaysScrollableScrollPhysics(),
-      controller: ScrollController(),
+      controller: _scrollController,
       itemBuilder: (context, index) {
+        if (index == chatState.chatEntity.rows.length) {
+          if (chatState is LoadingMoreChat) {
+            return const Center(child: AppLoadingIndicator(radius: 30));
+          }
+          return const SizedBox();
+        }
         final message = chatState.chatEntity.rows[index];
         return buildItem(
           message.fromInfo.id,
@@ -194,7 +220,7 @@ class _ChatScreenState extends State<ChatScreen> {
               .format(DateTime.parse(message.createdAt)),
         );
       },
-      itemCount: chatState.chatEntity.rows.length,
+      itemCount: chatState.chatEntity.rows.length + 1,
       separatorBuilder: (BuildContext context, int index) {
         return const SizedBox(height: 10);
       },
@@ -240,20 +266,6 @@ class _InputWidgetState extends State<InputWidget> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // IconButton(
-              //   onPressed: !widget.isListening
-              //       ? widget.onVoiceStart
-              //       : widget.onVoiceStop,
-              //   padding: const EdgeInsets.only(bottom: 8),
-              //   icon:
-              //       //  widget.isListening
-              //       //     ? const ListeningIcon()
-              //       //     :
-              //       Icon(
-              //     micIcon,
-              //     color: Theme.of(context).hintColor,
-              //   ),
-              // ),
               Expanded(
                 child: TextField(
                   keyboardType: TextInputType.multiline,

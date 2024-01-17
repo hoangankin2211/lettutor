@@ -13,4 +13,5 @@ abstract class AuthenticationRepository {
   Future<bool> logout();
   Future<User> getCurrentUser();
   Future<Either<DataFailed, DataSuccess>> forgetPassword(String email);
+  Future<Either<UserEntity, String>> loginByGoogle(String token);
 }

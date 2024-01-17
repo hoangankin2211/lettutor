@@ -17,6 +17,7 @@ abstract class EmailAuthApi implements AuthenticationApi {
   static const String registerApi = "$branch/register";
   static const String logoutApi = "$branch/logout";
   static const String changePasswordApi = "$branch/change-password";
+  static const String loginByGoogleApi = "$branch/google";
 
   @factoryMethod
   factory EmailAuthApi(Dio dio) = _EmailAuthApi;
@@ -47,6 +48,11 @@ abstract class EmailAuthApi implements AuthenticationApi {
   @override
   @POST("/user/forgotPassword")
   Future<HttpResponse> forgetPassword({
+    @Body() required Map<String, dynamic> body,
+  });
+
+  @POST(loginByGoogleApi)
+  Future<HttpResponse<AuthResponse>> loginByGoogle({
     @Body() required Map<String, dynamic> body,
   });
 }

@@ -40,6 +40,14 @@ class InitChangePasswordFlow extends AuthenticationEvent {
   InitChangePasswordFlow();
 }
 
+class GoogleSignInRequest extends AuthenticationEvent {
+  GoogleSignInRequest();
+}
+
+class FacebookSignInRequest extends AuthenticationEvent {
+  FacebookSignInRequest();
+}
+
 class ChangePasswordRequest extends AuthenticationEvent {
   final String password;
   final String newPassword;

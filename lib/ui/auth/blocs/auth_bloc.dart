@@ -1,12 +1,16 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
+import 'package:lettutor/core/utils/oauth/facebook_oauth_service.dart';
+import 'package:lettutor/core/utils/oauth/google_oauth_service.dart';
 import 'package:lettutor/data/data_source/local/authentication/auth_local_data.dart';
 import 'package:lettutor/data/data_source/remote/user/user_service.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
@@ -25,11 +29,15 @@ class AuthenticationBloc
   final AuthUseCase authUseCase;
   final UserService userService;
   final AuthLocalData _authLocalData;
+  final GoogleOAuthService googleOAuthService;
+  final FacebookOAuthService facebookOAuthService;
 
   AuthenticationBloc(
     this.authUseCase,
     this._authLocalData,
     this.userService,
+    this.googleOAuthService,
+    this.facebookOAuthService,
   ) : super(const AuthenticationState.unknown()) {
     on<EmailLoginRequest>(_onEmailLoginRequest);
     on<LogoutAuthenticationRequest>(_onLogoutAuthenticationRequest);
@@ -39,6 +47,22 @@ class AuthenticationBloc
     on<ForgetPasswordRequest>(_onForgetPasswordRequest);
     on<ChangePasswordRequest>(_onChangePasswordRequest);
     on<InitChangePasswordFlow>(_onInitChangePasswordFlow);
+    on<GoogleSignInRequest>(_onGoogleSignInRequest);
+
+    on<FacebookSignInRequest>(_onFacebookSignInRequest);
+  }
+
+  Future<void> _onFacebookSignInRequest(
+      FacebookSignInRequest event, Emitter<AuthenticationState> emit) async {
+    final result = await facebookOAuthService.handleLogin();
+    // emit(const AuthenticationState.loading());
+    final token = result.token;
+    logger.d(token);
+    // (await authUseCase.signInByFacebook(accessToken)).fold(
+    //   (user) => emit(AuthenticationState.authenticated(user: user)),
+    //   (errorMessage) =>
+    //       emit(AuthenticationState.unauthenticated(message: errorMessage)),
+    // );
   }
 
   Future<void> reloadProfile() async {
@@ -48,6 +72,24 @@ class AuthenticationBloc
             (await userService.getUserInfo()).data.user),
       ),
     );
+  }
+
+  Future<void> _onGoogleSignInRequest(
+      GoogleSignInRequest event, Emitter<AuthenticationState> emit) async {
+    final result = await googleOAuthService.handleSignIn();
+    emit(const AuthenticationState.loading());
+    if (result != null) {
+      final token = (await result.authHeaders)["Authorization"];
+      if (token != null) {
+        final accessToken = token.replaceAll("Bearer ", "");
+
+        (await authUseCase.signInByGoogle(accessToken)).fold(
+          (user) => emit(AuthenticationState.authenticated(user: user)),
+          (errorMessage) =>
+              emit(AuthenticationState.unauthenticated(message: errorMessage)),
+        );
+      }
+    }
   }
 
   FutureOr<void> _onInitAuthenticationStatus(

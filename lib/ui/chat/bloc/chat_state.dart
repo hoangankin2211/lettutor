@@ -1,9 +1,10 @@
+import 'package:lettutor/data/data_source/remote/chat/chat_query.dart';
 import 'package:lettutor/data/entities/chat/chat_entity.dart';
 
 abstract class ChatState {
   final ChatEntity chatEntity;
-
-  ChatState(this.chatEntity);
+  final ChatQuery chatQuery;
+  ChatState(this.chatEntity, {this.chatQuery = const ChatQuery()});
 }
 
 class ChatInitial extends ChatState {
@@ -16,6 +17,15 @@ class ChatLoading extends ChatState {
 
 class ChatLoaded extends ChatState {
   ChatLoaded(ChatEntity chatEntity) : super(chatEntity);
+}
+
+class LoadMoreChat extends ChatState {
+  LoadMoreChat(ChatEntity chatEntity, ChatQuery chatQuery)
+      : super(chatEntity, chatQuery: chatQuery);
+}
+
+class LoadingMoreChat extends ChatState {
+  LoadingMoreChat(ChatEntity chatEntity) : super(chatEntity);
 }
 
 class ChatError extends ChatState {

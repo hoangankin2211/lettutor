@@ -55,6 +55,39 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  void loadMoreChat({
+    required String partnerId,
+    ChatQuery chatQueries = const ChatQuery(),
+  }) async {
+    if (state is LoadingMoreChat) return;
+    if (state.chatEntity.count == state.chatEntity.rows.length) return;
+    emit(LoadingMoreChat(state.chatEntity));
+    logger.d(chatQueries.page);
+    try {
+      (await _chatUseCase.getChatDetail(
+              messageId: partnerId, chatQueries: chatQueries))
+          .fold(
+        (error) => emit(ChatError(error)),
+        (chatEntity) {
+          final List<MessageEntity> newChatList =
+              List.from(state.chatEntity.rows);
+          newChatList.addAll(chatEntity.rows);
+          emit(
+            LoadMoreChat(
+              ChatEntity(
+                rows: newChatList,
+                count: chatEntity.count,
+              ),
+              chatQueries,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      logger.e(e);
+    }
+  }
+
   @override
   Future<void> close() {
     _chatUseCase.disconnectNewMessageListener();

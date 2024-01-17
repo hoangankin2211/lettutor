@@ -7,6 +7,7 @@ import 'package:lettutor/core/utils/networking/interceptor/api_token_interceptor
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/api_helper.dart';
 import 'package:lettutor/data/data_source/remote/authentication/authentication.dart';
+import 'package:lettutor/data/data_source/remote/authentication/email/email_auth_api.dart';
 import 'package:lettutor/data/entities/response/auth_response.dart';
 import 'package:lettutor/data/entities/user_entity.dart';
 import 'package:lettutor/domain/models/user.dart';
@@ -140,5 +141,30 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Right(dataState as DataSuccess);
     }
     return Left(dataState as DataFailed);
+  }
+
+  @override
+  Future<Either<UserEntity, String>> loginByGoogle(String token) async {
+    final state = await getStateOf<AuthResponse>(
+      request: () => (_authenticationApi as EmailAuthApi).loginByGoogle(body: {
+        "access_token": token,
+      }),
+    );
+
+    if (state is DataSuccess) {
+      await Future.wait(
+        [
+          _appLocalStorage.saveMap(
+            accessTokenKey,
+            state.data!.tokens.toMap(),
+          )
+        ],
+      );
+      return Left(state.data!.user);
+    }
+
+    return Right((state.dioException?.response?.data["message"] ??
+        (state.dioException!.message) ??
+        "Error while sign in"));
   }
 }
