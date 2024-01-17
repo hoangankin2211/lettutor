@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/utils/analytics/google_analytic_service.dart';
 import 'package:lettutor/data/data_source/remote/tutorial/tutor_service.dart';
 import 'package:lettutor/data/entities/feedback/feedback_entity.dart';
 import 'package:lettutor/domain/models/tutor/tutor_detail.dart';
@@ -12,8 +13,10 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
   final TutorUseCase tutorUseCase;
   final TutorService tutorService;
   final ScheduleUseCase scheduleUseCase;
+  final GoogleAnalyticService analyticService;
 
-  TutorDetailBloc(this.tutorUseCase, this.scheduleUseCase, this.tutorService)
+  TutorDetailBloc(this.tutorUseCase, this.scheduleUseCase, this.tutorService,
+      this.analyticService)
       : super(TutorDetailInitial(data: TutorDetailDataState()));
 
   void fetchTutorDetailData(String id) async {
@@ -29,6 +32,11 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
         emit(TutorDetailError(data: state.data, message: element.left));
         return;
       } else {
+        // analyticService.sendEvent(AnalyticEvent.openTutorDetail.name, {
+        //   "tutor_id": id,
+        //   "tutor_name": (element.right as TutorDetail).user!.name,
+        // });
+
         if (element.right is List<FeedbackEntity>) {
           data =
               data.copyWith(feedbacks: element.right as List<FeedbackEntity>);
@@ -109,6 +117,12 @@ class TutorDetailBloc extends Cubit<TutorDetailState> {
               return false;
             },
             (right) {
+              // analyticService.sendEvent(AnalyticEvent.bookTutor.name, {
+              //   "tutor_id": state.data.tutorDetail.user!.id,
+              //   "tutor_name": state.data.tutorDetail.user!.name,
+              //   "schedule_id": scheduleId,
+              // });
+
               emit(BookClassSuccess(
                   data: state.data.copyWith(
                     bookingTime: state.data.bookingTime

@@ -10,29 +10,38 @@
             "type": "dart",
             "args": ["--flavor","dev"],
             "flutterMode": "debug",
+            "env": {
+                "flavor": "dev"
+            },
             "noDebug": true,
-            "program": "lib/main_dev.dart",
         },
         {
             "name": "prodDefault",
             "noDebug": true,
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart",
+            "env": {
+                "flavor": "prod"
+            },
         },
         {
             "name": "devDebug",
             "request": "launch",
             "args": ["--flavor","dev"],
             "type": "dart",
-            "program": "lib/main_dev.dart",
+            "env": {
+                "flavor": "dev"
+            },
+            // "program": "lib/main_dev.dart",
             "flutterMode": "debug"
         },
         {
             "name": "prodDebug",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart",
+            "env": {
+                "flavor": "prod"
+            },
             "flutterMode": "debug"
         },
         {
@@ -41,6 +50,9 @@
             "type": "dart",
             "program": "lib/main_dev.dart",
             "args": ["--flavor","dev"],
+            "env": {
+                "flavor": "dev"
+            },
             "flutterMode": "profile",
             "noDebug": true
         },
@@ -48,7 +60,9 @@
             "name": "prodProfile",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart",
+            "env": {
+                "flavor": "prod"
+            },
             "flutterMode": "profile"
         },
         {
@@ -56,15 +70,20 @@
             "request": "launch",
             "noDebug": true,
             "type": "dart",
+            "env": {
+                "flavor": "dev"
+            },
             "args": ["--flavor","dev"],
-            "program": "lib/main_dev.dart",
+            // "program": "lib/main_dev.dart",
             "flutterMode": "release"
         },
         {
             "name": "prodRelease",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart",
+            "env": {
+                "flavor": "prod"
+            },
             "flutterMode": "release"
         },
         // {

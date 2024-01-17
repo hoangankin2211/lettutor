@@ -8,6 +8,7 @@ import 'package:lettutor/core/utils/networking/networking.dart';
 import 'package:lettutor/data/data_source/local/app_local_storage.dart';
 import 'package:lettutor/data/data_source/remote/authentication/email/email_auth_api.dart';
 import 'package:lettutor/data/entities/token_entity.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 const keyAuthentication = 'Authorization';
 const keyApiKey = 'XApiKey';
@@ -42,6 +43,8 @@ class ApiTokenInterceptor extends Interceptor {
         if (refreshExpiredTime.isBefore(DateTime.now())) {
           return;
         }
+        final transaction = Sentry.startTransaction(
+            'GoogleOAuthService::handleSignIn()', 'task');
         try {
           final response = await EmailAuthApi(
             NetworkService.initializeDio(
@@ -61,10 +64,14 @@ class ApiTokenInterceptor extends Interceptor {
           options.headers[keyAuthentication] =
               '$keyBear ${response.data.tokens.access.token}';
         } catch (e) {
+          transaction.throwable = e;
+          transaction.status = const SpanStatus.internalError();
           handler.reject(DioException(
             requestOptions: options,
             error: e,
           ));
+        } finally {
+          transaction.finish();
         }
       } else {
         options.headers[keyAuthentication] =

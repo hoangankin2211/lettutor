@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../../core/utils/networking/networking.dart';
 
@@ -9,6 +10,8 @@ Future<DataState<T>> getStateOf<T>({
   required Future<HttpResponse> Function() request,
   Future<T> Function(Map<String, dynamic> data)? parser,
 }) async {
+  final transaction = Sentry.startTransaction('getStateOf', 'task');
+
   try {
     final httpResponse = await request();
     if (httpResponse.response.statusCode == HttpStatus.ok ||
@@ -32,9 +35,13 @@ Future<DataState<T>> getStateOf<T>({
       );
     }
   } on DioException catch (e) {
+    transaction.throwable = e;
+    transaction.status = const SpanStatus.internalError();
     return DataFailed(
       exception: e,
       statusCode: e.response?.statusCode ?? 400,
     );
+  } finally {
+    transaction.finish();
   }
 }

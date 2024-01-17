@@ -1,5 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 @singleton
 class GoogleOAuthService {
@@ -20,10 +21,16 @@ class GoogleOAuthService {
   }
 
   Future<GoogleSignInAccount?> handleSignIn() async {
+    final transaction =
+        Sentry.startTransaction('GoogleOAuthService::handleSignIn()', 'task');
     try {
       return await _googleSignIn.signIn();
     } catch (error) {
+      transaction.throwable = error;
+      transaction.status = const SpanStatus.internalError();
       print(error);
+    } finally {
+      transaction.finish();
     }
   }
 }

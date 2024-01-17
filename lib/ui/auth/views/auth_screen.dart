@@ -45,7 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
             SliverToBoxAdapter(
               child: Container(
                 padding: const EdgeInsets.all(15),
-                height: context.height * 0.7 - context.query.viewPadding.top,
+                height: context.height * 0.7 + 100,
                 decoration: BoxDecoration(
                   color: context.theme.scaffoldBackgroundColor,
                   borderRadius:

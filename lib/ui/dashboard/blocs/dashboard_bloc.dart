@@ -56,4 +56,10 @@ class DashboardBloc extends Cubit<DashboardState> {
       (value) => emit(DashboardLoaded(data: state.data)),
     );
   }
+
+  @override
+  Future<void> close() {
+    appSocket.disconnectSocket();
+    return super.close();
+  }
 }

@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'package:lettutor/core/constants/ui_config.dart';
+import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
+import 'package:lettutor/core/utils/analytics/google_analytic_service.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/navigation/routes_location.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
@@ -33,6 +35,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   ScheduleBloc get _scheduleBloc => BlocProvider.of<ScheduleBloc>(context);
 
+  final GoogleAnalyticService _analyticService =
+      injector.get<GoogleAnalyticService>();
   User? get _user => BlocProvider.of<AuthenticationBloc>(context).state.user;
 
   late final Animation<double> _animation;
@@ -244,6 +248,22 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                                         openMeeting: () {
                                           if (schedule.studentMeetingLink !=
                                               null) {
+                                            // _analyticService.sendEvent(
+                                            //     AnalyticEvent.attendCourse.name,
+                                            //     {
+                                            //       "tutor_id": schedule
+                                            //           .scheduleDetailInfo!
+                                            //           .scheduleInfo!
+                                            //           .tutorInfo
+                                            //           .id,
+                                            //       "tutor_name": schedule
+                                            //           .scheduleDetailInfo!
+                                            //           .scheduleInfo!
+                                            //           .tutorInfo
+                                            //           .name,
+                                            //       "schedule_id": schedule.id,
+                                            //     });
+
                                             _joinMeeting(
                                                 schedule.studentMeetingLink!);
                                           }

@@ -56,7 +56,6 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               children: [
                 const SignInHeader(),
-                const SizedBox(height: 10),
                 Flexible(
                   child: isSignInForm
                       ? Column(

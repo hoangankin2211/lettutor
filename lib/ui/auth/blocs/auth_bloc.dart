@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
@@ -77,19 +76,20 @@ class AuthenticationBloc
   Future<void> _onGoogleSignInRequest(
       GoogleSignInRequest event, Emitter<AuthenticationState> emit) async {
     final result = await googleOAuthService.handleSignIn();
-    emit(const AuthenticationState.loading());
     if (result != null) {
       final token = (await result.authHeaders)["Authorization"];
       if (token != null) {
         final accessToken = token.replaceAll("Bearer ", "");
-
-        (await authUseCase.signInByGoogle(accessToken)).fold(
+        emit(const AuthenticationState.loading());
+        return (await authUseCase.signInByGoogle(accessToken)).fold(
           (user) => emit(AuthenticationState.authenticated(user: user)),
           (errorMessage) =>
               emit(AuthenticationState.unauthenticated(message: errorMessage)),
         );
       }
     }
+    return emit(const AuthenticationState.unauthenticated(
+        message: "Error while login"));
   }
 
   FutureOr<void> _onInitAuthenticationStatus(
