@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/networking/data_state.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
 import 'package:lettutor/data/entities/schedule/schedule_entity.dart';
@@ -40,24 +41,25 @@ class ScheduleUseCase {
   Future<Either<String, BookingInfoEntity?>> getNextAppointment(
           DateTime time) =>
       scheduleRepository.getNextAppointment(dateTime: time).mapRight((right) {
-        final listData = right.data.where((element) {
-          final startPeriodTimestamp =
-              element.scheduleDetailInfo?.startPeriodTimestamp;
-          if (startPeriodTimestamp != null) {
-            return startPeriodTimestamp > time.millisecondsSinceEpoch;
-          }
-          return false;
-        }).toList();
+        // final listData = right.data.where((element) {
+        //   final startPeriodTimestamp =
+        //       element.scheduleDetailInfo?.startPeriodTimestamp;
+        //   if (startPeriodTimestamp != null) {
+        //     return startPeriodTimestamp < time.millisecondsSinceEpoch;
+        //   }
+        //   return false;
+        // }).toList();
 
-        if (listData.isEmpty) {
-          return null;
-        }
+        // if (listData.isEmpty) {
+        //   return null;
+        // }
 
-        listData.sort((a, b) {
-          return a.scheduleDetailInfo!.startPeriodTimestamp
-              .compareTo(b.scheduleDetailInfo!.startPeriodTimestamp);
-        });
+        // listData.sort((a, b) {
+        //   return a.scheduleDetailInfo!.startPeriodTimestamp
+        //       .compareTo(b.scheduleDetailInfo!.startPeriodTimestamp);
+        // });
 
+        logger.d(right.data.first.scheduleDetailInfo!.startPeriodTimestamp);
         return right.data.first;
       });
 

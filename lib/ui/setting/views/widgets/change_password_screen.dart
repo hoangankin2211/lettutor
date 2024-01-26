@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/extensions/extensions.dart';
 import 'package:lettutor/core/utils/widgets/app_loading_indicator.dart';
 import 'package:lettutor/ui/auth/blocs/auth_bloc.dart';
@@ -83,6 +84,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           if (state is ChangePassword) {
             switch (state.changePasswordStatus) {
               case ChangePasswordStatus.success:
+                logger.d(state.changePasswordStatus);
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
@@ -170,7 +172,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: _onChangePassword,
+                      onPressed: () {
+                        _onChangePassword();
+                        context
+                            .showSnackBarAlert("Change password successfully");
+                      },
                       child:
                           (state is ChangePassword && state.isChangingPassword)
                               ? AppLoadingIndicator(

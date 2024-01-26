@@ -37,7 +37,7 @@ class HistoryFeedbackEntity {
       bookingId: map['bookingId'] as String? ?? "",
       firstId: map['firstId'] as String? ?? "",
       secondId: map['secondId'] as String? ?? "",
-      rating: map['rating'] as int? ?? 0,
+      rating: (map['rating'] as num?)?.toInt() ?? 0,
       content: map['content'] as String? ?? "",
       createdAt: DateTime.parse(map['createdAt']),
       updatedAt: DateTime.parse(map['updatedAt']),

@@ -201,7 +201,7 @@ class _ScheduleService implements ScheduleService {
   }
 
   @override
-  Future<HttpResponse<dynamic>> getNextAppointment({required int time}) async {
+  Future<HttpResponse<dynamic>> getNextAppointment() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -214,7 +214,7 @@ class _ScheduleService implements ScheduleService {
     )
             .compose(
               _dio.options,
-              '/booking/next?dateTime=${time}',
+              '/booking/next',
               queryParameters: queryParameters,
               data: _data,
             )

@@ -39,13 +39,13 @@ class DashboardBloc extends Cubit<DashboardState> {
 
   Future<void> fetchInitialApplicationData() async {
     emit(DashboardLoading(data: state.data));
-    if (authenticationBloc.state.user != null) {
-      logger.d("Init socket");
-      appSocket.initSocket(authenticationBloc.state.user!);
-      appSocket.connectSocket();
-      chatUseCase.connectSocket();
-      chatListCubit.connectSocket();
-    }
+    // if (authenticationBloc.state.user != null) {
+    //   logger.d("Init socket");
+    //   appSocket.initSocket(authenticationBloc.state.user!);
+    //   appSocket.connectSocket();
+    //   chatUseCase.connectSocket();
+    //   chatListCubit.connectSocket();
+    // }
     Future.wait([
       courseBloc.fetchCourseList(),
       eBookBloc.fetchEBookList(),

@@ -22,9 +22,9 @@ import '../../data/data_source/remote/authentication/authentication.dart'
 import '../../data/data_source/remote/authentication/email/email_auth_api.dart'
     as _i23;
 import '../../data/data_source/remote/authentication/facebook/facebook_auth_impl.dart'
-    as _i6;
-import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
     as _i5;
+import '../../data/data_source/remote/authentication/google/google_auth_impl.dart'
+    as _i6;
 import '../../data/data_source/remote/chat/chat_service.dart' as _i26;
 import '../../data/data_source/remote/chore/chores_service.dart' as _i27;
 import '../../data/data_source/remote/course/course_service.dart' as _i28;
@@ -83,12 +83,12 @@ Future<_i1.GetIt> init(
   final dioModule = _$DioModule();
   gh.singleton<_i3.AppSocket>(_i3.AppSocket());
   gh.factory<_i4.AuthenticationApi>(
-    () => _i5.GoogleAuthImpl(),
-    instanceName: 'GoogleAuthImpl',
+    () => _i5.FacebookAuthImpl(),
+    instanceName: 'FacebookAuthImpl',
   );
   gh.factory<_i4.AuthenticationApi>(
-    () => _i6.FacebookAuthImpl(),
-    instanceName: 'FacebookAuthImpl',
+    () => _i6.GoogleAuthImpl(),
+    instanceName: 'GoogleAuthImpl',
   );
   gh.singleton<_i7.FacebookOAuthService>(_i7.FacebookOAuthService());
   gh.singleton<_i8.GoogleAnalyticService>(_i8.GoogleAnalyticService());

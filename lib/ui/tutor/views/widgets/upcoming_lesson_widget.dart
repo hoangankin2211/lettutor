@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
+import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/data/entities/schedule/booking_info_entity.dart';
+import 'package:lettutor/domain/models/user.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
@@ -12,10 +15,12 @@ class UpComingWidget extends StatefulWidget {
     super.key,
     required this.totalLearnTime,
     required this.nextClass,
+    required this.user,
   });
 
   final int totalLearnTime;
   final BookingInfoEntity? nextClass;
+  final User? user;
 
   @override
   State<UpComingWidget> createState() => _UpComingWidgetState();
@@ -50,13 +55,13 @@ class _UpComingWidgetState extends State<UpComingWidget>
         children: [
           ...[
             header,
-            hours.toString(),
-            ' ${context.l10n.hours} ${context.l10n.and} ',
+            if (hours > 0) hours.toString(),
+            if (hours > 0) ' ${context.l10n.hours} ${context.l10n.and} ',
             minutes.toString(),
             ' ${context.l10n.minutes} ',
             if (seconds != null) ...[
               seconds.toString(),
-              ' ${context.l10n.minutes}.'
+              ' ${context.l10n.seconds}.'
             ],
           ].asMap().entries.map((entry) {
             final textStyle = TextStyle(
@@ -87,12 +92,36 @@ class _UpComingWidgetState extends State<UpComingWidget>
     }
   }
 
+  void _joinMeeting(String meetingUrl) async {
+    final meetingToken = meetingUrl.split('token=')[1];
+    if (meetingToken.isNotEmpty) {
+      Map<String, Object> featureFlags = {};
+      try {
+        var options = JitsiMeetingOptions(
+          roomNameOrUrl: "learningRoom",
+          serverUrl: "https://meet.lettutor.com",
+          token: meetingToken,
+          isAudioMuted: false,
+          isAudioOnly: false,
+          isVideoMuted: false,
+          userDisplayName: widget.user?.name ?? '',
+          userEmail: widget.user?.email ?? '',
+          userAvatarUrl: widget.user?.avatar ?? "",
+          featureFlags: featureFlags,
+        );
+
+        await JitsiMeetWrapper.joinMeeting(options: options);
+      } catch (e) {
+        logger.d(e.toString());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final meetingTime = parseDateTime(
-      widget.nextClass?.scheduleDetailInfo?.scheduleInfo?.date,
-      widget.nextClass?.scheduleDetailInfo?.scheduleInfo?.startTime,
-    );
+    final meetingTime = DateTime.fromMillisecondsSinceEpoch(
+        widget.nextClass?.scheduleDetailInfo?.startPeriodTimestamp ??
+            DateTime.now().millisecondsSinceEpoch);
 
     final data = ((widget.totalLearnTime)).round();
     int hours = data ~/ 60;
@@ -162,9 +191,24 @@ class _UpComingWidgetState extends State<UpComingWidget>
                     const SizedBox(width: 20),
                     ElevatedBorderButton(
                       onPressed: () {
-                        context.push(RouteLocation.meeting, extra: {
-                          "meetingUrl": widget.nextClass?.studentMeetingLink
-                        });
+                        // _analyticService.sendEvent(
+                        //     AnalyticEvent.attendCourse.name,
+                        //     {
+                        //       "tutor_id": schedule
+                        //           .scheduleDetailInfo!
+                        //           .scheduleInfo!
+                        //           .tutorInfo
+                        //           .id,
+                        //       "tutor_name": schedule
+                        //           .scheduleDetailInfo!
+                        //           .scheduleInfo!
+                        //           .tutorInfo
+                        //           .name,
+                        //       "schedule_id": schedule.id,
+                        //     });
+
+                        _joinMeeting(
+                            widget.nextClass?.studentMeetingLink ?? "");
                       },
                       backgroundColor: context.theme.cardColor,
                       child: Text(

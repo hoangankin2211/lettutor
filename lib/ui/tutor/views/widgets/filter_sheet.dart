@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:lettutor/core/constants/enum.dart';
 import 'package:lettutor/core/core.dart';
 import 'package:lettutor/core/utils/widgets/elevated_border_button.dart';
-import 'package:lettutor/ui/course/views/course_screen.dart';
 
 class FilterSheet extends StatefulWidget {
   const FilterSheet({

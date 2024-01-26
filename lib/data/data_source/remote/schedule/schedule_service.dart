@@ -44,6 +44,6 @@ abstract class ScheduleService {
     @Body() required Map<String, dynamic> body,
   });
 
-  @GET("$getNextAppointmentUrl?dateTime={time}")
-  Future<HttpResponse> getNextAppointment({@Path("time") required int time});
+  @GET(getNextAppointmentUrl)
+  Future<HttpResponse> getNextAppointment();
 }

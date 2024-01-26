@@ -101,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
               : Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: UpComingWidget(
+                    user: user,
                     nextClass: state.data.nextTutor,
                     totalLearnTime: state.data.totalLearnTime,
                   ),

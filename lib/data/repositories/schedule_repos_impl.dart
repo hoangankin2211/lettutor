@@ -62,8 +62,7 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   Future<Either<String, UpcomingClassResponse>> getNextAppointment(
       {required DateTime dateTime}) async {
     final response = await getStateOf(
-      request: () => scheduleService.getNextAppointment(
-          time: dateTime.millisecondsSinceEpoch),
+      request: () => scheduleService.getNextAppointment(),
       parser: (data) => compute(UpcomingClassResponse.fromJson, data),
     );
 

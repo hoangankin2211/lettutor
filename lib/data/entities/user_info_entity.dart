@@ -78,7 +78,7 @@ class TutorInfo {
       interests: map['interests'] as String,
       languages: map['languages'],
       specialties: map['specialties'] as String,
-      rating: (map['rating'] as int).toDouble(),
+      rating: (map['rating'] as num? ?? 0).toDouble(),
       isActivated: map['isActivated'] as bool,
       isNative: map['isNative'] as bool,
       youtubeVideoId: map['youtubeVideoId'],

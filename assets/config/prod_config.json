@@ -19,5 +19,6 @@
     "primaryColor": "blue",
     "enableRemoteConfigFirebase": false,
     "enableFirebaseAnalytics": false,
+    "enableLogger": false,
     "countryCodeDefault": "VN"
 }

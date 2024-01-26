@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:either_dart/either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:lettutor/core/logger/custom_logger.dart';
 import 'package:lettutor/core/utils/networking/networking.dart';

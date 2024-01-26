@@ -35,6 +35,8 @@ class TutorBloc extends Cubit<TutorState> {
 
     final totalLearnTime = await tutorUseCase.getTotalTime();
 
+    logger.d(totalLearnTime);
+
     response.fold((left) {
       emit(TutorError(data: state.data, message: left));
     }, (right) async {
@@ -105,10 +107,16 @@ class TutorBloc extends Cubit<TutorState> {
     scheduleUseCase.getNextAppointment(DateTime.now()).then(
           (value) => value.fold(
             (left) {},
-            (right) {
-              emit(TutorLoaded(
-                data: state.data.copyWith(nextTutor: right),
-              ));
+            (right) async {
+              final totalLearnTime = await tutorUseCase.getTotalTime();
+              emit(
+                TutorLoaded(
+                  data: state.data.copyWith(
+                    nextTutor: right,
+                    totalLearnTime: totalLearnTime,
+                  ),
+                ),
+              );
             },
           ),
         );

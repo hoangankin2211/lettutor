@@ -22,50 +22,50 @@ class AppSocket {
   connectSocket() {
     disconnectSocket();
 
-    _socket = io.io(
-      "wss://sandbox.api.lettutor.com/socket.io/?EIO=4&transport=websocket",
-      io.OptionBuilder()
-          .setExtraHeaders({
-            "Host": "sandbox.api.lettutor.com",
-            "connection": "Upgrade",
-            "Origin": "https://sandbox.app.lettutor.com",
-            "Pragma": "no-cache",
-            "Cache-Control": "no-cache",
-            "Upgrade": "websocket",
-            "Sec-WebSocket-Version": "13",
-            "Sec-WebSocket-Extensions":
-                "permessage-deflate; client_max_window_bits",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "en-US,en;q=0.9"
-          })
-          .setReconnectionAttempts(10)
-          .setReconnectionDelay(1000)
-          .setReconnectionDelayMax(5000)
-          .setRandomizationFactor(0.5)
-          .enableAutoConnect()
-          .enableReconnection()
-          .build(),
-    );
+    // _socket = io.io(
+    //   "wss://sandbox.api.lettutor.com/socket.io/?EIO=4&transport=websocket",
+    //   io.OptionBuilder()
+    //       .setExtraHeaders({
+    //         "Host": "sandbox.api.lettutor.com",
+    //         "connection": "Upgrade",
+    //         "Origin": "https://sandbox.app.lettutor.com",
+    //         "Pragma": "no-cache",
+    //         "Cache-Control": "no-cache",
+    //         "Upgrade": "websocket",
+    //         "Sec-WebSocket-Version": "13",
+    //         "Sec-WebSocket-Extensions":
+    //             "permessage-deflate; client_max_window_bits",
+    //         "Accept-Encoding": "gzip, deflate, br",
+    //         "Accept-Language": "en-US,en;q=0.9"
+    //       })
+    //       .setReconnectionAttempts(10)
+    //       .setReconnectionDelay(1000)
+    //       .setReconnectionDelayMax(5000)
+    //       .setRandomizationFactor(0.5)
+    //       .enableAutoConnect()
+    //       .enableReconnection()
+    //       .build(),
+    // );
 
-    _socket!.connect();
+    // _socket!.connect();
 
-    _socket?.onConnect((data) {
-      logger.d(data);
-    });
+    // _socket?.onConnect((data) {
+    //   logger.d(data);
+    // });
 
-    _socket?.onclose((data) {
-      logger.d("onclose: $data");
-    });
+    // _socket?.onclose((data) {
+    //   logger.d("onclose: $data");
+    // });
 
-    _socket?.onAny((event, data) => logger.d(event + data.toString()));
+    // _socket?.onAny((event, data) => logger.d(event + data.toString()));
 
-    _socket?.onError((data) => {logger.d("onError: $data")});
+    // _socket?.onError((data) => {logger.d("onError: $data")});
 
-    _socket?.emit(connectionLogin, user?.toMap());
+    // _socket?.emit(connectionLogin, user?.toMap());
 
-    _eventHandlerMap.forEach((key, value) {
-      _socket?.on(key, value);
-    });
+    // _eventHandlerMap.forEach((key, value) {
+    //   _socket?.on(key, value);
+    // });
   }
 
   Socket get getSocket {
