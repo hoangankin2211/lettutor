@@ -1,4 +1,4 @@
-### [Thieu đánh giá](https://docs.google.com/document/d/1yh28QVGb5vAql-fcGu4KI22S8BdZLSCC/edit?usp=sharing&ouid=112654242766513180812&rtpof=true&sd=true)
+### [Phiếu đánh giá](https://docs.google.com/document/d/1yh28QVGb5vAql-fcGu4KI22S8BdZLSCC/edit?usp=sharing&ouid=112654242766513180812&rtpof=true&sd=true)
 
 - <https://docs.google.com/document/d/1yh28QVGb5vAql-fcGu4KI22S8BdZLSCC/edit?usp=sharing&ouid=112654242766513180812&rtpof=true&sd=true>
 
