@@ -10,6 +10,10 @@
 
 - <https://youtu.be/eoOYvLxui7E>
 
+### [Video Demo - Milestone-2](https://drive.google.com/file/d/15_RnD8ifspHfkN342X-BPlUMzN-lQUY8/view?usp=sharing)
+
+- <https://drive.google.com/file/d/15_RnD8ifspHfkN342X-BPlUMzN-lQUY8/view?usp=sharing>
+
 # [Widget Tree](https://drive.google.com/file/d/18-0tqeANERNgXDqyr8QztDWfNhCkhoo0/view?usp=sharing)
 
 <img src="screenshot/widget_tree.drawio.png" height="500em" width="800em" />
